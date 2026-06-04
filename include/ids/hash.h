@@ -24,8 +24,8 @@
  */
 
 
-#ifndef _IDS_HASH_H_
-#define _IDS_HASH_H_
+#ifndef IDS_HASH_H
+#define IDS_HASH_H
 
 
 #include <ids/error.h>
@@ -67,20 +67,19 @@ struct ids_hash_bkt_it
 {
     struct ids_hash_node* current_node;
 
-    struct ids_clist_it clist_it;
+    struct ids_clist_it   clist_it;
 };
 
 
 /*
-    The required type for a user-defined hash cmp function.
+    The required type for a user-defined hash cmp function.  Return zero if the
+    node matches the id
 
     For example:
         int
-        MyCmp (
-               void*                 id_to_cmp,
+        MyCmp (void*                 id_to_cmp,
                struct ids_hash_node* cmp_node,
-               void*                 user_data
-              )
+               void*                 user_data)
         {
             struct my_element* element;
 
@@ -90,7 +89,7 @@ struct ids_hash_bkt_it
         }
  */
 typedef int
-(*ids_hash_cmp_type) (void* id, struct ids_hash_node* node, void* user_data);
+ids_hash_cmp_type (void* id, struct ids_hash_node* node, void* user_data);
 
 
 /*
@@ -131,14 +130,12 @@ IDS_Hash_Bkt (unsigned int value_hash, struct ids_hash* hash);
     set and the found node returned.  If no node was found, NULL is returned
  */
 inline struct ids_hash_node*
-IDS_Hash_Find (
-               unsigned int          value_hash,
+IDS_Hash_Find (unsigned int          value_hash,
                void*                 value,
                struct ids_hash*      hash,
-               ids_hash_cmp_type     cmp,
+               ids_hash_cmp_type*    cmp,
                void*                 user_data,
-               struct ids_hash_bkt** searched_bkt
-              );
+               struct ids_hash_bkt** searched_bkt);
 
 
 /*

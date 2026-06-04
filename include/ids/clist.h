@@ -1,7 +1,7 @@
 /*
     libids library is licensed under the simplified BSD license:
 
-    Copyright 2013, Andrew Gottemoller
+    Copyright 2026, Andrew Gottemoller
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without modification,
@@ -24,8 +24,8 @@
  */
 
 
-#ifndef _IDS_CLIST_H_
-#define _IDS_CLIST_H_
+#ifndef IDS_CLIST_H
+#define IDS_CLIST_H
 
 
 /*
@@ -106,20 +106,16 @@ IDS_CList_Empty (struct ids_clist* clist);
     Place the specified range from a clist before the destination node
  */
 inline void
-IDS_CList_Splice (
-                  struct ids_clist_node* restrict start,
-                  struct ids_clist_node* restrict end,
-                  struct ids_clist_node* restrict dest
-                 );
+IDS_CList_Splice (struct ids_clist_node* start,
+                  struct ids_clist_node* end,
+                  struct ids_clist_node* dest);
 
 /*
     Insert a node before the specified node in the clist
  */
 inline void
-IDS_CList_Ins (
-               struct ids_clist_node* restrict new_node,
-               struct ids_clist_node* restrict existing_node
-              );
+IDS_CList_Ins (struct ids_clist_node* restrict new_node,
+               struct ids_clist_node* restrict existing_node);
 
 /*
     Delete the specified node from its clist
@@ -137,7 +133,7 @@ IDS_CList_PushH (struct ids_clist_node* node, struct ids_clist* clist);
     Pop the head node from a clist
  */
 inline struct ids_clist_node*
-IDS_Clist_PopH (struct ids_clist* clist);
+IDS_CList_PopH (struct ids_clist* clist);
 
 /*
     Push a node at the tail of the specified clist

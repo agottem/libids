@@ -1,5 +1,5 @@
 /*
-    libids is licensed under the simplified BSD license:
+    libids library is licensed under the simplified BSD license:
 
     Copyright 2026, Andrew Gottemoller
     All rights reserved.
@@ -19,19 +19,26 @@
     permission.
  */
 
+/*
+    Defines utility functions for use with the container library
+ */
 
-#ifndef IDS_ERROR_H
-#define IDS_ERROR_H
+
+#ifndef IDS_UTILS_H
+#define IDS_UTILS_H
+
+
+#include <stddef.h>
 
 
 /*
-   Error codes that may be returned by various data struct functions
+    Returns a pointer to the container of the specified type
+
+    NOTE: The implementation is convoluted intentionally to suppress GCC's incorrect
+          "no-strict-aliasing" warnings.
  */
-enum ids_error_code
-{
-    ids_error_none,
-    ids_error_mem
-};
+#define IDS_CONT_OF(address, type, member)                           \
+    ((type*)(1 ? ((char*)(address) - offsetof(type, member)) : NULL))
 
 
 #endif

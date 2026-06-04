@@ -22,25 +22,27 @@
 
 #include <ids/utils.h>
 
+#include <assert.h>
 #include <stddef.h>
 #include <stdlib.h>
 
 
-static inline void
+inline void
 IDS_Hash_UpdateBktIt (struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it)
 {
-    int done;
-
-    done = IDS_CList_ItDone(&bkt->node_list, &it->clist_it);
+    int done = IDS_CList_ItDone(&bkt->node_list, &it->clist_it);
     if(!done)
         it->current_node = IDS_CONT_OF(it->clist_it.current_node, struct ids_hash_node, node);
     else
         it->current_node = NULL;
 }
 
+
 inline void
 IDS_Hash_Init (unsigned int count, struct ids_hash_bkt* bkts, struct ids_hash* hash)
 {
+    assert(count > 0 && "Hash bucket count must be greater than zero");
+
     hash->bkt_count = count;
     hash->bkts      = bkts;
 
@@ -51,11 +53,10 @@ IDS_Hash_Init (unsigned int count, struct ids_hash_bkt* bkts, struct ids_hash* h
 inline enum ids_error_code
 IDS_Hash_Create (unsigned int count, struct ids_hash* hash)
 {
-    struct ids_hash_bkt* bkts;
-
-    bkts = calloc(count, sizeof(struct ids_hash_bkt));
+    size_t               alloc_size = count * sizeof(struct ids_hash_bkt);
+    struct ids_hash_bkt* bkts       = malloc(alloc_size);
     if(bkts == NULL)
-        return ids_error_memory_alloc;
+        return ids_error_mem;
 
     IDS_Hash_Init(count, bkts, hash);
 
@@ -71,11 +72,8 @@ IDS_Hash_Destroy (struct ids_hash* hash)
 inline void
 IDS_Hash_Reset (struct ids_hash* hash)
 {
-    struct ids_hash_bkt* bkts;
-    unsigned int         count;
-
-    bkts  = hash->bkts;
-    count = hash->bkt_count;
+    struct ids_hash_bkt* bkts  = hash->bkts;
+    unsigned int         count = hash->bkt_count;
     while(count-- > 0)
         IDS_CList_Reset(&bkts[count].node_list);
 }
@@ -83,24 +81,23 @@ IDS_Hash_Reset (struct ids_hash* hash)
 inline struct ids_hash_bkt*
 IDS_Hash_Bkt (unsigned int value_hash, struct ids_hash* hash)
 {
-    return &hash->bkts[hash->bkt_count % value_hash];
+    return &hash->bkts[value_hash % hash->bkt_count];
 }
 
 inline struct ids_hash_node*
-IDS_Hash_Find (
-               unsigned int          value_hash,
+IDS_Hash_Find (unsigned int          value_hash,
                void*                 value,
                struct ids_hash*      hash,
-               ids_hash_cmp_type     cmp,
+               ids_hash_cmp_type*    cmp,
                void*                 user_data,
-               struct ids_hash_bkt** searched_bkt
-              )
+               struct ids_hash_bkt** searched_bkt)
 {
     struct ids_hash_bkt_it it;
-    struct ids_hash_bkt*   bkt;
 
-    bkt           = IDS_Hash_Bkt(value_hash, hash);
-    *searched_bkt = bkt;
+    struct ids_hash_bkt*   bkt = IDS_Hash_Bkt(value_hash, hash);
+
+    if(searched_bkt != NULL)
+        *searched_bkt = bkt;
 
     for(IDS_Hash_BeginBktIt(bkt, &it); !IDS_Hash_BktItDone(&it); IDS_Hash_BktItFwd(bkt, &it))
     {

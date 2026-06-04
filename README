@@ -1,5 +1,9 @@
+libids implements intrusive data structures in C99. The APIs are intentionally light weight to
+facilitate both flexibility and performance.
+
 To build and install the C intrusive data struct library, perform the following commands:
     autoreconf -fi
     ./configure
     make
+    make check
     sudo make install
