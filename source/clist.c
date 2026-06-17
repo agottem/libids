@@ -24,64 +24,64 @@
 
 
 extern void
-IDS_CList_Init (struct ids_clist* clist);
+Ids_Clist_Init (struct ids_clist* clist);
 
 extern void
-IDS_CList_Reset (struct ids_clist* clist);
+Ids_Clist_Reset (struct ids_clist* clist);
 
 
 extern struct ids_clist_node*
-IDS_CList_Head (struct ids_clist* clist);
+Ids_Clist_Head (struct ids_clist* clist);
 
 extern struct ids_clist_node*
-IDS_CList_Tail (struct ids_clist* clist);
+Ids_Clist_Tail (struct ids_clist* clist);
 
 extern struct ids_clist_node*
-IDS_CList_End (struct ids_clist* clist);
+Ids_Clist_End (struct ids_clist* clist);
 
 extern int
-IDS_CList_Empty (struct ids_clist* clist);
+Ids_Clist_Empty (struct ids_clist* clist);
 
 
 extern void
-IDS_CList_Splice (struct ids_clist_node* start,
+Ids_Clist_Splice (struct ids_clist_node* start,
                   struct ids_clist_node* end,
                   struct ids_clist_node* dest);
 
 extern void
-IDS_CList_Ins (struct ids_clist_node* restrict new_node,
+Ids_Clist_Ins (struct ids_clist_node* restrict new_node,
                struct ids_clist_node* restrict existing_node);
 
 extern void
-IDS_CList_Del (struct ids_clist_node* node);
+Ids_Clist_Del (struct ids_clist_node* node);
 
 extern void
-IDS_CList_PushH (struct ids_clist_node* node, struct ids_clist* clist);
+Ids_Clist_PushH (struct ids_clist_node* node, struct ids_clist* clist);
 
 extern struct ids_clist_node*
-IDS_CList_PopH (struct ids_clist* clist);
+Ids_Clist_PopH (struct ids_clist* clist);
 
 extern void
-IDS_CList_PushT (struct ids_clist_node* node, struct ids_clist* clist);
+Ids_Clist_PushT (struct ids_clist_node* node, struct ids_clist* clist);
 
 extern struct ids_clist_node*
-IDS_CList_PopT (struct ids_clist* clist);
+Ids_Clist_PopT (struct ids_clist* clist);
 
 
 extern void
-IDS_CList_NBeginIt (struct ids_clist_node* node, struct ids_clist_it* it);
+Ids_Clist_NBeginIt (struct ids_clist_node* node, struct ids_clist_it* it);
 
 extern void
-IDS_CList_BeginIt (struct ids_clist* clist, struct ids_clist_it* it);
+Ids_Clist_BeginIt (struct ids_clist* clist, struct ids_clist_it* it);
 
 extern void
-IDS_CList_RBeginIt (struct ids_clist* clist, struct ids_clist_it* it);
+Ids_Clist_RBeginIt (struct ids_clist* clist, struct ids_clist_it* it);
 
 extern void
-IDS_CList_ItFwd (struct ids_clist_it* it);
+Ids_Clist_ItFwd (struct ids_clist_it* it);
 
 extern void
-IDS_CList_ItBack (struct ids_clist_it* it);
+Ids_Clist_ItBack (struct ids_clist_it* it);
 
 extern int
-IDS_CList_ItDone (struct ids_clist* clist, struct ids_clist_it* it);
+Ids_Clist_ItDone (struct ids_clist* clist, struct ids_clist_it* it);

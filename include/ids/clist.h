@@ -68,45 +68,45 @@ struct ids_clist_it
     Initialize a clist data struct.  The data struct will be empty upon initialization
  */
 inline void
-IDS_CList_Init (struct ids_clist* clist);
+Ids_Clist_Init (struct ids_clist* clist);
 
 /*
     Reset a clist data struct to the initialized state
  */
 inline void
-IDS_CList_Reset (struct ids_clist* clist);
+Ids_Clist_Reset (struct ids_clist* clist);
 
 
 /*
     Return the list head
  */
 inline struct ids_clist_node*
-IDS_CList_Head (struct ids_clist* clist);
+Ids_Clist_Head (struct ids_clist* clist);
 
 /*
     Return the list tail
  */
 inline struct ids_clist_node*
-IDS_CList_Tail (struct ids_clist* clist);
+Ids_Clist_Tail (struct ids_clist* clist);
 
 /*
     Return the end node (which is not a valid node)
  */
 inline struct ids_clist_node*
-IDS_CList_End (struct ids_clist* clist);
+Ids_Clist_End (struct ids_clist* clist);
 
 /*
     Return non-zero if the clist is empty
  */
 inline int
-IDS_CList_Empty (struct ids_clist* clist);
+Ids_Clist_Empty (struct ids_clist* clist);
 
 
 /*
     Place the specified range from a clist before the destination node
  */
 inline void
-IDS_CList_Splice (struct ids_clist_node* start,
+Ids_Clist_Splice (struct ids_clist_node* start,
                   struct ids_clist_node* end,
                   struct ids_clist_node* dest);
 
@@ -114,75 +114,75 @@ IDS_CList_Splice (struct ids_clist_node* start,
     Insert a node before the specified node in the clist
  */
 inline void
-IDS_CList_Ins (struct ids_clist_node* restrict new_node,
+Ids_Clist_Ins (struct ids_clist_node* restrict new_node,
                struct ids_clist_node* restrict existing_node);
 
 /*
     Delete the specified node from its clist
  */
 inline void
-IDS_CList_Del (struct ids_clist_node* node);
+Ids_Clist_Del (struct ids_clist_node* node);
 
 /*
     Push a node at the head of the specified clist
  */
 inline void
-IDS_CList_PushH (struct ids_clist_node* node, struct ids_clist* clist);
+Ids_Clist_PushH (struct ids_clist_node* node, struct ids_clist* clist);
 
 /*
     Pop the head node from a clist
  */
 inline struct ids_clist_node*
-IDS_CList_PopH (struct ids_clist* clist);
+Ids_Clist_PopH (struct ids_clist* clist);
 
 /*
     Push a node at the tail of the specified clist
  */
 inline void
-IDS_CList_PushT (struct ids_clist_node* node, struct ids_clist* clist);
+Ids_Clist_PushT (struct ids_clist_node* node, struct ids_clist* clist);
 
 /*
     Pop the tail node from a clist
  */
 inline struct ids_clist_node*
-IDS_CList_PopT (struct ids_clist* clist);
+Ids_Clist_PopT (struct ids_clist* clist);
 
 
 /*
     Start a clist iteration from the specified node
  */
 inline void
-IDS_CList_NBeginIt (struct ids_clist_node* node, struct ids_clist_it* it);
+Ids_Clist_NBeginIt (struct ids_clist_node* node, struct ids_clist_it* it);
 
 /*
     Start a clist iteration from the head node
  */
 inline void
-IDS_CList_BeginIt (struct ids_clist* clist, struct ids_clist_it* it);
+Ids_Clist_BeginIt (struct ids_clist* clist, struct ids_clist_it* it);
 
 /*
     Start a clist iteration from the tail node
  */
 inline void
-IDS_CList_RBeginIt (struct ids_clist* clist, struct ids_clist_it* it);
+Ids_Clist_RBeginIt (struct ids_clist* clist, struct ids_clist_it* it);
 
 /*
     Iterate forwards
  */
 inline void
-IDS_CList_ItFwd (struct ids_clist_it* it);
+Ids_Clist_ItFwd (struct ids_clist_it* it);
 
 /*
     Iterate backwards
  */
 inline void
-IDS_CList_ItBack (struct ids_clist_it* it);
+Ids_Clist_ItBack (struct ids_clist_it* it);
 
 /*
     Return non-zero if the iterator is at the end node
  */
 inline int
-IDS_CList_ItDone (struct ids_clist* clist, struct ids_clist_it* it);
+Ids_Clist_ItDone (struct ids_clist* clist, struct ids_clist_it* it);
 
 
 #include <ids/clist_inl.h>

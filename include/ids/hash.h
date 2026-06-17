@@ -70,6 +70,20 @@ struct ids_hash_bkt_it
     struct ids_clist_it   clist_it;
 };
 
+/*
+    The iterator struct used to iterate over an entire hash
+
+    Accessible members:
+        current_node -- the current element node being visited
+ */
+struct ids_hash_it
+{
+    struct ids_hash_node*  current_node;
+
+    unsigned int           current_bkt;
+    struct ids_hash_bkt_it bkt_it;
+};
+
 
 /*
     The required type for a user-defined hash cmp function.  Return zero if the
@@ -89,40 +103,40 @@ struct ids_hash_bkt_it
         }
  */
 typedef int
-ids_hash_cmp_type (void* id, struct ids_hash_node* node, void* user_data);
+ids_hash_cmp_t (void* id, struct ids_hash_node* node, void* user_data);
 
 
 /*
      Initialize a hash.  The data struct will be empty upon initialization
  */
 inline void
-IDS_Hash_Init (unsigned int count, struct ids_hash_bkt* bkts, struct ids_hash* hash);
+Ids_Hash_Init (unsigned int count, struct ids_hash_bkt* bkts, struct ids_hash* hash);
 
 /*
      Allocate hash buckets and initialize a hash.  The data struct will be empty upon
      initialization
  */
 inline enum ids_error_code
-IDS_Hash_Create (unsigned int count, struct ids_hash* hash);
+Ids_Hash_Create (unsigned int count, struct ids_hash* hash);
 
 /*
      Cleanup a previously created hash
  */
 inline void
-IDS_Hash_Destroy (struct ids_hash* hash);
+Ids_Hash_Destroy (struct ids_hash* hash);
 
 /*
     Reset a hash data struct to the initialized state
  */
 inline void
-IDS_Hash_Reset (struct ids_hash* hash);
+Ids_Hash_Reset (struct ids_hash* hash);
 
 
 /*
    Return the bucket which maps to the specified hash value
  */
 inline struct ids_hash_bkt*
-IDS_Hash_Bkt (unsigned int value_hash, struct ids_hash* hash);
+Ids_Hash_Bkt (unsigned int value_hash, struct ids_hash* hash);
 
 
 /*
@@ -130,10 +144,10 @@ IDS_Hash_Bkt (unsigned int value_hash, struct ids_hash* hash);
     set and the found node returned.  If no node was found, NULL is returned
  */
 inline struct ids_hash_node*
-IDS_Hash_Find (unsigned int          value_hash,
+Ids_Hash_Find (unsigned int          value_hash,
                void*                 value,
                struct ids_hash*      hash,
-               ids_hash_cmp_type*    cmp,
+               ids_hash_cmp_t*       cmp,
                void*                 user_data,
                struct ids_hash_bkt** searched_bkt);
 
@@ -142,44 +156,63 @@ IDS_Hash_Find (unsigned int          value_hash,
     Insert a node into the specified hash bucket
  */
 inline void
-IDS_Hash_Ins (struct ids_hash_node* node, struct ids_hash_bkt* bkt);
+Ids_Hash_Ins (struct ids_hash_node* node, struct ids_hash_bkt* bkt);
 
 /*
     Add a node to the hash, specifying the hash value for the node
  */
 inline void
-IDS_Hash_Add (unsigned int value_hash, struct ids_hash_node* node, struct ids_hash* hash);
+Ids_Hash_Add (unsigned int value_hash, struct ids_hash_node* node, struct ids_hash* hash);
 
 /*
     Delete the specified node from the hash
  */
 inline void
-IDS_Hash_Del (struct ids_hash_node* node);
+Ids_Hash_Del (struct ids_hash_node* node);
 
 /*
     Return non-zero if the hash bucket is empty
  */
 inline int
-IDS_Hash_BktEmpty (struct ids_hash_bkt* bkt);
+Ids_Hash_BktEmpty (struct ids_hash_bkt* bkt);
 
 
 /*
     Start an iteration of the specified hash bucket
  */
 inline void
-IDS_Hash_BeginBktIt (struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
+Ids_Hash_BeginBktIt (struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
 
 /*
     Iterate to the next node in the bucket
  */
 inline void
-IDS_Hash_BktItFwd (struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
+Ids_Hash_BktItFwd (struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
 
 /*
     Return non-zero if the iterator is at the end of the bucket
  */
 inline int
-IDS_Hash_BktItDone (struct ids_hash_bkt_it* it);
+Ids_Hash_BktItDone (struct ids_hash_bkt_it* it);
+
+
+/*
+    Start an unordered iteration of the hash
+ */
+inline void
+Ids_Hash_BeginIt (struct ids_hash* hash, struct ids_hash_it* it);
+
+/*
+    Iterate to the next node in the hash
+ */
+inline void
+Ids_Hash_ItFwd (struct ids_hash* hash, struct ids_hash_it* it);
+
+/*
+    Return non-zero if the iterator is at the end of the hash
+ */
+inline int
+Ids_Hash_ItDone (struct ids_hash_it* it);
 
 
 #include <ids/hash_inl.h>

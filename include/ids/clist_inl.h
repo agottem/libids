@@ -24,44 +24,44 @@
 
 
 inline void
-IDS_CList_Init (struct ids_clist* clist)
+Ids_Clist_Init (struct ids_clist* clist)
 {
     clist->sentinel.next = &clist->sentinel;
     clist->sentinel.prev = &clist->sentinel;
 }
 
 inline void
-IDS_CList_Reset (struct ids_clist* clist)
+Ids_Clist_Reset (struct ids_clist* clist)
 {
-    IDS_CList_Init(clist);
+    Ids_Clist_Init(clist);
 }
 
 inline struct ids_clist_node*
-IDS_CList_Head (struct ids_clist* clist)
+Ids_Clist_Head (struct ids_clist* clist)
 {
     return clist->sentinel.next;
 }
 
 inline struct ids_clist_node*
-IDS_CList_Tail (struct ids_clist* clist)
+Ids_Clist_Tail (struct ids_clist* clist)
 {
     return clist->sentinel.prev;
 }
 
 inline struct ids_clist_node*
-IDS_CList_End (struct ids_clist* clist)
+Ids_Clist_End (struct ids_clist* clist)
 {
     return &clist->sentinel;
 }
 
 inline int
-IDS_CList_Empty (struct ids_clist* clist)
+Ids_Clist_Empty (struct ids_clist* clist)
 {
-    return clist->sentinel.next == IDS_CList_End(clist);
+    return clist->sentinel.next == Ids_Clist_End(clist);
 }
 
 inline void
-IDS_CList_Splice (struct ids_clist_node* start,
+Ids_Clist_Splice (struct ids_clist_node* start,
                   struct ids_clist_node* end,
                   struct ids_clist_node* dest)
 {
@@ -75,7 +75,7 @@ IDS_CList_Splice (struct ids_clist_node* start,
 }
 
 inline void
-IDS_CList_Ins (struct ids_clist_node* restrict new_node,
+Ids_Clist_Ins (struct ids_clist_node* restrict new_node,
                struct ids_clist_node* restrict existing_node)
 {
     struct ids_clist_node* prev = existing_node->prev;
@@ -87,7 +87,7 @@ IDS_CList_Ins (struct ids_clist_node* restrict new_node,
 }
 
 inline void
-IDS_CList_Del (struct ids_clist_node* node)
+Ids_Clist_Del (struct ids_clist_node* node)
 {
     struct ids_clist_node* next = node->next;
     struct ids_clist_node* prev = node->prev;
@@ -97,73 +97,73 @@ IDS_CList_Del (struct ids_clist_node* node)
 }
 
 inline void
-IDS_CList_PushH (struct ids_clist_node* node, struct ids_clist* clist)
+Ids_Clist_PushH (struct ids_clist_node* node, struct ids_clist* clist)
 {
-    IDS_CList_Ins(node, IDS_CList_Head(clist));
+    Ids_Clist_Ins(node, Ids_Clist_Head(clist));
 }
 
 inline struct ids_clist_node*
-IDS_CList_PopH (struct ids_clist* clist)
+Ids_Clist_PopH (struct ids_clist* clist)
 {
-    struct ids_clist_node* head = IDS_CList_Head(clist);
+    struct ids_clist_node* head = Ids_Clist_Head(clist);
 
-    assert(!IDS_CList_Empty(clist) && "Attempting to pop an empty clist");
+    assert(!Ids_Clist_Empty(clist) && "Attempting to pop an empty clist");
 
-    IDS_CList_Del(head);
+    Ids_Clist_Del(head);
 
     return head;
 }
 
 inline void
-IDS_CList_PushT (struct ids_clist_node* node, struct ids_clist* clist)
+Ids_Clist_PushT (struct ids_clist_node* node, struct ids_clist* clist)
 {
-    IDS_CList_Ins(node, IDS_CList_End(clist));
+    Ids_Clist_Ins(node, Ids_Clist_End(clist));
 }
 
 inline struct ids_clist_node*
-IDS_CList_PopT (struct ids_clist* clist)
+Ids_Clist_PopT (struct ids_clist* clist)
 {
-    struct ids_clist_node* tail = IDS_CList_Tail(clist);
+    struct ids_clist_node* tail = Ids_Clist_Tail(clist);
 
-    assert(!IDS_CList_Empty(clist) && "Attempting to pop an empty clist");
+    assert(!Ids_Clist_Empty(clist) && "Attempting to pop an empty clist");
 
-    IDS_CList_Del(tail);
+    Ids_Clist_Del(tail);
 
     return tail;
 }
 
 inline void
-IDS_CList_NBeginIt (struct ids_clist_node* node, struct ids_clist_it* it)
+Ids_Clist_NBeginIt (struct ids_clist_node* node, struct ids_clist_it* it)
 {
     it->current_node = node;
 }
 
 inline void
-IDS_CList_BeginIt (struct ids_clist* clist, struct ids_clist_it* it)
+Ids_Clist_BeginIt (struct ids_clist* clist, struct ids_clist_it* it)
 {
-    IDS_CList_NBeginIt(IDS_CList_Head(clist), it);
+    Ids_Clist_NBeginIt(Ids_Clist_Head(clist), it);
 }
 
 inline void
-IDS_CList_RBeginIt (struct ids_clist* clist, struct ids_clist_it* it)
+Ids_Clist_RBeginIt (struct ids_clist* clist, struct ids_clist_it* it)
 {
-    IDS_CList_NBeginIt(IDS_CList_Tail(clist), it);
+    Ids_Clist_NBeginIt(Ids_Clist_Tail(clist), it);
 }
 
 inline void
-IDS_CList_ItFwd (struct ids_clist_it* it)
+Ids_Clist_ItFwd (struct ids_clist_it* it)
 {
     it->current_node = it->current_node->next;
 }
 
 inline void
-IDS_CList_ItBack (struct ids_clist_it* it)
+Ids_Clist_ItBack (struct ids_clist_it* it)
 {
     it->current_node = it->current_node->prev;
 }
 
 inline int
-IDS_CList_ItDone (struct ids_clist* clist, struct ids_clist_it* it)
+Ids_Clist_ItDone (struct ids_clist* clist, struct ids_clist_it* it)
 {
-    return it->current_node == IDS_CList_End(clist);
+    return it->current_node == Ids_Clist_End(clist);
 }
