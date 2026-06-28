@@ -74,7 +74,7 @@ Test_CreateDestroy (void)
 {
     struct ids_hash hash;
 
-    assert(Ids_Hash_Create(4, &hash) == ids_error_none);
+    assert(Ids_Hash_Create(4, &hash) == ids_err_none);
     assert(hash.bkt_count == 4);
     assert(hash.bkts != 0);
     Ids_Hash_Destroy(&hash);

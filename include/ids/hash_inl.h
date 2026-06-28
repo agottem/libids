@@ -67,17 +67,17 @@ Ids_Hash_Init (unsigned int count, struct ids_hash_bkt* bkts, struct ids_hash* h
         Ids_Clist_Init(&bkts[count].node_list);
 }
 
-inline enum ids_error_code
+inline enum ids_err
 Ids_Hash_Create (unsigned int count, struct ids_hash* hash)
 {
     size_t               alloc_size = count * sizeof(struct ids_hash_bkt);
     struct ids_hash_bkt* bkts       = malloc(alloc_size);
     if(bkts == NULL)
-        return ids_error_mem;
+        return ids_err_mem;
 
     Ids_Hash_Init(count, bkts, hash);
 
-    return ids_error_none;
+    return ids_err_none;
 }
 
 inline void

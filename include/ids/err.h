@@ -27,10 +27,10 @@
 /*
    Error codes that may be returned by various data struct functions
  */
-enum ids_error_code
+enum ids_err
 {
-    ids_error_none,
-    ids_error_mem
+    ids_err_none,
+    ids_err_mem
 };
 
 

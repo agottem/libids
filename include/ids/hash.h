@@ -28,7 +28,7 @@
 #define IDS_HASH_H
 
 
-#include <ids/error.h>
+#include <ids/err.h>
 #include <ids/clist.h>
 
 
@@ -116,7 +116,7 @@ Ids_Hash_Init (unsigned int count, struct ids_hash_bkt* bkts, struct ids_hash* h
      Allocate hash buckets and initialize a hash.  The data struct will be empty upon
      initialization
  */
-inline enum ids_error_code
+inline enum ids_err
 Ids_Hash_Create (unsigned int count, struct ids_hash* hash);
 
 /*

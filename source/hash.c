@@ -33,7 +33,7 @@ Ids_Hash_UpdateIt (struct ids_hash* hash, struct ids_hash_it* it);
 extern void
 Ids_Hash_Init (unsigned int count, struct ids_hash_bkt* bkts, struct ids_hash* hash);
 
-extern enum ids_error_code
+extern enum ids_err
 Ids_Hash_Create (unsigned int count, struct ids_hash* hash);
 
 extern void

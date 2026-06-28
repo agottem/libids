@@ -9,7 +9,7 @@ libids_la_LDFLAGS = -static
 
 libidsdir = $(includedir)/ids
 
-libids_HEADERS = include/ids/error.h     \
+libids_HEADERS = include/ids/err.h       \
                  include/ids/utils.h     \
                  include/ids/clist.h     \
                  include/ids/clist_inl.h \
