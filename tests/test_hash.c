@@ -21,7 +21,7 @@
 
 
 #include <ids/hash.h>
-#include <ids/utils.h>
+#include <ids/cont_of.h>
 
 #include <assert.h>
 #include <stdlib.h>

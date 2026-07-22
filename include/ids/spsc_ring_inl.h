@@ -20,7 +20,7 @@
  */
 
 
-#include <ids/utils.h>
+#include <ids/alg.h>
 
 #include <assert.h>
 
