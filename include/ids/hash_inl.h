@@ -20,7 +20,7 @@
  */
 
 
-#include <ids/utils.h>
+#include <ids/cont_of.h>
 
 #include <assert.h>
 #include <stddef.h>
@@ -54,6 +54,7 @@ Ids_Hash_UpdateIt (struct ids_hash* hash, struct ids_hash_it* it)
 
     it->current_node = it->bkt_it.current_node;
 }
+
 
 inline void
 Ids_Hash_Init (unsigned int count, struct ids_hash_bkt* bkts, struct ids_hash* hash)

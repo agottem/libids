@@ -1,5 +1,5 @@
 /*
-    libids library is licensed under the simplified BSD license:
+    libids is licensed under the simplified BSD license:
 
     Copyright 2026, Andrew Gottemoller
     All rights reserved.
@@ -17,28 +17,12 @@
     Neither the name Andrew Gottemoller nor the names of its contributors may be used to
     endorse or promote products derived from this software without specific prior written
     permission.
- */
-
-/*
-    Defines utility functions for use with the container library
- */
+*/
 
 
-#ifndef IDS_UTILS_H
-#define IDS_UTILS_H
+#ifndef IDS_ALG_H
+#define IDS_ALG_H
 
-
-#include <stddef.h>
-
-
-/*
-    Returns a pointer to the container of the specified type
-
-    NOTE: The implementation is convoluted intentionally to suppress GCC's incorrect
-          "no-strict-aliasing" warnings.
- */
-#define IDS_CONT_OF(address, type, member)                           \
-    ((type*)(1 ? ((char*)(address) - offsetof(type, member)) : NULL))
 
 #define IDS_MIN(a, b) ((a) < (b) ? (a) : (b))
 #define IDS_MAX(a, b) ((a) > (b) ? (a) : (b))
