@@ -24,7 +24,13 @@
 
 #include <assert.h>
 #include <stdalign.h>
+#include <stdatomic.h>
 #include <stdlib.h>
+#include <threads.h>
+
+
+#define STRESS_CAPACITY 64
+#define STRESS_COUNT    100000
 
 
 static void
@@ -34,7 +40,7 @@ Test_InitReset (void)
     struct ids_spsc_ring_range range;
 
     Ids_SpscRing_Init(4, &ring);
-    assert(Ids_SpscRing_Capacity(&ring) == 4);
+    assert(ring.capacity == 4);
     assert(Ids_SpscRing_Count(&ring) == 0);
     assert(Ids_SpscRing_Space(&ring) == 4);
     assert(Ids_SpscRing_Empty(&ring));
@@ -142,6 +148,89 @@ Test_Alignment (void)
     assert(alignof(struct ids_spsc_ring) == IDS_CACHE_LINE_SIZE);
 }
 
+struct stress_context
+{
+    struct ids_spsc_ring ring;
+    size_t                values[STRESS_CAPACITY];
+    atomic_int            start;
+};
+
+static int
+ProducerThread (void* argument)
+{
+    struct stress_context* context = argument;
+    size_t                 produced = 0;
+
+    while(!atomic_load_explicit(&context->start, memory_order_acquire))
+        thrd_yield();
+
+    while(produced < STRESS_COUNT)
+    {
+        size_t count = IDS_MIN(7, STRESS_COUNT - produced);
+        struct ids_spsc_ring_range range = Ids_SpscRing_Reserve(count, &context->ring);
+        if(range.count == 0)
+        {
+            thrd_yield();
+            continue;
+        }
+
+        for(size_t index = 0; index < range.count; ++index)
+            context->values[range.start + index] = produced + index;
+
+        Ids_SpscRing_Commit(&range, &context->ring);
+        produced += range.count;
+    }
+
+    return 0;
+}
+
+static int
+ConsumerThread (void* argument)
+{
+    struct stress_context* context = argument;
+    size_t                 consumed = 0;
+
+    while(!atomic_load_explicit(&context->start, memory_order_acquire))
+        thrd_yield();
+
+    while(consumed < STRESS_COUNT)
+    {
+        struct ids_spsc_ring_range range = Ids_SpscRing_Peek(5, &context->ring);
+        if(range.count == 0)
+        {
+            thrd_yield();
+            continue;
+        }
+
+        for(size_t index = 0; index < range.count; ++index)
+            assert(context->values[range.start + index] == consumed + index);
+
+        Ids_SpscRing_Release(&range, &context->ring);
+        consumed += range.count;
+    }
+
+    return 0;
+}
+
+static void
+Test_Concurrent (void)
+{
+    struct stress_context context;
+    thrd_t                producer;
+    thrd_t                consumer;
+
+    Ids_SpscRing_Init(STRESS_CAPACITY, &context.ring);
+    atomic_init(&context.start, 0);
+
+    assert(thrd_create(&producer, ProducerThread, &context) == thrd_success);
+    assert(thrd_create(&consumer, ConsumerThread, &context) == thrd_success);
+    atomic_store_explicit(&context.start, 1, memory_order_release);
+
+    assert(thrd_join(producer, NULL) == thrd_success);
+    assert(thrd_join(consumer, NULL) == thrd_success);
+    assert(Ids_SpscRing_Empty(&context.ring));
+}
+
 int
 main (void)
 {
@@ -150,6 +239,7 @@ main (void)
     Test_PeekRelease();
     Test_Wrap();
     Test_Alignment();
+    Test_Concurrent();
 
     return EXIT_SUCCESS;
 }
