@@ -57,7 +57,7 @@ struct ids_spsc_ring_range
  */
 struct ids_spsc_ring
 {
-    size_t capacity;
+    size_t                                     capacity;
 
     alignas(IDS_CACHE_LINE_SIZE) atomic_size_t write_cursor;
     alignas(IDS_CACHE_LINE_SIZE) atomic_size_t read_cursor;
@@ -76,12 +76,6 @@ Ids_SpscRing_Init (size_t capacity, struct ids_spsc_ring* ring);
 inline void
 Ids_SpscRing_Reset (struct ids_spsc_ring* ring);
 
-
-/*
-    Return the maximum number of indexes managed by the ring
- */
-inline size_t
-Ids_SpscRing_Capacity (struct ids_spsc_ring* ring);
 
 /*
     Return the number of indexes available to the consumer

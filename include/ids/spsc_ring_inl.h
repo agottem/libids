@@ -43,12 +43,6 @@ Ids_SpscRing_Reset (struct ids_spsc_ring* ring)
 }
 
 inline size_t
-Ids_SpscRing_Capacity (struct ids_spsc_ring* ring)
-{
-    return ring->capacity;
-}
-
-inline size_t
 Ids_SpscRing_Count (struct ids_spsc_ring* ring)
 {
     size_t write_cursor = atomic_load_explicit(&ring->write_cursor, memory_order_relaxed);

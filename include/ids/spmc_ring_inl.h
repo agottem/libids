@@ -47,7 +47,7 @@ Ids_SpmcRing_Reset (struct ids_spmc_ring* ring)
 inline size_t
 Ids_SpmcRing_Count (struct ids_spmc_ring* ring)
 {
-    size_t write_cursor = atomic_load_explicit(&ring->write_cursor, memory_order_acquire);
+    size_t write_cursor = atomic_load_explicit(&ring->write_cursor, memory_order_relaxed);
     size_t claim_cursor = atomic_load_explicit(&ring->claim_cursor, memory_order_relaxed);
 
     return write_cursor - claim_cursor;
@@ -57,7 +57,7 @@ inline size_t
 Ids_SpmcRing_Space (struct ids_spmc_ring* ring)
 {
     size_t write_cursor   = atomic_load_explicit(&ring->write_cursor,   memory_order_relaxed);
-    size_t release_cursor = atomic_load_explicit(&ring->release_cursor, memory_order_acquire);
+    size_t release_cursor = atomic_load_explicit(&ring->release_cursor, memory_order_relaxed);
 
     return ring->capacity - (write_cursor - release_cursor);
 }
