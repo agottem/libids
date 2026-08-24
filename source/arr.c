@@ -52,12 +52,21 @@ Ids_Arr_Capacity (struct ids_arr* arr);
 extern void*
 Ids_Arr_Data (struct ids_arr* arr);
 
+extern void*
+Ids_Arr_At (size_t elem_index, struct ids_arr* arr);
+
 
 extern enum ids_err
 Ids_Arr_Reserve (size_t count, struct ids_arr* arr);
 
+extern void*
+Ids_Arr_InsUninit (size_t count, size_t elem_index, struct ids_arr* arr);
+
 extern enum ids_err
-Ids_Arr_Insert (void* data, size_t count, size_t elem_index, struct ids_arr* arr);
+Ids_Arr_Ins (void* data, size_t count, size_t elem_index, struct ids_arr* arr);
+
+extern void*
+Ids_Arr_AddUninit (size_t count, struct ids_arr* arr);
 
 extern enum ids_err
 Ids_Arr_Add (void* data, size_t count, struct ids_arr* arr);

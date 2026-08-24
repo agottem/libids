@@ -20,6 +20,8 @@
  */
 
 
+#include <ids/alg.h>
+
 #include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -103,6 +105,14 @@ Ids_Arr_Data (struct ids_arr* arr)
     return arr->data;
 }
 
+inline void*
+Ids_Arr_At (size_t elem_index, struct ids_arr* arr)
+{
+    assert(elem_index < arr->elem_count && "Array element index must be in bounds");
+
+    return (unsigned char*)arr->data + elem_index * arr->elem_size;
+}
+
 inline enum ids_err
 Ids_Arr_Reserve (size_t count, struct ids_arr* arr)
 {
@@ -135,31 +145,51 @@ Ids_Arr_Reserve (size_t count, struct ids_arr* arr)
     return ids_err_none;
 }
 
-inline enum ids_err
-Ids_Arr_Insert (void* data, size_t count, size_t elem_index, struct ids_arr* arr)
+inline void*
+Ids_Arr_InsUninit (size_t count, size_t elem_index, struct ids_arr* arr)
 {
+    assert(count > 0 && "Element count must be greater than zero");
+
     size_t       new_count = elem_index + count;
     enum ids_err err       = Ids_Arr_Reserve(new_count, arr);
     if(err != ids_err_none)
-        return err;
+        return NULL;
 
-    size_t data_size     = count * arr->elem_size;
-    size_t existing_size = elem_index * arr->elem_size;
-    memcpy((unsigned char*)arr->data + existing_size, data, data_size);
+    arr->elem_count = IDS_MAX(new_count, count);
 
-    arr->elem_count = new_count;
+    return Ids_Arr_At(elem_index, arr);
+}
+
+inline enum ids_err
+Ids_Arr_Ins (void* data, size_t count, size_t elem_index, struct ids_arr* arr)
+{
+    assert(count > 0 && "Element count must be greater than zero");
+
+    void*  insert_start = Ids_Arr_InsUninit(count, elem_index, arr);
+    size_t insert_size  = count * arr->elem_size;
+    memcpy(insert_start, data, insert_size);
 
     return ids_err_none;
+}
+
+inline void*
+Ids_Arr_AddUninit (size_t count, struct ids_arr* arr)
+{
+    assert(count > 0 && "Element count must be greater than zero");
+
+    return Ids_Arr_InsUninit(count, arr->elem_count, arr);
 }
 
 inline enum ids_err
 Ids_Arr_Add (void* data, size_t count, struct ids_arr* arr)
 {
-    return Ids_Arr_Insert(data, count, arr->elem_count, arr);
+    assert(count > 0 && "Element count must be greater than zero");
+
+    return Ids_Arr_Ins(data, count, arr->elem_count, arr);
 }
 
 inline enum ids_err
 Ids_Arr_Place (void* data, size_t count, struct ids_arr* arr)
 {
-    return Ids_Arr_Insert(data, count, 0, arr);
+    return Ids_Arr_Ins(data, count, 0, arr);
 }

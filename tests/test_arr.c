@@ -96,9 +96,59 @@ Test_ZeroCount (void)
     struct ids_arr arr;
 
     Ids_Arr_Init(sizeof(int), &arr);
-    assert(Ids_Arr_Add(NULL, 0, &arr) == ids_err_none);
     assert(Ids_Arr_Count(&arr) == 0);
     assert(Ids_Arr_Data(&arr) == NULL);
+}
+
+static void
+Test_At (void)
+{
+    int            values[3] = {1, 2, 3};
+    struct ids_arr arr;
+
+    Ids_Arr_InitStatic(sizeof(int), 3, values, &arr);
+    assert(Ids_Arr_Add(values, 3, &arr) == ids_err_none);
+
+    assert(Ids_Arr_At(0, &arr) == &values[0]);
+    assert(Ids_Arr_At(2, &arr) == &values[2]);
+    assert(*(int*)Ids_Arr_At(1, &arr) == 2);
+
+    *(int*)Ids_Arr_At(1, &arr) = 4;
+    assert(values[1] == 4);
+}
+
+static void
+Test_AddUninit (void)
+{
+    int            storage[3];
+    struct ids_arr arr;
+    int*           values;
+
+    Ids_Arr_InitStatic(sizeof(int), 3, storage, &arr);
+
+    values = Ids_Arr_AddUninit(2, &arr);
+    assert(values == storage);
+    assert(Ids_Arr_Count(&arr) == 2);
+    values[0] = 1;
+    values[1] = 2;
+
+    values = Ids_Arr_AddUninit(1, &arr);
+    assert(values == &storage[2]);
+    assert(Ids_Arr_Count(&arr) == 3);
+    values[0] = 3;
+
+    values = Ids_Arr_AddUninit(2, &arr);
+    assert(values != NULL);
+    assert(values == Ids_Arr_At(3, &arr));
+    assert(Ids_Arr_Data(&arr) != storage);
+    assert(Ids_Arr_Count(&arr) == 5);
+    values[0] = 4;
+    values[1] = 5;
+
+    assert(*(int*)Ids_Arr_At(0, &arr) == 1);
+    assert(*(int*)Ids_Arr_At(4, &arr) == 5);
+
+    Ids_Arr_Destroy(&arr);
 }
 
 int
@@ -108,6 +158,8 @@ main (void)
     Test_StaticStorage();
     Test_CreateReserve();
     Test_ZeroCount();
+    Test_At();
+    Test_AddUninit();
 
     return EXIT_SUCCESS;
 }

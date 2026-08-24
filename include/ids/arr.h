@@ -108,6 +108,13 @@ Ids_Arr_Capacity (struct ids_arr* arr);
 inline void*
 Ids_Arr_Data (struct ids_arr* arr);
 
+/*
+    Return the element at the specified index.  The index must be less than the number of
+    elements currently stored in the arr
+ */
+inline void*
+Ids_Arr_At (size_t elem_index, struct ids_arr* arr);
+
 
 /*
     Ensure the arr can hold at least count elements
@@ -118,8 +125,21 @@ Ids_Arr_Reserve (size_t count, struct ids_arr* arr);
 /*
     Insert data beginning at the specified element index
  */
+inline void*
+Ids_Arr_InsUninit (size_t count, size_t elem_index, struct ids_arr* arr);
+
+/*
+    Insert data beginning at the specified element index
+ */
 inline enum ids_err
-Ids_Arr_Insert (void* data, size_t count, size_t elem_index, struct ids_arr* arr);
+Ids_Arr_Ins (void* data, size_t count, size_t elem_index, struct ids_arr* arr);
+
+/*
+    Append count uninitialized elements to the arr and return the first appended element.  Count
+    must be greater than zero.  NULL is returned if storage allocation fails
+ */
+inline void*
+Ids_Arr_AddUninit (size_t count, struct ids_arr* arr);
 
 /*
     Append count elements from data to the arr
