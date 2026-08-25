@@ -61,11 +61,11 @@ struct ids_hash
     The iterator struct used to iterate over an individual hash bucket
 
     Accessible members:
-        current_node -- the current element node being visited
+        node -- the current element node being visited
  */
 struct ids_hash_bkt_it
 {
-    struct ids_hash_node* current_node;
+    struct ids_hash_node* node;
 
     struct ids_clist_it   clist_it;
 };
@@ -74,11 +74,11 @@ struct ids_hash_bkt_it
     The iterator struct used to iterate over an entire hash
 
     Accessible members:
-        current_node -- the current element node being visited
+        node -- the current element node being visited
  */
 struct ids_hash_it
 {
-    struct ids_hash_node*  current_node;
+    struct ids_hash_node*  node;
 
     unsigned int           current_bkt;
     struct ids_hash_bkt_it bkt_it;
@@ -147,7 +147,7 @@ inline struct ids_hash_node*
 Ids_Hash_Find (unsigned int          value_hash,
                void*                 value,
                struct ids_hash*      hash,
-               ids_hash_cmp_t*       cmp,
+               ids_hash_cmp_t*       cmp_func,
                void*                 user_data,
                struct ids_hash_bkt** searched_bkt);
 

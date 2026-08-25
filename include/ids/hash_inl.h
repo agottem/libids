@@ -32,9 +32,9 @@ Ids_Hash_UpdateBktIt (struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it)
 {
     int done = Ids_Clist_ItDone(&bkt->node_list, &it->clist_it);
     if(!done)
-        it->current_node = IDS_CONT_OF(it->clist_it.current_node, struct ids_hash_node, node);
+        it->node = IDS_CONT_OF(it->clist_it.node, struct ids_hash_node, node);
     else
-        it->current_node = NULL;
+        it->node = NULL;
 }
 
 inline void
@@ -45,14 +45,14 @@ Ids_Hash_UpdateIt (struct ids_hash* hash, struct ids_hash_it* it)
         it->current_bkt++;
         if(it->current_bkt >= hash->bkt_count)
         {
-            it->current_node = NULL;
+            it->node = NULL;
             return;
         }
 
         Ids_Hash_BeginBktIt(&hash->bkts[it->current_bkt], &it->bkt_it);
     }
 
-    it->current_node = it->bkt_it.current_node;
+    it->node = it->bkt_it.node;
 }
 
 
@@ -106,7 +106,7 @@ inline struct ids_hash_node*
 Ids_Hash_Find (unsigned int          value_hash,
                void*                 value,
                struct ids_hash*      hash,
-               ids_hash_cmp_t*       cmp,
+               ids_hash_cmp_t*       cmp_func,
                void*                 user_data,
                struct ids_hash_bkt** searched_bkt)
 {
@@ -119,9 +119,9 @@ Ids_Hash_Find (unsigned int          value_hash,
     {
         int delta;
 
-        delta = (*cmp)(value, it.current_node, user_data);
+        delta = (*cmp_func)(value, it.node, user_data);
         if(delta == 0)
-            return it.current_node;
+            return it.node;
     }
 
     return NULL;
@@ -168,7 +168,7 @@ Ids_Hash_BktItFwd (struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it)
 inline int
 Ids_Hash_BktItDone (struct ids_hash_bkt_it* it)
 {
-    return it->current_node == NULL;
+    return it->node == NULL;
 }
 
 inline void
@@ -189,5 +189,5 @@ Ids_Hash_ItFwd (struct ids_hash* hash, struct ids_hash_it* it)
 inline int
 Ids_Hash_ItDone (struct ids_hash_it* it)
 {
-    return it->current_node == NULL;
+    return it->node == NULL;
 }

@@ -97,16 +97,16 @@ Test_ItAndDel (void)
     Ids_Clist_Del(&b.node);
 
     Ids_Clist_BeginIt(&list, &it);
-    assert(NodeToItem(it.current_node)->id == 1);
+    assert(NodeToItem(it.node)->id == 1);
     Ids_Clist_ItFwd(&it);
-    assert(NodeToItem(it.current_node)->id == 3);
+    assert(NodeToItem(it.node)->id == 3);
     Ids_Clist_ItFwd(&it);
     assert(Ids_Clist_ItDone(&list, &it));
 
     Ids_Clist_RBeginIt(&list, &it);
-    assert(NodeToItem(it.current_node)->id == 3);
+    assert(NodeToItem(it.node)->id == 3);
     Ids_Clist_ItBack(&it);
-    assert(NodeToItem(it.current_node)->id == 1);
+    assert(NodeToItem(it.node)->id == 1);
     Ids_Clist_ItBack(&it);
     assert(Ids_Clist_ItDone(&list, &it));
 }

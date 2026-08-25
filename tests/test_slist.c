@@ -130,18 +130,18 @@ Test_It (void)
     Ids_Slist_PushT(&c.node, &list);
 
     Ids_Slist_BeginIt(&list, &it);
-    assert(NodeToItem(it.current_node)->id == 1);
+    assert(NodeToItem(it.node)->id == 1);
     Ids_Slist_ItFwd(&it);
-    assert(NodeToItem(it.current_node)->id == 2);
+    assert(NodeToItem(it.node)->id == 2);
     Ids_Slist_ItFwd(&it);
-    assert(NodeToItem(it.current_node)->id == 3);
+    assert(NodeToItem(it.node)->id == 3);
     Ids_Slist_ItFwd(&it);
     assert(Ids_Slist_ItDone(&it));
 
     Ids_Slist_NBeginIt(&b.node, &it);
-    assert(NodeToItem(it.current_node)->id == 2);
+    assert(NodeToItem(it.node)->id == 2);
     Ids_Slist_ItFwd(&it);
-    assert(NodeToItem(it.current_node)->id == 3);
+    assert(NodeToItem(it.node)->id == 3);
 }
 
 static void

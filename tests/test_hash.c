@@ -127,10 +127,10 @@ Test_BktIt (void)
 
     Ids_Hash_BeginBktIt(&bkts[0], &it);
     assert(!Ids_Hash_BktItDone(&it));
-    assert(it.current_node == &b.node);
+    assert(it.node == &b.node);
     Ids_Hash_BktItFwd(&bkts[0], &it);
     assert(!Ids_Hash_BktItDone(&it));
-    assert(it.current_node == &a.node);
+    assert(it.node == &a.node);
     Ids_Hash_BktItFwd(&bkts[0], &it);
     assert(Ids_Hash_BktItDone(&it));
 }
@@ -161,7 +161,7 @@ Test_It (void)
 
     for(Ids_Hash_BeginIt(&hash, &it); !Ids_Hash_ItDone(&it); Ids_Hash_ItFwd(&hash, &it))
     {
-        struct item* item = IDS_CONT_OF(it.current_node, struct item, node);
+        struct item* item = IDS_CONT_OF(it.node, struct item, node);
         assert(item->id >= 1 && item->id <= 4);
         assert(!visited[item->id]);
 

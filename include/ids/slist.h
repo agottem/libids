@@ -56,11 +56,11 @@ struct ids_slist
     The iterator struct is used to track the current position of a data struct iteration
 
     Accessible members:
-        current_node -- the current element node being visited
+        node -- the current element node being visited
  */
 struct ids_slist_it
 {
-    struct ids_slist_node* current_node;
+    struct ids_slist_node* node;
 };
 
 

@@ -51,7 +51,7 @@ extern struct ids_hash_node*
 Ids_Hash_Find (unsigned int          value_hash,
                void*                 value,
                struct ids_hash*      hash,
-               ids_hash_cmp_t        cmp,
+               ids_hash_cmp_t        cmp_func,
                void*                 user_data,
                struct ids_hash_bkt** searched_bkt);
 

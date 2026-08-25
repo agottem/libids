@@ -135,7 +135,7 @@ Ids_Clist_PopT (struct ids_clist* clist)
 inline void
 Ids_Clist_NBeginIt (struct ids_clist_node* node, struct ids_clist_it* it)
 {
-    it->current_node = node;
+    it->node = node;
 }
 
 inline void
@@ -153,17 +153,17 @@ Ids_Clist_RBeginIt (struct ids_clist* clist, struct ids_clist_it* it)
 inline void
 Ids_Clist_ItFwd (struct ids_clist_it* it)
 {
-    it->current_node = it->current_node->next;
+    it->node = it->node->next;
 }
 
 inline void
 Ids_Clist_ItBack (struct ids_clist_it* it)
 {
-    it->current_node = it->current_node->prev;
+    it->node = it->node->prev;
 }
 
 inline int
 Ids_Clist_ItDone (struct ids_clist* clist, struct ids_clist_it* it)
 {
-    return it->current_node == Ids_Clist_End(clist);
+    return it->node == Ids_Clist_End(clist);
 }

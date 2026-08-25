@@ -107,7 +107,7 @@ Ids_Slist_PushT (struct ids_slist_node* node, struct ids_slist* slist)
 inline void
 Ids_Slist_NBeginIt (struct ids_slist_node* node, struct ids_slist_it* it)
 {
-    it->current_node = node;
+    it->node = node;
 }
 
 inline void
@@ -119,11 +119,11 @@ Ids_Slist_BeginIt (struct ids_slist* slist, struct ids_slist_it* it)
 inline void
 Ids_Slist_ItFwd (struct ids_slist_it* it)
 {
-    it->current_node = it->current_node->next;
+    it->node = it->node->next;
 }
 
 inline int
 Ids_Slist_ItDone (struct ids_slist_it* it)
 {
-    return it->current_node == NULL;
+    return it->node == NULL;
 }
