@@ -106,6 +106,18 @@ Ids_Slist_Ins (struct ids_slist_node* restrict new_node,
                struct ids_slist*               slist);
 
 /*
+    Move all nodes from source to the head of dest.  Source and dest must be distinct slists
+ */
+inline void
+Ids_Slist_SpliceH (struct ids_slist* restrict source, struct ids_slist* restrict dest);
+
+/*
+    Move all nodes from source to the tail of dest.  Source and dest must be distinct slists
+ */
+inline void
+Ids_Slist_SpliceT (struct ids_slist* restrict source, struct ids_slist* restrict dest);
+
+/*
     Push a node at the head of the specified slist
  */
 inline void

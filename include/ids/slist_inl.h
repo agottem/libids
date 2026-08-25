@@ -68,6 +68,41 @@ Ids_Slist_Ins (struct ids_slist_node* restrict new_node,
 }
 
 inline void
+Ids_Slist_SpliceH (struct ids_slist* restrict source, struct ids_slist* restrict dest)
+{
+    assert(source != dest && "Attempting to splice an slist into itself");
+
+    if(source->head == NULL)
+        return;
+
+    source->tail->next = dest->head;
+    dest->head         = source->head;
+
+    if(dest->tail == NULL)
+        dest->tail = source->tail;
+
+    Ids_Slist_Reset(source);
+}
+
+inline void
+Ids_Slist_SpliceT (struct ids_slist* restrict source, struct ids_slist* restrict dest)
+{
+    assert(source != dest && "Attempting to splice an slist into itself");
+
+    if(source->head == NULL)
+        return;
+
+    if(dest->tail == NULL)
+        dest->head = source->head;
+    else
+        dest->tail->next = source->head;
+
+    dest->tail = source->tail;
+
+    Ids_Slist_Reset(source);
+}
+
+inline void
 Ids_Slist_PushH (struct ids_slist_node* node, struct ids_slist* slist)
 {
     node->next  = slist->head;

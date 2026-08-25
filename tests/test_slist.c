@@ -113,6 +113,97 @@ Test_Ins (void)
 }
 
 static void
+Test_SpliceH (void)
+{
+    struct ids_slist source;
+    struct ids_slist dest;
+    struct item      a = {.id = 1};
+    struct item      b = {.id = 2};
+    struct item      c = {.id = 3};
+    struct item      d = {.id = 4};
+
+    Ids_Slist_Init(&source);
+    Ids_Slist_Init(&dest);
+    Ids_Slist_PushT(&a.node, &source);
+    Ids_Slist_PushT(&b.node, &source);
+    Ids_Slist_PushT(&c.node, &dest);
+    Ids_Slist_PushT(&d.node, &dest);
+
+    Ids_Slist_SpliceH(&source, &dest);
+
+    assert(Ids_Slist_Empty(&source));
+    assert(Ids_Slist_Tail(&source) == NULL);
+    assert(Ids_Slist_Head(&dest) == &a.node);
+    assert(Ids_Slist_Tail(&dest) == &d.node);
+    assert(NodeToItem(Ids_Slist_PopH(&dest))->id == 1);
+    assert(NodeToItem(Ids_Slist_PopH(&dest))->id == 2);
+    assert(NodeToItem(Ids_Slist_PopH(&dest))->id == 3);
+    assert(NodeToItem(Ids_Slist_PopH(&dest))->id == 4);
+}
+
+static void
+Test_SpliceT (void)
+{
+    struct ids_slist source;
+    struct ids_slist dest;
+    struct item      a = {.id = 1};
+    struct item      b = {.id = 2};
+    struct item      c = {.id = 3};
+    struct item      d = {.id = 4};
+
+    Ids_Slist_Init(&source);
+    Ids_Slist_Init(&dest);
+    Ids_Slist_PushT(&a.node, &source);
+    Ids_Slist_PushT(&b.node, &source);
+    Ids_Slist_PushT(&c.node, &dest);
+    Ids_Slist_PushT(&d.node, &dest);
+
+    Ids_Slist_SpliceT(&source, &dest);
+
+    assert(Ids_Slist_Empty(&source));
+    assert(Ids_Slist_Tail(&source) == NULL);
+    assert(Ids_Slist_Head(&dest) == &c.node);
+    assert(Ids_Slist_Tail(&dest) == &b.node);
+    assert(NodeToItem(Ids_Slist_PopH(&dest))->id == 3);
+    assert(NodeToItem(Ids_Slist_PopH(&dest))->id == 4);
+    assert(NodeToItem(Ids_Slist_PopH(&dest))->id == 1);
+    assert(NodeToItem(Ids_Slist_PopH(&dest))->id == 2);
+}
+
+static void
+Test_SpliceEmpty (void)
+{
+    struct ids_slist source;
+    struct ids_slist dest;
+    struct item      a = {.id = 1};
+
+    Ids_Slist_Init(&source);
+    Ids_Slist_Init(&dest);
+    Ids_Slist_PushT(&a.node, &dest);
+
+    Ids_Slist_SpliceH(&source, &dest);
+    assert(Ids_Slist_Empty(&source));
+    assert(Ids_Slist_Head(&dest) == &a.node);
+    assert(Ids_Slist_Tail(&dest) == &a.node);
+
+    Ids_Slist_SpliceT(&source, &dest);
+    assert(Ids_Slist_Empty(&source));
+    assert(Ids_Slist_Head(&dest) == &a.node);
+    assert(Ids_Slist_Tail(&dest) == &a.node);
+
+    Ids_Slist_SpliceH(&dest, &source);
+    assert(Ids_Slist_Empty(&dest));
+    assert(Ids_Slist_Head(&source) == &a.node);
+    assert(Ids_Slist_Tail(&source) == &a.node);
+
+    Ids_Slist_SpliceT(&source, &dest);
+    assert(Ids_Slist_Empty(&source));
+    assert(Ids_Slist_Head(&dest) == &a.node);
+    assert(Ids_Slist_Tail(&dest) == &a.node);
+    assert(a.node.next == NULL);
+}
+
+static void
 Test_It (void)
 {
     struct ids_slist    list;
@@ -166,6 +257,9 @@ main (void)
     Test_InitReset();
     Test_PushPop();
     Test_Ins();
+    Test_SpliceH();
+    Test_SpliceT();
+    Test_SpliceEmpty();
     Test_It();
     Test_Reuse();
 

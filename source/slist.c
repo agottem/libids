@@ -46,6 +46,12 @@ Ids_Slist_Ins (struct ids_slist_node* restrict new_node,
                struct ids_slist* slist);
 
 extern void
+Ids_Slist_SpliceH (struct ids_slist* restrict source, struct ids_slist* restrict dest);
+
+extern void
+Ids_Slist_SpliceT (struct ids_slist* restrict source, struct ids_slist* restrict dest);
+
+extern void
 Ids_Slist_PushH (struct ids_slist_node* node, struct ids_slist* slist);
 
 extern struct ids_slist_node*
