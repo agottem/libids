@@ -132,7 +132,7 @@ Ids_Arr_InsUninit (size_t count, size_t elem_index, struct ids_arr* arr);
     Insert data beginning at the specified element index
  */
 inline enum ids_err
-Ids_Arr_Ins (void* data, size_t count, size_t elem_index, struct ids_arr* arr);
+Ids_Arr_Ins (void* restrict data, size_t count, size_t elem_index, struct ids_arr* arr);
 
 /*
     Append count uninitialized elements to the arr and return the first appended element.  Count
@@ -145,13 +145,13 @@ Ids_Arr_AddUninit (size_t count, struct ids_arr* arr);
     Append count elements from data to the arr
  */
 inline enum ids_err
-Ids_Arr_Add (void* data, size_t count, struct ids_arr* arr);
+Ids_Arr_Add (void* restrict data, size_t count, struct ids_arr* arr);
 
 /*
     Place count elements from data to the arr
  */
 inline enum ids_err
-Ids_Arr_Place (void* data, size_t count, struct ids_arr* arr);
+Ids_Arr_Place (void* restrict data, size_t count, struct ids_arr* arr);
 
 
 #include <ids/arr_inl.h>
