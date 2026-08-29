@@ -1,4 +1,4 @@
-libids implements intrusive data structures in C11. The APIs are intentionally light weight to
+libids implements intrusive data structures in C23. The APIs are intentionally light weight to
 facilitate both flexibility and performance.
 
 To build and install the C intrusive data struct library, perform the following commands:

@@ -1,4 +1,4 @@
-AM_CFLAGS = -std=c11 -I$(top_srcdir)/include
+AM_CFLAGS = -std=c23 -I$(top_srcdir)/include
 
 lib_LTLIBRARIES = libids.la
 
