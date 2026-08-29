@@ -33,9 +33,10 @@
 #include <ids/err.h>
 
 
-enum ids_arr_flags
+enum ids_arr_flags : unsigned int
 {
-    ids_arr_flag_static_data = 1 << 0,
+    ids_arr_flags_none       = 0u,
+    ids_arr_flag_static_data = 1u << 0,
 };
 
 
@@ -50,11 +51,11 @@ enum ids_arr_flags
  */
 struct ids_arr
 {
-    size_t       elem_size;
-    size_t       elem_count;
-    size_t       capacity;
-    void*        data;
-    unsigned int flags;
+    size_t             elem_size;
+    size_t             elem_count;
+    size_t             capacity;
+    void*              data;
+    enum ids_arr_flags flags;
 };
 
 

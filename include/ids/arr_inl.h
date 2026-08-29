@@ -36,7 +36,7 @@ Ids_Arr_Init (size_t elem_size, struct ids_arr* arr)
     arr->elem_count = 0;
     arr->capacity   = 0;
     arr->data       = NULL;
-    arr->flags      = 0;
+    arr->flags      = ids_arr_flags_none;
 }
 
 inline void
