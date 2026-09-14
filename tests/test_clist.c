@@ -62,8 +62,8 @@ Test_PushPop (void)
     struct item b = { .id = 2 };
 
     Ids_Clist_Init(&list);
-    Ids_Clist_PushH(&a.node, &list);
-    Ids_Clist_PushT(&b.node, &list);
+    Ids_Clist_PushH(&list, &a.node);
+    Ids_Clist_PushT(&list, &b.node);
 
     assert(NodeToItem(Ids_Clist_Head(&list))->id == 1);
     assert(NodeToItem(Ids_Clist_Tail(&list))->id == 2);
@@ -71,8 +71,8 @@ Test_PushPop (void)
     assert(Ids_Clist_PopT(&list) == &b.node);
     assert(Ids_Clist_Empty(&list));
 
-    Ids_Clist_PushH(&a.node, &list);
-    Ids_Clist_PushH(&b.node, &list);
+    Ids_Clist_PushH(&list, &a.node);
+    Ids_Clist_PushH(&list, &b.node);
 
     assert(Ids_Clist_PopT(&list) == &a.node);
     assert(Ids_Clist_PopT(&list) == &b.node);
@@ -90,9 +90,9 @@ Test_ItAndDel (void)
     struct item c = { .id = 3 };
 
     Ids_Clist_Init(&list);
-    Ids_Clist_PushT(&a.node, &list);
-    Ids_Clist_PushT(&b.node, &list);
-    Ids_Clist_PushT(&c.node, &list);
+    Ids_Clist_PushT(&list, &a.node);
+    Ids_Clist_PushT(&list, &b.node);
+    Ids_Clist_PushT(&list, &c.node);
 
     Ids_Clist_Del(&b.node);
 
@@ -121,9 +121,9 @@ Test_SpliceSingle (void)
     struct item c = { .id = 3 };
 
     Ids_Clist_Init(&list);
-    Ids_Clist_PushT(&a.node, &list);
-    Ids_Clist_PushT(&b.node, &list);
-    Ids_Clist_PushT(&c.node, &list);
+    Ids_Clist_PushT(&list, &a.node);
+    Ids_Clist_PushT(&list, &b.node);
+    Ids_Clist_PushT(&list, &c.node);
 
     Ids_Clist_Splice(&b.node, &b.node, &a.node);
 
@@ -144,10 +144,10 @@ Test_SpliceRange (void)
     struct item d = { .id = 4 };
 
     Ids_Clist_Init(&list);
-    Ids_Clist_PushT(&a.node, &list);
-    Ids_Clist_PushT(&b.node, &list);
-    Ids_Clist_PushT(&c.node, &list);
-    Ids_Clist_PushT(&d.node, &list);
+    Ids_Clist_PushT(&list, &a.node);
+    Ids_Clist_PushT(&list, &b.node);
+    Ids_Clist_PushT(&list, &c.node);
+    Ids_Clist_PushT(&list, &d.node);
 
     Ids_Clist_Splice(&b.node, &c.node, &a.node);
 

@@ -130,7 +130,7 @@ Ids_Hash_Find (unsigned int          value_hash,
 inline void
 Ids_Hash_Ins (struct ids_hash_node* node, struct ids_hash_bkt* bkt)
 {
-    Ids_Clist_PushH(&node->node, &bkt->node_list);
+    Ids_Clist_PushH(&bkt->node_list, &node->node);
 }
 
 inline void

@@ -97,7 +97,7 @@ Ids_Clist_Del (struct ids_clist_node* node)
 }
 
 inline void
-Ids_Clist_PushH (struct ids_clist_node* node, struct ids_clist* clist)
+Ids_Clist_PushH (struct ids_clist* clist, struct ids_clist_node* node)
 {
     Ids_Clist_Ins(node, Ids_Clist_Head(clist));
 }
@@ -115,7 +115,7 @@ Ids_Clist_PopH (struct ids_clist* clist)
 }
 
 inline void
-Ids_Clist_PushT (struct ids_clist_node* node, struct ids_clist* clist)
+Ids_Clist_PushT (struct ids_clist* clist, struct ids_clist_node* node)
 {
     Ids_Clist_Ins(node, Ids_Clist_End(clist));
 }
