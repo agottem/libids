@@ -116,7 +116,7 @@ Ids_RbTree_PostNext (struct ids_rbtree_node* node)
 }
 
 inline void
-Ids_RbTree_RotateLeft (struct ids_rbtree_node* node, struct ids_rbtree* rbtree)
+Ids_RbTree_RotateLeft (struct ids_rbtree* rbtree, struct ids_rbtree_node* node)
 {
     struct ids_rbtree_node* pivot = node->right;
 
@@ -137,7 +137,7 @@ Ids_RbTree_RotateLeft (struct ids_rbtree_node* node, struct ids_rbtree* rbtree)
 }
 
 inline void
-Ids_RbTree_RotateRight (struct ids_rbtree_node* node, struct ids_rbtree* rbtree)
+Ids_RbTree_RotateRight (struct ids_rbtree* rbtree, struct ids_rbtree_node* node)
 {
     struct ids_rbtree_node* pivot = node->left;
 
@@ -158,7 +158,7 @@ Ids_RbTree_RotateRight (struct ids_rbtree_node* node, struct ids_rbtree* rbtree)
 }
 
 inline void
-Ids_RbTree_FixAdd (struct ids_rbtree_node* node, struct ids_rbtree* rbtree)
+Ids_RbTree_FixAdd (struct ids_rbtree* rbtree, struct ids_rbtree_node* node)
 {
     while(node->parent != NULL && node->parent->color == ids_rbtree_color_red)
     {
@@ -180,13 +180,13 @@ Ids_RbTree_FixAdd (struct ids_rbtree_node* node, struct ids_rbtree* rbtree)
             if(node == parent->right)
             {
                 node = parent;
-                Ids_RbTree_RotateLeft(node, rbtree);
+                Ids_RbTree_RotateLeft(rbtree, node);
                 parent = node->parent;
             }
 
             parent->color         = ids_rbtree_color_black;
             parent->parent->color = ids_rbtree_color_red;
-            Ids_RbTree_RotateRight(parent->parent, rbtree);
+            Ids_RbTree_RotateRight(rbtree, parent->parent);
         }
         else
         {
@@ -203,13 +203,13 @@ Ids_RbTree_FixAdd (struct ids_rbtree_node* node, struct ids_rbtree* rbtree)
             if(node == parent->left)
             {
                 node = parent;
-                Ids_RbTree_RotateRight(node, rbtree);
+                Ids_RbTree_RotateRight(rbtree, node);
                 parent = node->parent;
             }
 
             parent->color         = ids_rbtree_color_black;
             parent->parent->color = ids_rbtree_color_red;
-            Ids_RbTree_RotateLeft(parent->parent, rbtree);
+            Ids_RbTree_RotateLeft(rbtree, parent->parent);
         }
     }
 
@@ -217,9 +217,9 @@ Ids_RbTree_FixAdd (struct ids_rbtree_node* node, struct ids_rbtree* rbtree)
 }
 
 inline void
-Ids_RbTree_Replace (struct ids_rbtree_node* node,
-                    struct ids_rbtree_node* replacement,
-                    struct ids_rbtree*      rbtree)
+Ids_RbTree_Replace (struct ids_rbtree*      rbtree,
+                    struct ids_rbtree_node* node,
+                    struct ids_rbtree_node* replacement)
 {
     if(node->parent == NULL)
         rbtree->root = replacement;
@@ -233,9 +233,9 @@ Ids_RbTree_Replace (struct ids_rbtree_node* node,
 }
 
 inline void
-Ids_RbTree_FixDel (struct ids_rbtree_node* node,
-                   struct ids_rbtree_node* parent,
-                   struct ids_rbtree*      rbtree)
+Ids_RbTree_FixDel (struct ids_rbtree*      rbtree,
+                   struct ids_rbtree_node* node,
+                   struct ids_rbtree_node* parent)
 {
     while(node != rbtree->root && Ids_RbTree_Color(node) == ids_rbtree_color_black)
     {
@@ -246,7 +246,7 @@ Ids_RbTree_FixDel (struct ids_rbtree_node* node,
             {
                 sibling->color = ids_rbtree_color_black;
                 parent->color  = ids_rbtree_color_red;
-                Ids_RbTree_RotateLeft(parent, rbtree);
+                Ids_RbTree_RotateLeft(rbtree, parent);
                 sibling = parent->right;
             }
 
@@ -264,7 +264,7 @@ Ids_RbTree_FixDel (struct ids_rbtree_node* node,
                     if(sibling->left != NULL)
                         sibling->left->color = ids_rbtree_color_black;
                     sibling->color = ids_rbtree_color_red;
-                    Ids_RbTree_RotateRight(sibling, rbtree);
+                    Ids_RbTree_RotateRight(rbtree, sibling);
                     sibling = parent->right;
                 }
 
@@ -272,7 +272,7 @@ Ids_RbTree_FixDel (struct ids_rbtree_node* node,
                 parent->color  = ids_rbtree_color_black;
                 if(sibling->right != NULL)
                     sibling->right->color = ids_rbtree_color_black;
-                Ids_RbTree_RotateLeft(parent, rbtree);
+                Ids_RbTree_RotateLeft(rbtree, parent);
                 node = rbtree->root;
                 break;
             }
@@ -284,7 +284,7 @@ Ids_RbTree_FixDel (struct ids_rbtree_node* node,
             {
                 sibling->color = ids_rbtree_color_black;
                 parent->color  = ids_rbtree_color_red;
-                Ids_RbTree_RotateRight(parent, rbtree);
+                Ids_RbTree_RotateRight(rbtree, parent);
                 sibling = parent->left;
             }
 
@@ -302,7 +302,7 @@ Ids_RbTree_FixDel (struct ids_rbtree_node* node,
                     if(sibling->right != NULL)
                         sibling->right->color = ids_rbtree_color_black;
                     sibling->color = ids_rbtree_color_red;
-                    Ids_RbTree_RotateLeft(sibling, rbtree);
+                    Ids_RbTree_RotateLeft(rbtree, sibling);
                     sibling = parent->left;
                 }
 
@@ -310,7 +310,7 @@ Ids_RbTree_FixDel (struct ids_rbtree_node* node,
                 parent->color  = ids_rbtree_color_black;
                 if(sibling->left != NULL)
                     sibling->left->color = ids_rbtree_color_black;
-                Ids_RbTree_RotateRight(parent, rbtree);
+                Ids_RbTree_RotateRight(rbtree, parent);
                 node = rbtree->root;
                 break;
             }
@@ -359,7 +359,7 @@ Ids_RbTree_Max (struct ids_rbtree* rbtree)
 }
 
 inline struct ids_rbtree_node*
-Ids_RbTree_Find (void* id, struct ids_rbtree* rbtree, ids_rbtree_cmp_t* cmp_func, void* user_data)
+Ids_RbTree_Find (struct ids_rbtree* rbtree, void* id, ids_rbtree_cmp_t* cmp_func, void* user_data)
 {
     struct ids_rbtree_node* node = rbtree->root;
     while(node != NULL)
@@ -375,8 +375,8 @@ Ids_RbTree_Find (void* id, struct ids_rbtree* rbtree, ids_rbtree_cmp_t* cmp_func
 }
 
 inline struct ids_rbtree_node*
-Ids_RbTree_LowerBound (void*              id,
-                       struct ids_rbtree* rbtree,
+Ids_RbTree_LowerBound (struct ids_rbtree* rbtree,
+                       void*              id,
                        ids_rbtree_cmp_t*  cmp_func,
                        void*              user_data)
 {
@@ -398,8 +398,8 @@ Ids_RbTree_LowerBound (void*              id,
 }
 
 inline struct ids_rbtree_node*
-Ids_RbTree_UpperBound (void*              id,
-                       struct ids_rbtree* rbtree,
+Ids_RbTree_UpperBound (struct ids_rbtree* rbtree,
+                       void*              id,
                        ids_rbtree_cmp_t*  cmp_func,
                        void*              user_data)
 {
@@ -421,9 +421,9 @@ Ids_RbTree_UpperBound (void*              id,
 }
 
 inline struct ids_rbtree_node*
-Ids_RbTree_Add (void*                   id,
+Ids_RbTree_Add (struct ids_rbtree*      rbtree,
+                void*                   id,
                 struct ids_rbtree_node* node,
-                struct ids_rbtree*      rbtree,
                 ids_rbtree_cmp_t*       cmp_func,
                 void*                   user_data)
 {
@@ -448,30 +448,30 @@ Ids_RbTree_Add (void*                   id,
     node->color  = ids_rbtree_color_red;
     *link        = node;
 
-    Ids_RbTree_FixAdd(node, rbtree);
+    Ids_RbTree_FixAdd(rbtree, node);
 
     return NULL;
 }
 
 inline void
-Ids_RbTree_Del (struct ids_rbtree_node* node, struct ids_rbtree* rbtree)
+Ids_RbTree_Del (struct ids_rbtree* rbtree, struct ids_rbtree_node* node)
 {
-    struct ids_rbtree_node* removed = node;
     struct ids_rbtree_node* replacement;
     struct ids_rbtree_node* parent;
+    struct ids_rbtree_node* removed       = node;
     enum ids_rbtree_color   removed_color = removed->color;
 
     if(node->left == NULL)
     {
         replacement = node->right;
         parent      = node->parent;
-        Ids_RbTree_Replace(node, node->right, rbtree);
+        Ids_RbTree_Replace(rbtree, node, node->right);
     }
     else if(node->right == NULL)
     {
         replacement = node->left;
         parent      = node->parent;
-        Ids_RbTree_Replace(node, node->left, rbtree);
+        Ids_RbTree_Replace(rbtree, node, node->left);
     }
     else
     {
@@ -488,19 +488,19 @@ Ids_RbTree_Del (struct ids_rbtree_node* node, struct ids_rbtree* rbtree)
         else
         {
             parent = removed->parent;
-            Ids_RbTree_Replace(removed, removed->right, rbtree);
+            Ids_RbTree_Replace(rbtree, removed, removed->right);
             removed->right         = node->right;
             removed->right->parent = removed;
         }
 
-        Ids_RbTree_Replace(node, removed, rbtree);
+        Ids_RbTree_Replace(rbtree, node, removed);
         removed->left         = node->left;
         removed->left->parent = removed;
         removed->color        = node->color;
     }
 
     if(removed_color == ids_rbtree_color_black)
-        Ids_RbTree_FixDel(replacement, parent, rbtree);
+        Ids_RbTree_FixDel(rbtree, replacement, parent);
 }
 
 inline void

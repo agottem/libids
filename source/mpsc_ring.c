@@ -24,7 +24,7 @@
 
 
 extern void
-Ids_MpscRing_Init (size_t capacity, struct ids_mpsc_ring* ring);
+Ids_MpscRing_Init (struct ids_mpsc_ring* ring, size_t capacity);
 
 extern void
 Ids_MpscRing_Reset (struct ids_mpsc_ring* ring);
@@ -44,14 +44,14 @@ Ids_MpscRing_Full (struct ids_mpsc_ring* ring);
 
 
 extern struct ids_mpsc_ring_range
-Ids_MpscRing_Reserve (size_t count, struct ids_mpsc_ring* ring);
+Ids_MpscRing_Reserve (struct ids_mpsc_ring* ring, size_t count);
 
 extern void
-Ids_MpscRing_Commit (struct ids_mpsc_ring_range* range, struct ids_mpsc_ring* ring);
+Ids_MpscRing_Commit (struct ids_mpsc_ring* ring, struct ids_mpsc_ring_range* range);
 
 
 extern struct ids_mpsc_ring_range
-Ids_MpscRing_Peek (size_t count, struct ids_mpsc_ring* ring);
+Ids_MpscRing_Peek (struct ids_mpsc_ring* ring, size_t count);
 
 extern void
-Ids_MpscRing_Release (struct ids_mpsc_ring_range* range, struct ids_mpsc_ring* ring);
+Ids_MpscRing_Release (struct ids_mpsc_ring* ring, struct ids_mpsc_ring_range* range);

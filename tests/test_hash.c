@@ -53,15 +53,15 @@ Test_InitReset (void)
 
     struct item         item = {.id = 1};
 
-    Ids_Hash_Init(3, bkts, &hash);
+    Ids_Hash_Init(&hash, 3, bkts);
     assert(hash.bkt_count == 3);
     assert(hash.bkts == bkts);
     assert(Ids_Hash_BktEmpty(&bkts[0]));
     assert(Ids_Hash_BktEmpty(&bkts[1]));
     assert(Ids_Hash_BktEmpty(&bkts[2]));
 
-    Ids_Hash_Add(1, &item.node, &hash);
-    assert(!Ids_Hash_BktEmpty(Ids_Hash_Bkt(1, &hash)));
+    Ids_Hash_Add(&hash, 1, &item.node);
+    assert(!Ids_Hash_BktEmpty(Ids_Hash_Bkt(&hash, 1)));
 
     Ids_Hash_Reset(&hash);
     assert(Ids_Hash_BktEmpty(&bkts[0]));
@@ -74,7 +74,7 @@ Test_CreateDestroy (void)
 {
     struct ids_hash hash;
 
-    assert(Ids_Hash_Create(4, &hash) == ids_err_none);
+    assert(Ids_Hash_Create(&hash, 4) == ids_err_none);
     assert(hash.bkt_count == 4);
     assert(hash.bkts != 0);
     Ids_Hash_Destroy(&hash);
@@ -91,20 +91,20 @@ Test_FindDel (void)
     struct item          a = {.id = 1};
     struct item          b = {.id = 3};
 
-    Ids_Hash_Init(2, bkts, &hash);
-    Ids_Hash_Add(1, &a.node, &hash);
-    Ids_Hash_Add(3, &b.node, &hash);
+    Ids_Hash_Init(&hash, 2, bkts);
+    Ids_Hash_Add(&hash, 1, &a.node);
+    Ids_Hash_Add(&hash, 3, &b.node);
 
     id = 3;
-    assert(Ids_Hash_Find(3, &id, &hash, ItemCmp, 0, &searched_bkt) == &b.node);
-    assert(searched_bkt == Ids_Hash_Bkt(3, &hash));
+    assert(Ids_Hash_Find(&hash, 3, &id, ItemCmp, 0, &searched_bkt) == &b.node);
+    assert(searched_bkt == Ids_Hash_Bkt(&hash, 3));
 
     id = 2;
-    assert(Ids_Hash_Find(2, &id, &hash, ItemCmp, 0, &searched_bkt) == NULL);
+    assert(Ids_Hash_Find(&hash, 2, &id, ItemCmp, 0, &searched_bkt) == NULL);
 
     Ids_Hash_Del(&b.node);
     id = 3;
-    assert(Ids_Hash_Find(3, &id, &hash, ItemCmp, 0, &searched_bkt) == NULL);
+    assert(Ids_Hash_Find(&hash, 3, &id, ItemCmp, 0, &searched_bkt) == NULL);
 }
 
 static void
@@ -117,13 +117,13 @@ Test_BktIt (void)
     struct item            a = {.id = 1};
     struct item            b = {.id = 2};
 
-    Ids_Hash_Init(1, bkts, &hash);
+    Ids_Hash_Init(&hash, 1, bkts);
 
     Ids_Hash_BeginBktIt(&bkts[0], &it);
     assert(Ids_Hash_BktItDone(&it));
 
-    Ids_Hash_Add(0, &a.node, &hash);
-    Ids_Hash_Add(0, &b.node, &hash);
+    Ids_Hash_Add(&hash, 0, &a.node);
+    Ids_Hash_Add(&hash, 0, &b.node);
 
     Ids_Hash_BeginBktIt(&bkts[0], &it);
     assert(!Ids_Hash_BktItDone(&it));
@@ -149,15 +149,15 @@ Test_It (void)
     struct item         c          = {.id = 3};
     struct item         d          = {.id = 4};
 
-    Ids_Hash_Init(4, bkts, &hash);
+    Ids_Hash_Init(&hash, 4, bkts);
 
     Ids_Hash_BeginIt(&hash, &it);
     assert(Ids_Hash_ItDone(&it));
 
-    Ids_Hash_Add(0, &a.node, &hash);
-    Ids_Hash_Add(2, &b.node, &hash);
-    Ids_Hash_Add(6, &c.node, &hash);
-    Ids_Hash_Add(3, &d.node, &hash);
+    Ids_Hash_Add(&hash, 0, &a.node);
+    Ids_Hash_Add(&hash, 2, &b.node);
+    Ids_Hash_Add(&hash, 6, &c.node);
+    Ids_Hash_Add(&hash, 3, &d.node);
 
     for(Ids_Hash_BeginIt(&hash, &it); !Ids_Hash_ItDone(&it); Ids_Hash_ItFwd(&hash, &it))
     {

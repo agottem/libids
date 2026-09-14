@@ -110,14 +110,14 @@ ids_hash_cmp_t (void* id, struct ids_hash_node* node, void* user_data);
      Initialize a hash.  The data struct will be empty upon initialization
  */
 inline void
-Ids_Hash_Init (unsigned int count, struct ids_hash_bkt* bkts, struct ids_hash* hash);
+Ids_Hash_Init (struct ids_hash* hash, unsigned int count, struct ids_hash_bkt* bkts);
 
 /*
      Allocate hash buckets and initialize a hash.  The data struct will be empty upon
      initialization
  */
 inline enum ids_err
-Ids_Hash_Create (unsigned int count, struct ids_hash* hash);
+Ids_Hash_Create (struct ids_hash* hash, unsigned int count);
 
 /*
      Cleanup a previously created hash
@@ -136,7 +136,7 @@ Ids_Hash_Reset (struct ids_hash* hash);
    Return the bucket which maps to the specified hash value
  */
 inline struct ids_hash_bkt*
-Ids_Hash_Bkt (unsigned int value_hash, struct ids_hash* hash);
+Ids_Hash_Bkt (struct ids_hash* hash, unsigned int value_hash);
 
 
 /*
@@ -144,9 +144,9 @@ Ids_Hash_Bkt (unsigned int value_hash, struct ids_hash* hash);
     set and the found node returned.  If no node was found, NULL is returned
  */
 inline struct ids_hash_node*
-Ids_Hash_Find (unsigned int          value_hash,
+Ids_Hash_Find (struct ids_hash*      hash,
+               unsigned int          value_hash,
                void*                 value,
-               struct ids_hash*      hash,
                ids_hash_cmp_t*       cmp_func,
                void*                 user_data,
                struct ids_hash_bkt** searched_bkt);
@@ -156,13 +156,13 @@ Ids_Hash_Find (unsigned int          value_hash,
     Insert a node into the specified hash bucket
  */
 inline void
-Ids_Hash_Ins (struct ids_hash_node* node, struct ids_hash_bkt* bkt);
+Ids_Hash_Ins (struct ids_hash_bkt* bkt, struct ids_hash_node* node);
 
 /*
     Add a node to the hash, specifying the hash value for the node
  */
 inline void
-Ids_Hash_Add (unsigned int value_hash, struct ids_hash_node* node, struct ids_hash* hash);
+Ids_Hash_Add (struct ids_hash* hash, unsigned int value_hash, struct ids_hash_node* node);
 
 /*
     Delete the specified node from the hash

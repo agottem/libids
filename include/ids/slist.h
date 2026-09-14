@@ -101,9 +101,9 @@ Ids_Slist_Empty (struct ids_slist* slist);
     specified non-empty slist
  */
 inline void
-Ids_Slist_Ins (struct ids_slist_node* restrict new_node,
-               struct ids_slist_node* restrict existing_node,
-               struct ids_slist*               slist);
+Ids_Slist_Ins (struct ids_slist*               slist,
+               struct ids_slist_node* restrict new_node,
+               struct ids_slist_node* restrict existing_node);
 
 /*
     Move all nodes from source to the head of dest.  Source and dest must be distinct slists
@@ -121,7 +121,7 @@ Ids_Slist_SpliceT (struct ids_slist* restrict source, struct ids_slist* restrict
     Push a node at the head of the specified slist
  */
 inline void
-Ids_Slist_PushH (struct ids_slist_node* node, struct ids_slist* slist);
+Ids_Slist_PushH (struct ids_slist* slist, struct ids_slist_node* node);
 
 /*
     Pop the head node from an slist
@@ -133,7 +133,7 @@ Ids_Slist_PopH (struct ids_slist* slist);
     Push a node at the tail of the specified slist
  */
 inline void
-Ids_Slist_PushT (struct ids_slist_node* node, struct ids_slist* slist);
+Ids_Slist_PushT (struct ids_slist* slist, struct ids_slist_node* node);
 
 
 /*

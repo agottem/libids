@@ -26,7 +26,7 @@
 
 
 inline void
-Ids_MpscRing_Init (size_t capacity, struct ids_mpsc_ring* ring)
+Ids_MpscRing_Init (struct ids_mpsc_ring* ring, size_t capacity)
 {
     assert(capacity > 0 && "MPSC ring capacity must be greater than zero");
 
@@ -75,7 +75,7 @@ Ids_MpscRing_Full (struct ids_mpsc_ring* ring)
 }
 
 inline struct ids_mpsc_ring_range
-Ids_MpscRing_Reserve (size_t count, struct ids_mpsc_ring* ring)
+Ids_MpscRing_Reserve (struct ids_mpsc_ring* ring, size_t count)
 {
     size_t start;
     size_t reserved;
@@ -112,7 +112,7 @@ Ids_MpscRing_Reserve (size_t count, struct ids_mpsc_ring* ring)
 }
 
 inline void
-Ids_MpscRing_Commit (struct ids_mpsc_ring_range* range, struct ids_mpsc_ring* ring)
+Ids_MpscRing_Commit (struct ids_mpsc_ring* ring, struct ids_mpsc_ring_range* range)
 {
     if(range->count == 0)
         return;
@@ -125,7 +125,7 @@ Ids_MpscRing_Commit (struct ids_mpsc_ring_range* range, struct ids_mpsc_ring* ri
 }
 
 inline struct ids_mpsc_ring_range
-Ids_MpscRing_Peek (size_t count, struct ids_mpsc_ring* ring)
+Ids_MpscRing_Peek (struct ids_mpsc_ring* ring, size_t count)
 {
     size_t commit_cursor = atomic_load_explicit(&ring->commit_cursor, memory_order_acquire);
     size_t read_cursor   = atomic_load_explicit(&ring->read_cursor,   memory_order_relaxed);
@@ -140,7 +140,7 @@ Ids_MpscRing_Peek (size_t count, struct ids_mpsc_ring* ring)
 }
 
 inline void
-Ids_MpscRing_Release (struct ids_mpsc_ring_range* range, struct ids_mpsc_ring* ring)
+Ids_MpscRing_Release (struct ids_mpsc_ring* ring, struct ids_mpsc_ring_range* range)
 {
     atomic_store_explicit(&ring->read_cursor,
                           range->cursor + range->count,

@@ -33,7 +33,7 @@ Ids_MpscStack_Empty (struct ids_mpsc_stack* stack)
 }
 
 inline void
-Ids_MpscStack_Push (struct ids_mpsc_stack_node* node, struct ids_mpsc_stack* stack)
+Ids_MpscStack_Push (struct ids_mpsc_stack* stack, struct ids_mpsc_stack_node* node)
 {
     struct ids_mpsc_stack_node* head = atomic_load_explicit(&stack->head, memory_order_relaxed);
     do

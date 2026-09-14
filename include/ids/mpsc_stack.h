@@ -67,7 +67,7 @@ Ids_MpscStack_Empty (struct ids_mpsc_stack* stack);
     Push a node at the head of the mpsc stack
  */
 inline void
-Ids_MpscStack_Push (struct ids_mpsc_stack_node* node, struct ids_mpsc_stack* stack);
+Ids_MpscStack_Push (struct ids_mpsc_stack* stack, struct ids_mpsc_stack_node* node);
 
 /*
     Pop the head node from the mpsc stack.  Return NULL if the mpsc stack is empty

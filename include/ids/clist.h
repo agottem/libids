@@ -127,7 +127,7 @@ Ids_Clist_Del (struct ids_clist_node* node);
     Push a node at the head of the specified clist
  */
 inline void
-Ids_Clist_PushH (struct ids_clist_node* node, struct ids_clist* clist);
+Ids_Clist_PushH (struct ids_clist* clist, struct ids_clist_node* node);
 
 /*
     Pop the head node from a clist
@@ -139,7 +139,7 @@ Ids_Clist_PopH (struct ids_clist* clist);
     Push a node at the tail of the specified clist
  */
 inline void
-Ids_Clist_PushT (struct ids_clist_node* node, struct ids_clist* clist);
+Ids_Clist_PushT (struct ids_clist* clist, struct ids_clist_node* node);
 
 /*
     Pop the tail node from a clist

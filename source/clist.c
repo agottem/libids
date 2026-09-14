@@ -56,13 +56,13 @@ extern void
 Ids_Clist_Del (struct ids_clist_node* node);
 
 extern void
-Ids_Clist_PushH (struct ids_clist_node* node, struct ids_clist* clist);
+Ids_Clist_PushH (struct ids_clist* clist, struct ids_clist_node* node);
 
 extern struct ids_clist_node*
 Ids_Clist_PopH (struct ids_clist* clist);
 
 extern void
-Ids_Clist_PushT (struct ids_clist_node* node, struct ids_clist* clist);
+Ids_Clist_PushT (struct ids_clist* clist, struct ids_clist_node* node);
 
 extern struct ids_clist_node*
 Ids_Clist_PopT (struct ids_clist* clist);

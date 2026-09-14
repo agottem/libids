@@ -31,7 +31,7 @@ Test_Init (void)
 {
     struct ids_arr arr;
 
-    Ids_Arr_Init(sizeof(int), &arr);
+    Ids_Arr_Init(&arr, sizeof(int));
 
     assert(Ids_Arr_Count(&arr) == 0);
     assert(Ids_Arr_Capacity(&arr) == 0);
@@ -45,14 +45,14 @@ Test_StaticStorage (void)
     int              values[3] = {1, 2, 3};
     struct ids_arr   arr;
 
-    Ids_Arr_InitStatic(sizeof(int), 2, data, &arr);
-    assert(Ids_Arr_Add(values, 2, &arr) == ids_err_none);
+    Ids_Arr_InitStatic(&arr, sizeof(int), 2, data);
+    assert(Ids_Arr_Add(&arr, values, 2) == ids_err_none);
     assert(Ids_Arr_Data(&arr) == data);
     assert(Ids_Arr_Count(&arr) == 2);
     assert(data[0] == 1);
     assert(data[1] == 2);
 
-    assert(Ids_Arr_Add(&values[2], 1, &arr) == ids_err_none);
+    assert(Ids_Arr_Add(&arr, &values[2], 1) == ids_err_none);
     assert(Ids_Arr_Data(&arr) != data);
     assert(Ids_Arr_Count(&arr) == 3);
     assert(((int*)Ids_Arr_Data(&arr))[0] == 1);
@@ -69,16 +69,16 @@ Test_CreateReserve (void)
     struct ids_arr   arr;
     void*            data;
 
-    assert(Ids_Arr_Create(sizeof(int), 2, &arr) == ids_err_none);
+    assert(Ids_Arr_Create(&arr, sizeof(int), 2) == ids_err_none);
     data = Ids_Arr_Data(&arr);
     assert(Ids_Arr_Capacity(&arr) == 2);
 
-    assert(Ids_Arr_Reserve(4, &arr) == ids_err_none);
+    assert(Ids_Arr_Reserve(&arr, 4) == ids_err_none);
     assert(Ids_Arr_Capacity(&arr) >= 4);
     assert(Ids_Arr_Data(&arr) != NULL);
     assert(Ids_Arr_Data(&arr) != data || Ids_Arr_Capacity(&arr) > 2);
 
-    assert(Ids_Arr_Add(values, 4, &arr) == ids_err_none);
+    assert(Ids_Arr_Add(&arr, values, 4) == ids_err_none);
     assert(Ids_Arr_Count(&arr) == 4);
     assert(((int*)Ids_Arr_Data(&arr))[3] == 4);
 
@@ -95,7 +95,7 @@ Test_ZeroCount (void)
 {
     struct ids_arr arr;
 
-    Ids_Arr_Init(sizeof(int), &arr);
+    Ids_Arr_Init(&arr, sizeof(int));
     assert(Ids_Arr_Count(&arr) == 0);
     assert(Ids_Arr_Data(&arr) == NULL);
 }
@@ -106,14 +106,14 @@ Test_At (void)
     int            values[3] = {1, 2, 3};
     struct ids_arr arr;
 
-    Ids_Arr_InitStatic(sizeof(int), 3, values, &arr);
-    assert(Ids_Arr_Add(values, 3, &arr) == ids_err_none);
+    Ids_Arr_InitStatic(&arr, sizeof(int), 3, values);
+    assert(Ids_Arr_Add(&arr, values, 3) == ids_err_none);
 
-    assert(Ids_Arr_At(0, &arr) == &values[0]);
-    assert(Ids_Arr_At(2, &arr) == &values[2]);
-    assert(*(int*)Ids_Arr_At(1, &arr) == 2);
+    assert(Ids_Arr_At(&arr, 0) == &values[0]);
+    assert(Ids_Arr_At(&arr, 2) == &values[2]);
+    assert(*(int*)Ids_Arr_At(&arr, 1) == 2);
 
-    *(int*)Ids_Arr_At(1, &arr) = 4;
+    *(int*)Ids_Arr_At(&arr, 1) = 4;
     assert(values[1] == 4);
 }
 
@@ -124,29 +124,29 @@ Test_AddUninit (void)
     struct ids_arr arr;
     int*           values;
 
-    Ids_Arr_InitStatic(sizeof(int), 3, storage, &arr);
+    Ids_Arr_InitStatic(&arr, sizeof(int), 3, storage);
 
-    values = Ids_Arr_AddUninit(2, &arr);
+    values = Ids_Arr_AddUninit(&arr, 2);
     assert(values == storage);
     assert(Ids_Arr_Count(&arr) == 2);
     values[0] = 1;
     values[1] = 2;
 
-    values = Ids_Arr_AddUninit(1, &arr);
+    values = Ids_Arr_AddUninit(&arr, 1);
     assert(values == &storage[2]);
     assert(Ids_Arr_Count(&arr) == 3);
     values[0] = 3;
 
-    values = Ids_Arr_AddUninit(2, &arr);
+    values = Ids_Arr_AddUninit(&arr, 2);
     assert(values != NULL);
-    assert(values == Ids_Arr_At(3, &arr));
+    assert(values == Ids_Arr_At(&arr, 3));
     assert(Ids_Arr_Data(&arr) != storage);
     assert(Ids_Arr_Count(&arr) == 5);
     values[0] = 4;
     values[1] = 5;
 
-    assert(*(int*)Ids_Arr_At(0, &arr) == 1);
-    assert(*(int*)Ids_Arr_At(4, &arr) == 5);
+    assert(*(int*)Ids_Arr_At(&arr, 0) == 1);
+    assert(*(int*)Ids_Arr_At(&arr, 4) == 5);
 
     Ids_Arr_Destroy(&arr);
 }

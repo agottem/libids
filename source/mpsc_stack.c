@@ -30,7 +30,7 @@ extern int
 Ids_MpscStack_Empty (struct ids_mpsc_stack* stack);
 
 extern void
-Ids_MpscStack_Push (struct ids_mpsc_stack_node* node, struct ids_mpsc_stack* stack);
+Ids_MpscStack_Push (struct ids_mpsc_stack* stack, struct ids_mpsc_stack_node* node);
 
 extern struct ids_mpsc_stack_node*
 Ids_MpscStack_Pop (struct ids_mpsc_stack* stack);

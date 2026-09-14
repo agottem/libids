@@ -63,20 +63,20 @@ struct ids_arr
     Initialize an arr with no storage.  The data struct will be empty upon initialization
  */
 inline void
-Ids_Arr_Init (size_t elem_size, struct ids_arr* arr);
+Ids_Arr_Init (struct ids_arr* arr, size_t elem_size);
 
 /*
     Initialize an arr with caller-provided storage.  The storage must remain valid for the
     lifetime of the arr.  The arr does not take ownership of the storage.
  */
 inline void
-Ids_Arr_InitStatic (size_t elem_size, size_t capacity, void* data, struct ids_arr* arr);
+Ids_Arr_InitStatic (struct ids_arr* arr, size_t elem_size, size_t capacity, void* data);
 
 /*
     Allocate storage and initialize an arr.  The data struct will be empty upon initialization
  */
 inline enum ids_err
-Ids_Arr_Create (size_t elem_size, size_t capacity, struct ids_arr* arr);
+Ids_Arr_Create (struct ids_arr* arr, size_t elem_size, size_t capacity);
 
 /*
     Cleanup a previously created arr
@@ -114,45 +114,45 @@ Ids_Arr_Data (struct ids_arr* arr);
     elements currently stored in the arr
  */
 inline void*
-Ids_Arr_At (size_t elem_index, struct ids_arr* arr);
+Ids_Arr_At (struct ids_arr* arr, size_t elem_index);
 
 
 /*
     Ensure the arr can hold at least count elements
  */
 inline enum ids_err
-Ids_Arr_Reserve (size_t count, struct ids_arr* arr);
+Ids_Arr_Reserve (struct ids_arr* arr, size_t count);
 
 /*
     Insert data beginning at the specified element index
  */
 inline void*
-Ids_Arr_InsUninit (size_t count, size_t elem_index, struct ids_arr* arr);
+Ids_Arr_InsUninit (struct ids_arr* arr, size_t count, size_t elem_index);
 
 /*
     Insert data beginning at the specified element index
  */
 inline enum ids_err
-Ids_Arr_Ins (void* restrict data, size_t count, size_t elem_index, struct ids_arr* arr);
+Ids_Arr_Ins (struct ids_arr* arr, void* restrict data, size_t count, size_t elem_index);
 
 /*
     Append count uninitialized elements to the arr and return the first appended element.  Count
     must be greater than zero.  NULL is returned if storage allocation fails
  */
 inline void*
-Ids_Arr_AddUninit (size_t count, struct ids_arr* arr);
+Ids_Arr_AddUninit (struct ids_arr* arr, size_t count);
 
 /*
     Append count elements from data to the arr
  */
 inline enum ids_err
-Ids_Arr_Add (void* restrict data, size_t count, struct ids_arr* arr);
+Ids_Arr_Add (struct ids_arr* arr, void* restrict data, size_t count);
 
 /*
     Place count elements from data to the arr
  */
 inline enum ids_err
-Ids_Arr_Place (void* restrict data, size_t count, struct ids_arr* arr);
+Ids_Arr_Place (struct ids_arr* arr, void* restrict data, size_t count);
 
 
 #include <ids/arr_inl.h>

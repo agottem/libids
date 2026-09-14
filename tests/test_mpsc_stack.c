@@ -68,9 +68,9 @@ Test_PushPop (void)
     struct item           c = {.id = 3};
 
     Ids_MpscStack_Init(&stack);
-    Ids_MpscStack_Push(&a.node, &stack);
-    Ids_MpscStack_Push(&b.node, &stack);
-    Ids_MpscStack_Push(&c.node, &stack);
+    Ids_MpscStack_Push(&stack, &a.node);
+    Ids_MpscStack_Push(&stack, &b.node);
+    Ids_MpscStack_Push(&stack, &c.node);
 
     assert(!Ids_MpscStack_Empty(&stack));
     assert(NodeToItem(Ids_MpscStack_Pop(&stack))->id == 3);
@@ -88,10 +88,10 @@ Test_Reuse (void)
 
     Ids_MpscStack_Init(&stack);
 
-    Ids_MpscStack_Push(&item.node, &stack);
+    Ids_MpscStack_Push(&stack, &item.node);
     assert(Ids_MpscStack_Pop(&stack) == &item.node);
 
-    Ids_MpscStack_Push(&item.node, &stack);
+    Ids_MpscStack_Push(&stack, &item.node);
     assert(Ids_MpscStack_Pop(&stack) == &item.node);
     assert(Ids_MpscStack_Empty(&stack));
 }
@@ -119,7 +119,7 @@ ProducerThread (void* argument)
         thrd_yield();
 
     for(size_t index = context->first; index < context->first + ITEMS_PER_PRODUCER; ++index)
-        Ids_MpscStack_Push(&context->stress->items[index].node, &context->stress->stack);
+        Ids_MpscStack_Push(&context->stress->stack, &context->stress->items[index].node);
 
     return 0;
 }

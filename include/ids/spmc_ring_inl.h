@@ -26,7 +26,7 @@
 
 
 inline void
-Ids_SpmcRing_Init (size_t capacity, struct ids_spmc_ring* ring)
+Ids_SpmcRing_Init (struct ids_spmc_ring* ring, size_t capacity)
 {
     assert(capacity > 0 && "SPMC ring capacity must be greater than zero");
 
@@ -75,7 +75,7 @@ Ids_SpmcRing_Full (struct ids_spmc_ring* ring)
 }
 
 inline struct ids_spmc_ring_range
-Ids_SpmcRing_Reserve (size_t count, struct ids_spmc_ring* ring)
+Ids_SpmcRing_Reserve (struct ids_spmc_ring* ring, size_t count)
 {
     size_t write_cursor   = atomic_load_explicit(&ring->write_cursor,   memory_order_relaxed);
     size_t release_cursor = atomic_load_explicit(&ring->release_cursor, memory_order_acquire);
@@ -91,13 +91,13 @@ Ids_SpmcRing_Reserve (size_t count, struct ids_spmc_ring* ring)
 }
 
 inline void
-Ids_SpmcRing_Commit (struct ids_spmc_ring_range* range, struct ids_spmc_ring* ring)
+Ids_SpmcRing_Commit (struct ids_spmc_ring* ring, struct ids_spmc_ring_range* range)
 {
     atomic_store_explicit(&ring->write_cursor, range->cursor + range->count, memory_order_release);
 }
 
 inline struct ids_spmc_ring_range
-Ids_SpmcRing_Claim (size_t count, struct ids_spmc_ring* ring)
+Ids_SpmcRing_Claim (struct ids_spmc_ring* ring, size_t count)
 {
     size_t start;
     size_t claimed;
@@ -129,7 +129,7 @@ Ids_SpmcRing_Claim (size_t count, struct ids_spmc_ring* ring)
 }
 
 inline void
-Ids_SpmcRing_Release (struct ids_spmc_ring_range* range, struct ids_spmc_ring* ring)
+Ids_SpmcRing_Release (struct ids_spmc_ring* ring, struct ids_spmc_ring_range* range)
 {
     if(range->count == 0)
         return;

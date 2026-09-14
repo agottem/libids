@@ -41,15 +41,15 @@ Test_InitReset (void)
     struct ids_mpsc_ring       ring;
     struct ids_mpsc_ring_range range;
 
-    Ids_MpscRing_Init(4, &ring);
+    Ids_MpscRing_Init(&ring, 4);
     assert(ring.capacity == 4);
     assert(Ids_MpscRing_Count(&ring) == 0);
     assert(Ids_MpscRing_Space(&ring) == 4);
     assert(Ids_MpscRing_Empty(&ring));
     assert(!Ids_MpscRing_Full(&ring));
 
-    range = Ids_MpscRing_Reserve(2, &ring);
-    Ids_MpscRing_Commit(&range, &ring);
+    range = Ids_MpscRing_Reserve(&ring, 2);
+    Ids_MpscRing_Commit(&ring, &range);
     assert(Ids_MpscRing_Count(&ring) == 2);
 
     Ids_MpscRing_Reset(&ring);
@@ -63,26 +63,26 @@ Test_ReserveCommit (void)
     struct ids_mpsc_ring       ring;
     struct ids_mpsc_ring_range range;
 
-    Ids_MpscRing_Init(4, &ring);
+    Ids_MpscRing_Init(&ring, 4);
 
-    range = Ids_MpscRing_Reserve(3, &ring);
+    range = Ids_MpscRing_Reserve(&ring, 3);
     assert(range.start == 0);
     assert(range.count == 3);
     assert(Ids_MpscRing_Count(&ring) == 0);
     assert(Ids_MpscRing_Space(&ring) == 1);
 
-    Ids_MpscRing_Commit(&range, &ring);
+    Ids_MpscRing_Commit(&ring, &range);
     assert(Ids_MpscRing_Count(&ring) == 3);
 
-    range = Ids_MpscRing_Reserve(3, &ring);
+    range = Ids_MpscRing_Reserve(&ring, 3);
     assert(range.start == 3);
     assert(range.count == 1);
-    Ids_MpscRing_Commit(&range, &ring);
+    Ids_MpscRing_Commit(&ring, &range);
     assert(Ids_MpscRing_Full(&ring));
 
-    range = Ids_MpscRing_Reserve(1, &ring);
+    range = Ids_MpscRing_Reserve(&ring, 1);
     assert(range.count == 0);
-    Ids_MpscRing_Commit(&range, &ring);
+    Ids_MpscRing_Commit(&ring, &range);
 }
 
 static void
@@ -91,24 +91,24 @@ Test_PeekRelease (void)
     struct ids_mpsc_ring       ring;
     struct ids_mpsc_ring_range range;
 
-    Ids_MpscRing_Init(4, &ring);
+    Ids_MpscRing_Init(&ring, 4);
 
-    range = Ids_MpscRing_Reserve(4, &ring);
-    Ids_MpscRing_Commit(&range, &ring);
+    range = Ids_MpscRing_Reserve(&ring, 4);
+    Ids_MpscRing_Commit(&ring, &range);
 
-    range = Ids_MpscRing_Peek(2, &ring);
+    range = Ids_MpscRing_Peek(&ring, 2);
     assert(range.start == 0);
     assert(range.count == 2);
     assert(Ids_MpscRing_Count(&ring) == 4);
 
-    Ids_MpscRing_Release(&range, &ring);
+    Ids_MpscRing_Release(&ring, &range);
     assert(Ids_MpscRing_Count(&ring) == 2);
     assert(Ids_MpscRing_Space(&ring) == 2);
 
-    range = Ids_MpscRing_Peek(3, &ring);
+    range = Ids_MpscRing_Peek(&ring, 3);
     assert(range.start == 2);
     assert(range.count == 2);
-    Ids_MpscRing_Release(&range, &ring);
+    Ids_MpscRing_Release(&ring, &range);
     assert(Ids_MpscRing_Empty(&ring));
 }
 
@@ -118,32 +118,32 @@ Test_Wrap (void)
     struct ids_mpsc_ring       ring;
     struct ids_mpsc_ring_range range;
 
-    Ids_MpscRing_Init(4, &ring);
+    Ids_MpscRing_Init(&ring, 4);
 
-    range = Ids_MpscRing_Reserve(3, &ring);
-    Ids_MpscRing_Commit(&range, &ring);
-    range = Ids_MpscRing_Peek(2, &ring);
-    Ids_MpscRing_Release(&range, &ring);
+    range = Ids_MpscRing_Reserve(&ring, 3);
+    Ids_MpscRing_Commit(&ring, &range);
+    range = Ids_MpscRing_Peek(&ring, 2);
+    Ids_MpscRing_Release(&ring, &range);
 
-    range = Ids_MpscRing_Reserve(3, &ring);
+    range = Ids_MpscRing_Reserve(&ring, 3);
     assert(range.start == 3);
     assert(range.count == 1);
-    Ids_MpscRing_Commit(&range, &ring);
+    Ids_MpscRing_Commit(&ring, &range);
 
-    range = Ids_MpscRing_Reserve(2, &ring);
+    range = Ids_MpscRing_Reserve(&ring, 2);
     assert(range.start == 0);
     assert(range.count == 2);
-    Ids_MpscRing_Commit(&range, &ring);
+    Ids_MpscRing_Commit(&ring, &range);
 
-    range = Ids_MpscRing_Peek(4, &ring);
+    range = Ids_MpscRing_Peek(&ring, 4);
     assert(range.start == 2);
     assert(range.count == 2);
-    Ids_MpscRing_Release(&range, &ring);
+    Ids_MpscRing_Release(&ring, &range);
 
-    range = Ids_MpscRing_Peek(4, &ring);
+    range = Ids_MpscRing_Peek(&ring, 4);
     assert(range.start == 0);
     assert(range.count == 2);
-    Ids_MpscRing_Release(&range, &ring);
+    Ids_MpscRing_Release(&ring, &range);
 }
 
 struct commit_context
@@ -160,7 +160,7 @@ CommitThread (void* argument)
     struct commit_context* context = argument;
 
     atomic_store_explicit(context->started, 1, memory_order_release);
-    Ids_MpscRing_Commit(context->range, context->ring);
+    Ids_MpscRing_Commit(context->ring, context->range);
     atomic_store_explicit(context->finished, 1, memory_order_release);
 
     return 0;
@@ -177,9 +177,9 @@ Test_OrderedCommit (void)
     atomic_int                 finished = 0;
     thrd_t                     thread;
 
-    Ids_MpscRing_Init(4, &ring);
-    first  = Ids_MpscRing_Reserve(2, &ring);
-    second = Ids_MpscRing_Reserve(2, &ring);
+    Ids_MpscRing_Init(&ring, 4);
+    first  = Ids_MpscRing_Reserve(&ring, 2);
+    second = Ids_MpscRing_Reserve(&ring, 2);
 
     struct commit_context context = {.ring     = &ring,
                                      .range    = &second,
@@ -193,14 +193,14 @@ Test_OrderedCommit (void)
     assert(Ids_MpscRing_Count(&ring) == 0);
     assert(Ids_MpscRing_Full(&ring));
 
-    Ids_MpscRing_Commit(&first, &ring);
+    Ids_MpscRing_Commit(&ring, &first);
     assert(thrd_join(thread, NULL) == thrd_success);
     assert(atomic_load_explicit(&finished, memory_order_acquire));
     assert(Ids_MpscRing_Count(&ring) == 4);
 
-    peek = Ids_MpscRing_Peek(4, &ring);
+    peek = Ids_MpscRing_Peek(&ring, 4);
     assert(peek.count == 4);
-    Ids_MpscRing_Release(&peek, &ring);
+    Ids_MpscRing_Release(&ring, &peek);
 }
 
 struct stress_context
@@ -229,8 +229,7 @@ ProducerThread (void* argument)
     while(produced < ITEMS_PER_PRODUCER)
     {
         size_t count = IDS_MIN(7, ITEMS_PER_PRODUCER - produced);
-        struct ids_mpsc_ring_range range = Ids_MpscRing_Reserve(count,
-                                                                &context->stress->ring);
+        struct ids_mpsc_ring_range range = Ids_MpscRing_Reserve(&context->stress->ring, count);
         if(range.count == 0)
         {
             thrd_yield();
@@ -240,7 +239,7 @@ ProducerThread (void* argument)
         for(size_t index = 0; index < range.count; ++index)
             context->stress->values[range.start + index] = context->first + produced + index;
 
-        Ids_MpscRing_Commit(&range, &context->stress->ring);
+        Ids_MpscRing_Commit(&context->stress->ring, &range);
         produced += range.count;
     }
 
@@ -258,7 +257,7 @@ ConsumerThread (void* argument)
 
     while(consumed < ITEM_COUNT)
     {
-        struct ids_mpsc_ring_range range = Ids_MpscRing_Peek(5, &context->ring);
+        struct ids_mpsc_ring_range range = Ids_MpscRing_Peek(&context->ring, 5);
         if(range.count == 0)
         {
             thrd_yield();
@@ -272,7 +271,7 @@ ConsumerThread (void* argument)
             assert(atomic_fetch_add_explicit(&context->seen[value], 1, memory_order_relaxed) == 0);
         }
 
-        Ids_MpscRing_Release(&range, &context->ring);
+        Ids_MpscRing_Release(&context->ring, &range);
         consumed += range.count;
     }
 
@@ -287,7 +286,7 @@ Test_Concurrent (void)
     thrd_t                  producers[PRODUCER_COUNT];
     thrd_t                  consumer;
 
-    Ids_MpscRing_Init(STRESS_CAPACITY, &context.ring);
+    Ids_MpscRing_Init(&context.ring, STRESS_CAPACITY);
     atomic_init(&context.start, 0);
     for(size_t index = 0; index < ITEM_COUNT; ++index)
         atomic_init(&context.seen[index], 0);

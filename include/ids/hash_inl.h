@@ -57,7 +57,7 @@ Ids_Hash_UpdateIt (struct ids_hash* hash, struct ids_hash_it* it)
 
 
 inline void
-Ids_Hash_Init (unsigned int count, struct ids_hash_bkt* bkts, struct ids_hash* hash)
+Ids_Hash_Init (struct ids_hash* hash, unsigned int count, struct ids_hash_bkt* bkts)
 {
     assert(count > 0 && "Hash bucket count must be greater than zero");
 
@@ -69,14 +69,14 @@ Ids_Hash_Init (unsigned int count, struct ids_hash_bkt* bkts, struct ids_hash* h
 }
 
 inline enum ids_err
-Ids_Hash_Create (unsigned int count, struct ids_hash* hash)
+Ids_Hash_Create (struct ids_hash* hash, unsigned int count)
 {
     size_t               alloc_size = count * sizeof(struct ids_hash_bkt);
     struct ids_hash_bkt* bkts       = malloc(alloc_size);
     if(bkts == NULL)
         return ids_err_mem;
 
-    Ids_Hash_Init(count, bkts, hash);
+    Ids_Hash_Init(hash, count, bkts);
 
     return ids_err_none;
 }
@@ -97,20 +97,20 @@ Ids_Hash_Reset (struct ids_hash* hash)
 }
 
 inline struct ids_hash_bkt*
-Ids_Hash_Bkt (unsigned int value_hash, struct ids_hash* hash)
+Ids_Hash_Bkt (struct ids_hash* hash, unsigned int value_hash)
 {
     return &hash->bkts[value_hash % hash->bkt_count];
 }
 
 inline struct ids_hash_node*
-Ids_Hash_Find (unsigned int          value_hash,
+Ids_Hash_Find (struct ids_hash*      hash,
+               unsigned int          value_hash,
                void*                 value,
-               struct ids_hash*      hash,
                ids_hash_cmp_t*       cmp_func,
                void*                 user_data,
                struct ids_hash_bkt** searched_bkt)
 {
-    struct ids_hash_bkt* bkt = Ids_Hash_Bkt(value_hash, hash);
+    struct ids_hash_bkt* bkt = Ids_Hash_Bkt(hash, value_hash);
     if(searched_bkt != NULL)
         *searched_bkt = bkt;
 
@@ -128,15 +128,15 @@ Ids_Hash_Find (unsigned int          value_hash,
 }
 
 inline void
-Ids_Hash_Ins (struct ids_hash_node* node, struct ids_hash_bkt* bkt)
+Ids_Hash_Ins (struct ids_hash_bkt* bkt, struct ids_hash_node* node)
 {
-    Ids_Clist_PushH(&node->node, &bkt->node_list);
+    Ids_Clist_PushH(&bkt->node_list, &node->node);
 }
 
 inline void
-Ids_Hash_Add (unsigned int value_hash, struct ids_hash_node* node, struct ids_hash* hash)
+Ids_Hash_Add (struct ids_hash* hash, unsigned int value_hash, struct ids_hash_node* node)
 {
-    Ids_Hash_Ins(node, Ids_Hash_Bkt(value_hash, hash));
+    Ids_Hash_Ins(Ids_Hash_Bkt(hash, value_hash), node);
 }
 
 inline void

@@ -132,14 +132,14 @@ Ids_RbTree_Max (struct ids_rbtree* rbtree);
     Find a node matching id.  NULL is returned if no node was found
  */
 inline struct ids_rbtree_node*
-Ids_RbTree_Find (void* id, struct ids_rbtree* rbtree, ids_rbtree_cmp_t* cmp_func, void* user_data);
+Ids_RbTree_Find (struct ids_rbtree* rbtree, void* id, ids_rbtree_cmp_t* cmp_func, void* user_data);
 
 /*
     Return the first node which does not sort before id, or NULL if no such node exists
  */
 inline struct ids_rbtree_node*
-Ids_RbTree_LowerBound (void*              id,
-                       struct ids_rbtree* rbtree,
+Ids_RbTree_LowerBound (struct ids_rbtree* rbtree,
+                       void*              id,
                        ids_rbtree_cmp_t*  cmp_func,
                        void*              user_data);
 
@@ -147,8 +147,8 @@ Ids_RbTree_LowerBound (void*              id,
     Return the first node which sorts after id, or NULL if no such node exists
  */
 inline struct ids_rbtree_node*
-Ids_RbTree_UpperBound (void*              id,
-                       struct ids_rbtree* rbtree,
+Ids_RbTree_UpperBound (struct ids_rbtree* rbtree,
+                       void*              id,
                        ids_rbtree_cmp_t*  cmp_func,
                        void*              user_data);
 
@@ -158,9 +158,9 @@ Ids_RbTree_UpperBound (void*              id,
     already exists, that node is returned and the specified node is not modified
  */
 inline struct ids_rbtree_node*
-Ids_RbTree_Add (void*                   id,
+Ids_RbTree_Add (struct ids_rbtree*      rbtree,
+                void*                   id,
                 struct ids_rbtree_node* node,
-                struct ids_rbtree*      rbtree,
                 ids_rbtree_cmp_t*       cmp_func,
                 void*                   user_data);
 
@@ -168,7 +168,7 @@ Ids_RbTree_Add (void*                   id,
     Delete the specified node from the rbtree
  */
 inline void
-Ids_RbTree_Del (struct ids_rbtree_node* node, struct ids_rbtree* rbtree);
+Ids_RbTree_Del (struct ids_rbtree* rbtree, struct ids_rbtree_node* node);
 
 
 /*

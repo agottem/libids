@@ -71,7 +71,7 @@ struct ids_mpsc_ring
     function requires exclusive access to the ring
  */
 inline void
-Ids_MpscRing_Init (size_t capacity, struct ids_mpsc_ring* ring);
+Ids_MpscRing_Init (struct ids_mpsc_ring* ring, size_t capacity);
 
 /*
     Reset an mpsc ring to the initialized state.  This function requires exclusive access
@@ -113,7 +113,7 @@ Ids_MpscRing_Full (struct ids_mpsc_ring* ring);
     nonempty reservation must be committed exactly once
  */
 inline struct ids_mpsc_ring_range
-Ids_MpscRing_Reserve (size_t count, struct ids_mpsc_ring* ring);
+Ids_MpscRing_Reserve (struct ids_mpsc_ring* ring, size_t count);
 
 /*
     Commit previously reserved indexes to the consumer.  Reservations are committed in the
@@ -122,7 +122,7 @@ Ids_MpscRing_Reserve (size_t count, struct ids_mpsc_ring* ring);
     after committing it
  */
 inline void
-Ids_MpscRing_Commit (struct ids_mpsc_ring_range* range, struct ids_mpsc_ring* ring);
+Ids_MpscRing_Commit (struct ids_mpsc_ring* ring, struct ids_mpsc_ring_range* range);
 
 
 /*
@@ -131,14 +131,14 @@ Ids_MpscRing_Commit (struct ids_mpsc_ring_range* range, struct ids_mpsc_ring* ri
     are available.  If the ring is empty, the returned count is zero
  */
 inline struct ids_mpsc_ring_range
-Ids_MpscRing_Peek (size_t count, struct ids_mpsc_ring* ring);
+Ids_MpscRing_Peek (struct ids_mpsc_ring* ring, size_t count);
 
 /*
     Release previously peeked indexes back to the producers.  Only the consumer may call this
     function
  */
 inline void
-Ids_MpscRing_Release (struct ids_mpsc_ring_range* range, struct ids_mpsc_ring* ring);
+Ids_MpscRing_Release (struct ids_mpsc_ring* ring, struct ids_mpsc_ring_range* range);
 
 
 #include <ids/mpsc_ring_inl.h>

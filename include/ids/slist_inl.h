@@ -56,9 +56,9 @@ Ids_Slist_Empty (struct ids_slist* slist)
 }
 
 inline void
-Ids_Slist_Ins (struct ids_slist_node* restrict new_node,
-               struct ids_slist_node* restrict existing_node,
-               struct ids_slist* slist)
+Ids_Slist_Ins (struct ids_slist*               slist,
+               struct ids_slist_node* restrict new_node,
+               struct ids_slist_node* restrict existing_node)
 {
     new_node->next      = existing_node->next;
     existing_node->next = new_node;
@@ -103,7 +103,7 @@ Ids_Slist_SpliceT (struct ids_slist* restrict source, struct ids_slist* restrict
 }
 
 inline void
-Ids_Slist_PushH (struct ids_slist_node* node, struct ids_slist* slist)
+Ids_Slist_PushH (struct ids_slist* slist, struct ids_slist_node* node)
 {
     node->next  = slist->head;
     slist->head = node;
@@ -127,7 +127,7 @@ Ids_Slist_PopH (struct ids_slist* slist)
 }
 
 inline void
-Ids_Slist_PushT (struct ids_slist_node* node, struct ids_slist* slist)
+Ids_Slist_PushT (struct ids_slist* slist, struct ids_slist_node* node)
 {
     node->next = NULL;
 

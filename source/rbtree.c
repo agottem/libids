@@ -45,23 +45,23 @@ extern struct ids_rbtree_node*
 Ids_RbTree_PostNext (struct ids_rbtree_node* node);
 
 extern void
-Ids_RbTree_RotateLeft (struct ids_rbtree_node* node, struct ids_rbtree* rbtree);
+Ids_RbTree_RotateLeft (struct ids_rbtree* rbtree, struct ids_rbtree_node* node);
 
 extern void
-Ids_RbTree_RotateRight (struct ids_rbtree_node* node, struct ids_rbtree* rbtree);
+Ids_RbTree_RotateRight (struct ids_rbtree* rbtree, struct ids_rbtree_node* node);
 
 extern void
-Ids_RbTree_FixAdd (struct ids_rbtree_node* node, struct ids_rbtree* rbtree);
+Ids_RbTree_FixAdd (struct ids_rbtree* rbtree, struct ids_rbtree_node* node);
 
 extern void
-Ids_RbTree_Replace (struct ids_rbtree_node* node,
-                    struct ids_rbtree_node* replacement,
-                    struct ids_rbtree*      rbtree);
+Ids_RbTree_Replace (struct ids_rbtree*      rbtree,
+                    struct ids_rbtree_node* node,
+                    struct ids_rbtree_node* replacement);
 
 extern void
-Ids_RbTree_FixDel (struct ids_rbtree_node* node,
-                   struct ids_rbtree_node* parent,
-                   struct ids_rbtree*      rbtree);
+Ids_RbTree_FixDel (struct ids_rbtree*      rbtree,
+                   struct ids_rbtree_node* node,
+                   struct ids_rbtree_node* parent);
 
 
 extern void
@@ -84,30 +84,30 @@ Ids_RbTree_Max (struct ids_rbtree* rbtree);
 
 
 extern struct ids_rbtree_node*
-Ids_RbTree_Find (void* id, struct ids_rbtree* rbtree, ids_rbtree_cmp_t* cmp_func, void* user_data);
+Ids_RbTree_Find (struct ids_rbtree* rbtree, void* id, ids_rbtree_cmp_t* cmp_func, void* user_data);
 
 extern struct ids_rbtree_node*
-Ids_RbTree_LowerBound (void*              id,
-                       struct ids_rbtree* rbtree,
+Ids_RbTree_LowerBound (struct ids_rbtree* rbtree,
+                       void*              id,
                        ids_rbtree_cmp_t*  cmp_func,
                        void*              user_data);
 
 extern struct ids_rbtree_node*
-Ids_RbTree_UpperBound (void*              id,
-                       struct ids_rbtree* rbtree,
+Ids_RbTree_UpperBound (struct ids_rbtree* rbtree,
+                       void*              id,
                        ids_rbtree_cmp_t*  cmp_func,
                        void*              user_data);
 
 
 extern struct ids_rbtree_node*
-Ids_RbTree_Add (void*                   id,
+Ids_RbTree_Add (struct ids_rbtree*      rbtree,
+                void*                   id,
                 struct ids_rbtree_node* node,
-                struct ids_rbtree*      rbtree,
                 ids_rbtree_cmp_t*       cmp_func,
                 void*                   user_data);
 
 extern void
-Ids_RbTree_Del (struct ids_rbtree_node* node, struct ids_rbtree* rbtree);
+Ids_RbTree_Del (struct ids_rbtree* rbtree, struct ids_rbtree_node* node);
 
 
 extern void

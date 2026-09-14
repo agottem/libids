@@ -40,15 +40,15 @@ Test_InitReset (void)
     struct ids_spmc_ring       ring;
     struct ids_spmc_ring_range range;
 
-    Ids_SpmcRing_Init(4, &ring);
+    Ids_SpmcRing_Init(&ring, 4);
     assert(ring.capacity == 4);
     assert(Ids_SpmcRing_Count(&ring) == 0);
     assert(Ids_SpmcRing_Space(&ring) == 4);
     assert(Ids_SpmcRing_Empty(&ring));
     assert(!Ids_SpmcRing_Full(&ring));
 
-    range = Ids_SpmcRing_Reserve(2, &ring);
-    Ids_SpmcRing_Commit(&range, &ring);
+    range = Ids_SpmcRing_Reserve(&ring, 2);
+    Ids_SpmcRing_Commit(&ring, &range);
     assert(Ids_SpmcRing_Count(&ring) == 2);
 
     Ids_SpmcRing_Reset(&ring);
@@ -62,27 +62,27 @@ Test_ReserveClaimRelease (void)
     struct ids_spmc_ring       ring;
     struct ids_spmc_ring_range range;
 
-    Ids_SpmcRing_Init(4, &ring);
+    Ids_SpmcRing_Init(&ring, 4);
 
-    range = Ids_SpmcRing_Reserve(4, &ring);
+    range = Ids_SpmcRing_Reserve(&ring, 4);
     assert(range.start == 0);
     assert(range.count == 4);
-    Ids_SpmcRing_Commit(&range, &ring);
+    Ids_SpmcRing_Commit(&ring, &range);
     assert(Ids_SpmcRing_Full(&ring));
 
-    range = Ids_SpmcRing_Claim(2, &ring);
+    range = Ids_SpmcRing_Claim(&ring, 2);
     assert(range.start == 0);
     assert(range.count == 2);
     assert(Ids_SpmcRing_Count(&ring) == 2);
     assert(Ids_SpmcRing_Space(&ring) == 0);
 
-    Ids_SpmcRing_Release(&range, &ring);
+    Ids_SpmcRing_Release(&ring, &range);
     assert(Ids_SpmcRing_Space(&ring) == 2);
 
-    range = Ids_SpmcRing_Claim(3, &ring);
+    range = Ids_SpmcRing_Claim(&ring, 3);
     assert(range.start == 2);
     assert(range.count == 2);
-    Ids_SpmcRing_Release(&range, &ring);
+    Ids_SpmcRing_Release(&ring, &range);
     assert(Ids_SpmcRing_Empty(&ring));
     assert(Ids_SpmcRing_Space(&ring) == 4);
 }
@@ -93,30 +93,30 @@ Test_Wrap (void)
     struct ids_spmc_ring       ring;
     struct ids_spmc_ring_range range;
 
-    Ids_SpmcRing_Init(4, &ring);
+    Ids_SpmcRing_Init(&ring, 4);
 
-    range = Ids_SpmcRing_Reserve(3, &ring);
-    Ids_SpmcRing_Commit(&range, &ring);
-    range = Ids_SpmcRing_Claim(2, &ring);
-    Ids_SpmcRing_Release(&range, &ring);
+    range = Ids_SpmcRing_Reserve(&ring, 3);
+    Ids_SpmcRing_Commit(&ring, &range);
+    range = Ids_SpmcRing_Claim(&ring, 2);
+    Ids_SpmcRing_Release(&ring, &range);
 
-    range = Ids_SpmcRing_Reserve(3, &ring);
+    range = Ids_SpmcRing_Reserve(&ring, 3);
     assert(range.start == 3);
     assert(range.count == 1);
-    Ids_SpmcRing_Commit(&range, &ring);
-    range = Ids_SpmcRing_Reserve(2, &ring);
+    Ids_SpmcRing_Commit(&ring, &range);
+    range = Ids_SpmcRing_Reserve(&ring, 2);
     assert(range.start == 0);
     assert(range.count == 2);
-    Ids_SpmcRing_Commit(&range, &ring);
+    Ids_SpmcRing_Commit(&ring, &range);
 
-    range = Ids_SpmcRing_Claim(4, &ring);
+    range = Ids_SpmcRing_Claim(&ring, 4);
     assert(range.start == 2);
     assert(range.count == 2);
-    Ids_SpmcRing_Release(&range, &ring);
-    range = Ids_SpmcRing_Claim(4, &ring);
+    Ids_SpmcRing_Release(&ring, &range);
+    range = Ids_SpmcRing_Claim(&ring, 4);
     assert(range.start == 0);
     assert(range.count == 2);
-    Ids_SpmcRing_Release(&range, &ring);
+    Ids_SpmcRing_Release(&ring, &range);
 }
 
 struct release_context
@@ -133,7 +133,7 @@ ReleaseThread (void* argument)
     struct release_context* context = argument;
 
     atomic_store_explicit(context->started, 1, memory_order_release);
-    Ids_SpmcRing_Release(context->range, context->ring);
+    Ids_SpmcRing_Release(context->ring, context->range);
     atomic_store_explicit(context->finished, 1, memory_order_release);
 
     return 0;
@@ -150,11 +150,11 @@ Test_OrderedRelease (void)
     atomic_int                 finished = 0;
     thrd_t                     thread;
 
-    Ids_SpmcRing_Init(4, &ring);
-    reserve = Ids_SpmcRing_Reserve(4, &ring);
-    Ids_SpmcRing_Commit(&reserve, &ring);
-    first  = Ids_SpmcRing_Claim(2, &ring);
-    second = Ids_SpmcRing_Claim(2, &ring);
+    Ids_SpmcRing_Init(&ring, 4);
+    reserve = Ids_SpmcRing_Reserve(&ring, 4);
+    Ids_SpmcRing_Commit(&ring, &reserve);
+    first  = Ids_SpmcRing_Claim(&ring, 2);
+    second = Ids_SpmcRing_Claim(&ring, 2);
 
     struct release_context context = {.ring     = &ring,
                                       .range    = &second,
@@ -167,7 +167,7 @@ Test_OrderedRelease (void)
     assert(!atomic_load_explicit(&finished, memory_order_acquire));
     assert(Ids_SpmcRing_Space(&ring) == 0);
 
-    Ids_SpmcRing_Release(&first, &ring);
+    Ids_SpmcRing_Release(&ring, &first);
     assert(thrd_join(thread, NULL) == thrd_success);
     assert(atomic_load_explicit(&finished, memory_order_acquire));
     assert(Ids_SpmcRing_Space(&ring) == 4);
@@ -194,7 +194,7 @@ ProducerThread (void* argument)
     while(produced < STRESS_COUNT)
     {
         size_t count = IDS_MIN(7, STRESS_COUNT - produced);
-        struct ids_spmc_ring_range range = Ids_SpmcRing_Reserve(count, &context->ring);
+        struct ids_spmc_ring_range range = Ids_SpmcRing_Reserve(&context->ring, count);
         if(range.count == 0)
         {
             thrd_yield();
@@ -204,7 +204,7 @@ ProducerThread (void* argument)
         for(size_t index = 0; index < range.count; ++index)
             context->values[range.start + index] = produced + index;
 
-        Ids_SpmcRing_Commit(&range, &context->ring);
+        Ids_SpmcRing_Commit(&context->ring, &range);
         produced += range.count;
     }
 
@@ -221,7 +221,7 @@ ConsumerThread (void* argument)
 
     for(;;)
     {
-        struct ids_spmc_ring_range range = Ids_SpmcRing_Claim(5, &context->ring);
+        struct ids_spmc_ring_range range = Ids_SpmcRing_Claim(&context->ring, 5);
         if(range.count == 0)
         {
             if(atomic_load_explicit(&context->consumed, memory_order_acquire) == STRESS_COUNT)
@@ -241,7 +241,7 @@ ConsumerThread (void* argument)
         while(atomic_load_explicit(&context->ring.release_cursor, memory_order_acquire) !=
               range.cursor)
             thrd_yield();
-        Ids_SpmcRing_Release(&range, &context->ring);
+        Ids_SpmcRing_Release(&context->ring, &range);
         atomic_fetch_add_explicit(&context->consumed, range.count, memory_order_release);
     }
 
@@ -255,7 +255,7 @@ Test_Concurrent (void)
     thrd_t                producer;
     thrd_t                consumers[CONSUMER_COUNT];
 
-    Ids_SpmcRing_Init(STRESS_CAPACITY, &context.ring);
+    Ids_SpmcRing_Init(&context.ring, STRESS_CAPACITY);
     atomic_init(&context.consumed, 0);
     atomic_init(&context.start, 0);
     for(size_t index = 0; index < STRESS_COUNT; ++index)

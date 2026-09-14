@@ -71,7 +71,7 @@ struct ids_spmc_ring
     function requires exclusive access to the ring
  */
 inline void
-Ids_SpmcRing_Init (size_t capacity, struct ids_spmc_ring* ring);
+Ids_SpmcRing_Init (struct ids_spmc_ring* ring, size_t capacity);
 
 /*
     Reset an spmc ring to the initialized state.  This function requires exclusive access
@@ -112,14 +112,14 @@ Ids_SpmcRing_Full (struct ids_spmc_ring* ring);
     free space available.  If no space is available, the returned count is zero
  */
 inline struct ids_spmc_ring_range
-Ids_SpmcRing_Reserve (size_t count, struct ids_spmc_ring* ring);
+Ids_SpmcRing_Reserve (struct ids_spmc_ring* ring, size_t count);
 
 /*
     Commit previously reserved indexes to the consumers.  Only the producer may call this
     function
  */
 inline void
-Ids_SpmcRing_Commit (struct ids_spmc_ring_range* range, struct ids_spmc_ring* ring);
+Ids_SpmcRing_Commit (struct ids_spmc_ring* ring, struct ids_spmc_ring_range* range);
 
 
 /*
@@ -129,7 +129,7 @@ Ids_SpmcRing_Commit (struct ids_spmc_ring_range* range, struct ids_spmc_ring* ri
     must be released exactly once
  */
 inline struct ids_spmc_ring_range
-Ids_SpmcRing_Claim (size_t count, struct ids_spmc_ring* ring);
+Ids_SpmcRing_Claim (struct ids_spmc_ring* ring, size_t count);
 
 /*
     Release previously claimed indexes back to the producer.  Claims must be released in the
@@ -137,7 +137,7 @@ Ids_SpmcRing_Claim (size_t count, struct ids_spmc_ring* ring);
     claims.  Claims should be short lived.  Consumers must not access a range after releasing it
  */
 inline void
-Ids_SpmcRing_Release (struct ids_spmc_ring_range* range, struct ids_spmc_ring* ring);
+Ids_SpmcRing_Release (struct ids_spmc_ring* ring, struct ids_spmc_ring_range* range);
 
 
 #include <ids/spmc_ring_inl.h>
