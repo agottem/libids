@@ -81,25 +81,25 @@ Ids_Clist_Reset (struct ids_clist* clist);
     Return the list head
  */
 inline struct ids_clist_node*
-Ids_Clist_Head (struct ids_clist* clist);
+Ids_Clist_Head (const struct ids_clist* clist);
 
 /*
     Return the list tail
  */
 inline struct ids_clist_node*
-Ids_Clist_Tail (struct ids_clist* clist);
+Ids_Clist_Tail (const struct ids_clist* clist);
 
 /*
     Return the end node (which is not a valid node)
  */
 inline struct ids_clist_node*
-Ids_Clist_End (struct ids_clist* clist);
+Ids_Clist_End (const struct ids_clist* clist);
 
 /*
     Return non-zero if the clist is empty
  */
 inline int
-Ids_Clist_Empty (struct ids_clist* clist);
+Ids_Clist_Empty (const struct ids_clist* clist);
 
 
 /*
@@ -152,19 +152,19 @@ Ids_Clist_PopT (struct ids_clist* clist);
     Start a clist iteration from the specified node
  */
 inline void
-Ids_Clist_NBeginIt (struct ids_clist_node* node, struct ids_clist_it* it);
+Ids_Clist_NBeginIt (const struct ids_clist_node* node, struct ids_clist_it* it);
 
 /*
     Start a clist iteration from the head node
  */
 inline void
-Ids_Clist_BeginIt (struct ids_clist* clist, struct ids_clist_it* it);
+Ids_Clist_BeginIt (const struct ids_clist* clist, struct ids_clist_it* it);
 
 /*
     Start a clist iteration from the tail node
  */
 inline void
-Ids_Clist_RBeginIt (struct ids_clist* clist, struct ids_clist_it* it);
+Ids_Clist_RBeginIt (const struct ids_clist* clist, struct ids_clist_it* it);
 
 /*
     Iterate forwards
@@ -182,7 +182,7 @@ Ids_Clist_ItBack (struct ids_clist_it* it);
     Return non-zero if the iterator is at the end node
  */
 inline int
-Ids_Clist_ItDone (struct ids_clist* clist, struct ids_clist_it* it);
+Ids_Clist_ItDone (const struct ids_clist* clist, const struct ids_clist_it* it);
 
 
 #include <ids/clist_inl.h>

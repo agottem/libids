@@ -28,6 +28,8 @@
 #include <stdlib.h>
 #include <threads.h>
 
+#include "test_utils.h"
+
 
 #define PRODUCER_COUNT 4
 #define ITEMS_PER_PRODUCER 25000
@@ -36,13 +38,13 @@
 
 struct item
 {
-    int                        id;
+    size_t                     id;
     struct ids_mpsc_stack_node node;
 };
 
 
 static inline struct item*
-NodeToItem (struct ids_mpsc_stack_node* node)
+NodeToItem (const struct ids_mpsc_stack_node* node)
 {
     return IDS_CONT_OF(node, struct item, node);
 }
@@ -55,8 +57,8 @@ Test_InitEmpty (void)
 
     Ids_MpscStack_Init(&stack);
 
-    assert(Ids_MpscStack_Empty(&stack));
-    assert(Ids_MpscStack_Pop(&stack) == NULL);
+    CHECK(Ids_MpscStack_Empty(&stack));
+    CHECK(Ids_MpscStack_Pop(&stack) == NULL);
 }
 
 static void
@@ -72,12 +74,12 @@ Test_PushPop (void)
     Ids_MpscStack_Push(&stack, &b.node);
     Ids_MpscStack_Push(&stack, &c.node);
 
-    assert(!Ids_MpscStack_Empty(&stack));
-    assert(NodeToItem(Ids_MpscStack_Pop(&stack))->id == 3);
-    assert(NodeToItem(Ids_MpscStack_Pop(&stack))->id == 2);
-    assert(NodeToItem(Ids_MpscStack_Pop(&stack))->id == 1);
-    assert(Ids_MpscStack_Empty(&stack));
-    assert(Ids_MpscStack_Pop(&stack) == NULL);
+    CHECK(!Ids_MpscStack_Empty(&stack));
+    CHECK(NodeToItem(Ids_MpscStack_Pop(&stack))->id == 3);
+    CHECK(NodeToItem(Ids_MpscStack_Pop(&stack))->id == 2);
+    CHECK(NodeToItem(Ids_MpscStack_Pop(&stack))->id == 1);
+    CHECK(Ids_MpscStack_Empty(&stack));
+    CHECK(Ids_MpscStack_Pop(&stack) == NULL);
 }
 
 static void
@@ -89,11 +91,11 @@ Test_Reuse (void)
     Ids_MpscStack_Init(&stack);
 
     Ids_MpscStack_Push(&stack, &item.node);
-    assert(Ids_MpscStack_Pop(&stack) == &item.node);
+    CHECK(Ids_MpscStack_Pop(&stack) == &item.node);
 
     Ids_MpscStack_Push(&stack, &item.node);
-    assert(Ids_MpscStack_Pop(&stack) == &item.node);
-    assert(Ids_MpscStack_Empty(&stack));
+    CHECK(Ids_MpscStack_Pop(&stack) == &item.node);
+    CHECK(Ids_MpscStack_Empty(&stack));
 }
 
 struct stress_context
@@ -143,8 +145,8 @@ ConsumerThread (void* argument)
         }
 
         struct item* item = NodeToItem(node);
-        assert(item->id >= 0 && item->id < ITEM_COUNT);
-        assert(atomic_fetch_add_explicit(&context->seen[item->id], 1, memory_order_relaxed) == 0);
+        CHECK(item->id >= 0 && item->id < ITEM_COUNT);
+        CHECK(atomic_fetch_add_explicit(&context->seen[item->id], 1, memory_order_relaxed) == 0);
         ++consumed;
     }
 
@@ -167,23 +169,23 @@ Test_Concurrent (void)
         atomic_init(&context.seen[index], 0);
     }
 
-    assert(thrd_create(&consumer, ConsumerThread, &context) == thrd_success);
+    CHECK(thrd_create(&consumer, ConsumerThread, &context) == thrd_success);
     for(size_t index = 0; index < PRODUCER_COUNT; ++index)
     {
         producer_contexts[index].stress = &context;
         producer_contexts[index].first  = index * ITEMS_PER_PRODUCER;
-        assert(thrd_create(&producers[index], ProducerThread, &producer_contexts[index]) ==
+        CHECK(thrd_create(&producers[index], ProducerThread, &producer_contexts[index]) ==
                thrd_success);
     }
 
     atomic_store_explicit(&context.start, 1, memory_order_release);
     for(size_t index = 0; index < PRODUCER_COUNT; ++index)
-        assert(thrd_join(producers[index], NULL) == thrd_success);
-    assert(thrd_join(consumer, NULL) == thrd_success);
+        CHECK(thrd_join(producers[index], NULL) == thrd_success);
+    CHECK(thrd_join(consumer, NULL) == thrd_success);
 
     for(size_t index = 0; index < ITEM_COUNT; ++index)
-        assert(atomic_load_explicit(&context.seen[index], memory_order_relaxed) == 1);
-    assert(Ids_MpscStack_Empty(&context.stack));
+        CHECK(atomic_load_explicit(&context.seen[index], memory_order_relaxed) == 1);
+    CHECK(Ids_MpscStack_Empty(&context.stack));
 }
 
 int

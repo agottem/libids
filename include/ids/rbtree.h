@@ -87,7 +87,7 @@ struct ids_rbtree_post_it
     id sorts before node, zero if id matches node, or greater than zero if id sorts after node
  */
 typedef int
-ids_rbtree_cmp_t (void* id, struct ids_rbtree_node* node, void* user_data);
+ids_rbtree_cmp_t (const void* id, const struct ids_rbtree_node* node, void* user_data);
 
 
 /*
@@ -107,50 +107,53 @@ Ids_RbTree_Reset (struct ids_rbtree* rbtree);
     Return non-zero if the rbtree is empty
  */
 inline int
-Ids_RbTree_Empty (struct ids_rbtree* rbtree);
+Ids_RbTree_Empty (const struct ids_rbtree* rbtree);
 
 /*
     Return the root node, or NULL when empty
  */
 inline struct ids_rbtree_node*
-Ids_RbTree_Root (struct ids_rbtree* rbtree);
+Ids_RbTree_Root (const struct ids_rbtree* rbtree);
 
 /*
     Return the first node in key order, or NULL when empty
  */
 inline struct ids_rbtree_node*
-Ids_RbTree_Min (struct ids_rbtree* rbtree);
+Ids_RbTree_Min (const struct ids_rbtree* rbtree);
 
 /*
     Return the last node in key order, or NULL when empty
  */
 inline struct ids_rbtree_node*
-Ids_RbTree_Max (struct ids_rbtree* rbtree);
+Ids_RbTree_Max (const struct ids_rbtree* rbtree);
 
 
 /*
     Find a node matching id.  NULL is returned if no node was found
  */
 inline struct ids_rbtree_node*
-Ids_RbTree_Find (struct ids_rbtree* rbtree, void* id, ids_rbtree_cmp_t* cmp_func, void* user_data);
+Ids_RbTree_Find (const struct ids_rbtree* rbtree,
+                 const void*              id,
+                 ids_rbtree_cmp_t*        cmp_func,
+                 void*                    user_data);
 
 /*
     Return the first node which does not sort before id, or NULL if no such node exists
  */
 inline struct ids_rbtree_node*
-Ids_RbTree_LowerBound (struct ids_rbtree* rbtree,
-                       void*              id,
-                       ids_rbtree_cmp_t*  cmp_func,
-                       void*              user_data);
+Ids_RbTree_LowerBound (const struct ids_rbtree* rbtree,
+                       const void*              id,
+                       ids_rbtree_cmp_t*        cmp_func,
+                       void*                    user_data);
 
 /*
     Return the first node which sorts after id, or NULL if no such node exists
  */
 inline struct ids_rbtree_node*
-Ids_RbTree_UpperBound (struct ids_rbtree* rbtree,
-                       void*              id,
-                       ids_rbtree_cmp_t*  cmp_func,
-                       void*              user_data);
+Ids_RbTree_UpperBound (const struct ids_rbtree* rbtree,
+                       const void*              id,
+                       ids_rbtree_cmp_t*        cmp_func,
+                       void*                    user_data);
 
 
 /*
@@ -159,7 +162,7 @@ Ids_RbTree_UpperBound (struct ids_rbtree* rbtree,
  */
 inline struct ids_rbtree_node*
 Ids_RbTree_Add (struct ids_rbtree*      rbtree,
-                void*                   id,
+                const void*             id,
                 struct ids_rbtree_node* node,
                 ids_rbtree_cmp_t*       cmp_func,
                 void*                   user_data);
@@ -175,19 +178,19 @@ Ids_RbTree_Del (struct ids_rbtree* rbtree, struct ids_rbtree_node* node);
     Start an iteration from the specified node
  */
 inline void
-Ids_RbTree_NBeginIt (struct ids_rbtree_node* node, struct ids_rbtree_it* it);
+Ids_RbTree_NBeginIt (const struct ids_rbtree_node* node, struct ids_rbtree_it* it);
 
 /*
     Start an iteration from the first node in key order
  */
 inline void
-Ids_RbTree_BeginIt (struct ids_rbtree* rbtree, struct ids_rbtree_it* it);
+Ids_RbTree_BeginIt (const struct ids_rbtree* rbtree, struct ids_rbtree_it* it);
 
 /*
     Start an iteration from the last node in key order
  */
 inline void
-Ids_RbTree_RBeginIt (struct ids_rbtree* rbtree, struct ids_rbtree_it* it);
+Ids_RbTree_RBeginIt (const struct ids_rbtree* rbtree, struct ids_rbtree_it* it);
 
 /*
     Iterate forwards in key order
@@ -205,7 +208,7 @@ Ids_RbTree_ItBack (struct ids_rbtree_it* it);
     Return non-zero if the iterator is past the last node
  */
 inline int
-Ids_RbTree_ItDone (struct ids_rbtree_it* it);
+Ids_RbTree_ItDone (const struct ids_rbtree_it* it);
 
 
 /*
@@ -213,7 +216,7 @@ Ids_RbTree_ItDone (struct ids_rbtree_it* it);
     If nodes are freed during iteration, the rbtree must be reset after iteration completes
  */
 inline void
-Ids_RbTree_BeginPostIt (struct ids_rbtree* rbtree, struct ids_rbtree_post_it* it);
+Ids_RbTree_BeginPostIt (const struct ids_rbtree* rbtree, struct ids_rbtree_post_it* it);
 
 /*
     Iterate forwards in post-order

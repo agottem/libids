@@ -24,34 +24,34 @@
 
 
 extern void
-Ids_SpscRing_Init (size_t capacity, struct ids_spsc_ring* ring);
+Ids_SpscRing_Init (struct ids_spsc_ring* ring, size_t capacity);
 
 extern void
 Ids_SpscRing_Reset (struct ids_spsc_ring* ring);
 
 
 extern size_t
-Ids_SpscRing_Count (struct ids_spsc_ring* ring);
+Ids_SpscRing_Count (const struct ids_spsc_ring* ring);
 
 extern size_t
-Ids_SpscRing_Space (struct ids_spsc_ring* ring);
+Ids_SpscRing_Space (const struct ids_spsc_ring* ring);
 
 extern int
-Ids_SpscRing_Empty (struct ids_spsc_ring* ring);
+Ids_SpscRing_Empty (const struct ids_spsc_ring* ring);
 
 extern int
-Ids_SpscRing_Full (struct ids_spsc_ring* ring);
+Ids_SpscRing_Full (const struct ids_spsc_ring* ring);
 
 
 extern struct ids_spsc_ring_range
-Ids_SpscRing_Reserve (size_t count, struct ids_spsc_ring* ring);
+Ids_SpscRing_Reserve (const struct ids_spsc_ring* ring, size_t count);
 
 extern void
-Ids_SpscRing_Commit (struct ids_spsc_ring_range* range, struct ids_spsc_ring* ring);
+Ids_SpscRing_Commit (struct ids_spsc_ring* ring, const struct ids_spsc_ring_range* range);
 
 
 extern struct ids_spsc_ring_range
-Ids_SpscRing_Peek (size_t count, struct ids_spsc_ring* ring);
+Ids_SpscRing_Peek (const struct ids_spsc_ring* ring, size_t count);
 
 extern void
-Ids_SpscRing_Release (struct ids_spsc_ring_range* range, struct ids_spsc_ring* ring);
+Ids_SpscRing_Release (struct ids_spsc_ring* ring, const struct ids_spsc_ring_range* range);

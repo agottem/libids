@@ -31,27 +31,27 @@ Ids_SpmcRing_Reset (struct ids_spmc_ring* ring);
 
 
 extern size_t
-Ids_SpmcRing_Count (struct ids_spmc_ring* ring);
+Ids_SpmcRing_Count (const struct ids_spmc_ring* ring);
 
 extern size_t
-Ids_SpmcRing_Space (struct ids_spmc_ring* ring);
+Ids_SpmcRing_Space (const struct ids_spmc_ring* ring);
 
 extern int
-Ids_SpmcRing_Empty (struct ids_spmc_ring* ring);
+Ids_SpmcRing_Empty (const struct ids_spmc_ring* ring);
 
 extern int
-Ids_SpmcRing_Full (struct ids_spmc_ring* ring);
+Ids_SpmcRing_Full (const struct ids_spmc_ring* ring);
 
 
 extern struct ids_spmc_ring_range
-Ids_SpmcRing_Reserve (struct ids_spmc_ring* ring, size_t count);
+Ids_SpmcRing_Reserve (const struct ids_spmc_ring* ring, size_t count);
 
 extern void
-Ids_SpmcRing_Commit (struct ids_spmc_ring* ring, struct ids_spmc_ring_range* range);
+Ids_SpmcRing_Commit (struct ids_spmc_ring* ring, const struct ids_spmc_ring_range* range);
 
 
 extern struct ids_spmc_ring_range
 Ids_SpmcRing_Claim (struct ids_spmc_ring* ring, size_t count);
 
 extern void
-Ids_SpmcRing_Release (struct ids_spmc_ring* ring, struct ids_spmc_ring_range* range);
+Ids_SpmcRing_Release (struct ids_spmc_ring* ring, const struct ids_spmc_ring_range* range);

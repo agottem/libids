@@ -43,12 +43,12 @@ inline void
 Ids_Arr_InitStatic (struct ids_arr* arr,
                     size_t          elem_size,
                     size_t          capacity,
-                    void*           data)
+                    const void*     data)
 {
     arr->elem_size  = elem_size;
     arr->elem_count = 0;
     arr->capacity   = capacity;
-    arr->data       = data;
+    arr->data       = (void*)data;
     arr->flags      = ids_arr_flag_static_data;
 }
 
@@ -69,7 +69,7 @@ Ids_Arr_Create (struct ids_arr* arr, size_t elem_size, size_t capacity)
     arr->elem_count = 0;
     arr->capacity   = capacity;
     arr->data       = data;
-    arr->flags     &= ~ids_arr_flag_static_data;
+    arr->flags      = ids_arr_flags_none;
 
     return ids_err_none;
 }
@@ -88,25 +88,25 @@ Ids_Arr_Reset (struct ids_arr* arr)
 }
 
 inline size_t
-Ids_Arr_Count (struct ids_arr* arr)
+Ids_Arr_Count (const struct ids_arr* arr)
 {
     return arr->elem_count;
 }
 
 inline size_t
-Ids_Arr_Capacity (struct ids_arr* arr)
+Ids_Arr_Capacity (const struct ids_arr* arr)
 {
     return arr->capacity;
 }
 
 inline void*
-Ids_Arr_Data (struct ids_arr* arr)
+Ids_Arr_Data (const struct ids_arr* arr)
 {
     return arr->data;
 }
 
 inline void*
-Ids_Arr_At (struct ids_arr* arr, size_t elem_index)
+Ids_Arr_At (const struct ids_arr* arr, size_t elem_index)
 {
     assert(elem_index < arr->elem_count && "Array element index must be in bounds");
 
@@ -161,12 +161,15 @@ Ids_Arr_InsUninit (struct ids_arr* arr, size_t count, size_t elem_index)
 }
 
 inline enum ids_err
-Ids_Arr_Ins (struct ids_arr* arr, void* restrict data, size_t count, size_t elem_index)
+Ids_Arr_Ins (struct ids_arr* arr, const void* data, size_t count, size_t elem_index)
 {
     assert(count > 0 && "Element count must be greater than zero");
 
-    void*  insert_start = Ids_Arr_InsUninit(arr, count, elem_index);
-    size_t insert_size  = count * arr->elem_size;
+    void* insert_start = Ids_Arr_InsUninit(arr, count, elem_index);
+    if(insert_start == NULL)
+        return ids_err_mem;
+
+    size_t insert_size = count * arr->elem_size;
     memcpy(insert_start, data, insert_size);
 
     return ids_err_none;
@@ -181,7 +184,7 @@ Ids_Arr_AddUninit (struct ids_arr* arr, size_t count)
 }
 
 inline enum ids_err
-Ids_Arr_Add (struct ids_arr* arr, void* restrict data, size_t count)
+Ids_Arr_Add (struct ids_arr* arr, const void* restrict data, size_t count)
 {
     assert(count > 0 && "Element count must be greater than zero");
 
@@ -189,7 +192,7 @@ Ids_Arr_Add (struct ids_arr* arr, void* restrict data, size_t count)
 }
 
 inline enum ids_err
-Ids_Arr_Place (struct ids_arr* arr, void* restrict data, size_t count)
+Ids_Arr_Place (struct ids_arr* arr, const void* restrict data, size_t count)
 {
     assert(count > 0 && "Element count must be greater than zero");
 

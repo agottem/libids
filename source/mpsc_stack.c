@@ -27,7 +27,7 @@ extern void
 Ids_MpscStack_Init (struct ids_mpsc_stack* stack);
 
 extern int
-Ids_MpscStack_Empty (struct ids_mpsc_stack* stack);
+Ids_MpscStack_Empty (const struct ids_mpsc_stack* stack);
 
 extern void
 Ids_MpscStack_Push (struct ids_mpsc_stack* stack, struct ids_mpsc_stack_node* node);

@@ -45,7 +45,7 @@ Ids_MpscRing_Reset (struct ids_mpsc_ring* ring)
 }
 
 inline size_t
-Ids_MpscRing_Count (struct ids_mpsc_ring* ring)
+Ids_MpscRing_Count (const struct ids_mpsc_ring* ring)
 {
     size_t commit_cursor = atomic_load_explicit(&ring->commit_cursor, memory_order_relaxed);
     size_t read_cursor   = atomic_load_explicit(&ring->read_cursor,   memory_order_relaxed);
@@ -54,7 +54,7 @@ Ids_MpscRing_Count (struct ids_mpsc_ring* ring)
 }
 
 inline size_t
-Ids_MpscRing_Space (struct ids_mpsc_ring* ring)
+Ids_MpscRing_Space (const struct ids_mpsc_ring* ring)
 {
     size_t reserve_cursor = atomic_load_explicit(&ring->reserve_cursor, memory_order_relaxed);
     size_t read_cursor    = atomic_load_explicit(&ring->read_cursor,    memory_order_relaxed);
@@ -63,13 +63,13 @@ Ids_MpscRing_Space (struct ids_mpsc_ring* ring)
 }
 
 inline int
-Ids_MpscRing_Empty (struct ids_mpsc_ring* ring)
+Ids_MpscRing_Empty (const struct ids_mpsc_ring* ring)
 {
     return Ids_MpscRing_Count(ring) == 0;
 }
 
 inline int
-Ids_MpscRing_Full (struct ids_mpsc_ring* ring)
+Ids_MpscRing_Full (const struct ids_mpsc_ring* ring)
 {
     return Ids_MpscRing_Space(ring) == 0;
 }
@@ -112,7 +112,7 @@ Ids_MpscRing_Reserve (struct ids_mpsc_ring* ring, size_t count)
 }
 
 inline void
-Ids_MpscRing_Commit (struct ids_mpsc_ring* ring, struct ids_mpsc_ring_range* range)
+Ids_MpscRing_Commit (struct ids_mpsc_ring* ring, const struct ids_mpsc_ring_range* range)
 {
     if(range->count == 0)
         return;
@@ -125,7 +125,7 @@ Ids_MpscRing_Commit (struct ids_mpsc_ring* ring, struct ids_mpsc_ring_range* ran
 }
 
 inline struct ids_mpsc_ring_range
-Ids_MpscRing_Peek (struct ids_mpsc_ring* ring, size_t count)
+Ids_MpscRing_Peek (const struct ids_mpsc_ring* ring, size_t count)
 {
     size_t commit_cursor = atomic_load_explicit(&ring->commit_cursor, memory_order_acquire);
     size_t read_cursor   = atomic_load_explicit(&ring->read_cursor,   memory_order_relaxed);
@@ -140,7 +140,7 @@ Ids_MpscRing_Peek (struct ids_mpsc_ring* ring, size_t count)
 }
 
 inline void
-Ids_MpscRing_Release (struct ids_mpsc_ring* ring, struct ids_mpsc_ring_range* range)
+Ids_MpscRing_Release (struct ids_mpsc_ring* ring, const struct ids_mpsc_ring_range* range)
 {
     atomic_store_explicit(&ring->read_cursor,
                           range->cursor + range->count,

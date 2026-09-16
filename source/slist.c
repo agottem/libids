@@ -31,13 +31,13 @@ Ids_Slist_Reset (struct ids_slist* slist);
 
 
 extern struct ids_slist_node*
-Ids_Slist_Head (struct ids_slist* slist);
+Ids_Slist_Head (const struct ids_slist* slist);
 
 extern struct ids_slist_node*
-Ids_Slist_Tail (struct ids_slist* slist);
+Ids_Slist_Tail (const struct ids_slist* slist);
 
 extern int
-Ids_Slist_Empty (struct ids_slist* slist);
+Ids_Slist_Empty (const struct ids_slist* slist);
 
 
 extern void
@@ -62,13 +62,13 @@ Ids_Slist_PushT (struct ids_slist* slist, struct ids_slist_node* node);
 
 
 extern void
-Ids_Slist_NBeginIt (struct ids_slist_node* node, struct ids_slist_it* it);
+Ids_Slist_NBeginIt (const struct ids_slist_node* node, struct ids_slist_it* it);
 
 extern void
-Ids_Slist_BeginIt (struct ids_slist* slist, struct ids_slist_it* it);
+Ids_Slist_BeginIt (const struct ids_slist* slist, struct ids_slist_it* it);
 
 extern void
 Ids_Slist_ItFwd (struct ids_slist_it* it);
 
 extern int
-Ids_Slist_ItDone (struct ids_slist_it* it);
+Ids_Slist_ItDone (const struct ids_slist_it* it);

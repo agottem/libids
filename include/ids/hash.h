@@ -91,9 +91,9 @@ struct ids_hash_it
 
     For example:
         int
-        MyCmp (void*                 id_to_cmp,
-               struct ids_hash_node* cmp_node,
-               void*                 user_data)
+        MyCmp (const void*                 id_to_cmp,
+               const struct ids_hash_node* cmp_node,
+               void*                       user_data)
         {
             struct my_element* element;
 
@@ -103,7 +103,7 @@ struct ids_hash_it
         }
  */
 typedef int
-ids_hash_cmp_t (void* id, struct ids_hash_node* node, void* user_data);
+ids_hash_cmp_t (const void* id, const struct ids_hash_node* node, void* user_data);
 
 
 /*
@@ -136,7 +136,7 @@ Ids_Hash_Reset (struct ids_hash* hash);
    Return the bucket which maps to the specified hash value
  */
 inline struct ids_hash_bkt*
-Ids_Hash_Bkt (struct ids_hash* hash, unsigned int value_hash);
+Ids_Hash_Bkt (const struct ids_hash* hash, unsigned int value_hash);
 
 
 /*
@@ -144,12 +144,12 @@ Ids_Hash_Bkt (struct ids_hash* hash, unsigned int value_hash);
     set and the found node returned.  If no node was found, NULL is returned
  */
 inline struct ids_hash_node*
-Ids_Hash_Find (struct ids_hash*      hash,
-               unsigned int          value_hash,
-               void*                 value,
-               ids_hash_cmp_t*       cmp_func,
-               void*                 user_data,
-               struct ids_hash_bkt** searched_bkt);
+Ids_Hash_Find (const struct ids_hash* hash,
+               unsigned int           value_hash,
+               const void*            value,
+               ids_hash_cmp_t*        cmp_func,
+               void*                  user_data,
+               struct ids_hash_bkt**  searched_bkt);
 
 
 /*
@@ -174,45 +174,45 @@ Ids_Hash_Del (struct ids_hash_node* node);
     Return non-zero if the hash bucket is empty
  */
 inline int
-Ids_Hash_BktEmpty (struct ids_hash_bkt* bkt);
+Ids_Hash_BktEmpty (const struct ids_hash_bkt* bkt);
 
 
 /*
     Start an iteration of the specified hash bucket
  */
 inline void
-Ids_Hash_BeginBktIt (struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
+Ids_Hash_BeginBktIt (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
 
 /*
     Iterate to the next node in the bucket
  */
 inline void
-Ids_Hash_BktItFwd (struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
+Ids_Hash_BktItFwd (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
 
 /*
     Return non-zero if the iterator is at the end of the bucket
  */
 inline int
-Ids_Hash_BktItDone (struct ids_hash_bkt_it* it);
+Ids_Hash_BktItDone (const struct ids_hash_bkt_it* it);
 
 
 /*
     Start an unordered iteration of the hash
  */
 inline void
-Ids_Hash_BeginIt (struct ids_hash* hash, struct ids_hash_it* it);
+Ids_Hash_BeginIt (const struct ids_hash* hash, struct ids_hash_it* it);
 
 /*
     Iterate to the next node in the hash
  */
 inline void
-Ids_Hash_ItFwd (struct ids_hash* hash, struct ids_hash_it* it);
+Ids_Hash_ItFwd (const struct ids_hash* hash, struct ids_hash_it* it);
 
 /*
     Return non-zero if the iterator is at the end of the hash
  */
 inline int
-Ids_Hash_ItDone (struct ids_hash_it* it);
+Ids_Hash_ItDone (const struct ids_hash_it* it);
 
 
 #include <ids/hash_inl.h>

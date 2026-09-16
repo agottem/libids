@@ -85,25 +85,25 @@ Ids_MpscRing_Reset (struct ids_mpsc_ring* ring);
     Return a snapshot of the number of committed indexes available to the consumer
  */
 inline size_t
-Ids_MpscRing_Count (struct ids_mpsc_ring* ring);
+Ids_MpscRing_Count (const struct ids_mpsc_ring* ring);
 
 /*
     Return a snapshot of the number of indexes available to reserve
  */
 inline size_t
-Ids_MpscRing_Space (struct ids_mpsc_ring* ring);
+Ids_MpscRing_Space (const struct ids_mpsc_ring* ring);
 
 /*
     Return non-zero if no committed indexes are available to the consumer
  */
 inline int
-Ids_MpscRing_Empty (struct ids_mpsc_ring* ring);
+Ids_MpscRing_Empty (const struct ids_mpsc_ring* ring);
 
 /*
     Return non-zero if no indexes are available to reserve
  */
 inline int
-Ids_MpscRing_Full (struct ids_mpsc_ring* ring);
+Ids_MpscRing_Full (const struct ids_mpsc_ring* ring);
 
 
 /*
@@ -122,7 +122,7 @@ Ids_MpscRing_Reserve (struct ids_mpsc_ring* ring, size_t count);
     after committing it
  */
 inline void
-Ids_MpscRing_Commit (struct ids_mpsc_ring* ring, struct ids_mpsc_ring_range* range);
+Ids_MpscRing_Commit (struct ids_mpsc_ring* ring, const struct ids_mpsc_ring_range* range);
 
 
 /*
@@ -131,14 +131,14 @@ Ids_MpscRing_Commit (struct ids_mpsc_ring* ring, struct ids_mpsc_ring_range* ran
     are available.  If the ring is empty, the returned count is zero
  */
 inline struct ids_mpsc_ring_range
-Ids_MpscRing_Peek (struct ids_mpsc_ring* ring, size_t count);
+Ids_MpscRing_Peek (const struct ids_mpsc_ring* ring, size_t count);
 
 /*
     Release previously peeked indexes back to the producers.  Only the consumer may call this
     function
  */
 inline void
-Ids_MpscRing_Release (struct ids_mpsc_ring* ring, struct ids_mpsc_ring_range* range);
+Ids_MpscRing_Release (struct ids_mpsc_ring* ring, const struct ids_mpsc_ring_range* range);
 
 
 #include <ids/mpsc_ring_inl.h>

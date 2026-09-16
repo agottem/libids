@@ -60,7 +60,7 @@ Ids_MpscStack_Init (struct ids_mpsc_stack* stack);
     Return non-zero if the mpsc stack is empty
  */
 inline int
-Ids_MpscStack_Empty (struct ids_mpsc_stack* stack);
+Ids_MpscStack_Empty (const struct ids_mpsc_stack* stack);
 
 
 /*

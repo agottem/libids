@@ -28,6 +28,8 @@
 #include <stdlib.h>
 #include <threads.h>
 
+#include "test_utils.h"
+
 
 #define STRESS_CAPACITY    64
 #define PRODUCER_COUNT     4
@@ -42,19 +44,19 @@ Test_InitReset (void)
     struct ids_mpsc_ring_range range;
 
     Ids_MpscRing_Init(&ring, 4);
-    assert(ring.capacity == 4);
-    assert(Ids_MpscRing_Count(&ring) == 0);
-    assert(Ids_MpscRing_Space(&ring) == 4);
-    assert(Ids_MpscRing_Empty(&ring));
-    assert(!Ids_MpscRing_Full(&ring));
+    CHECK(ring.capacity == 4);
+    CHECK(Ids_MpscRing_Count(&ring) == 0);
+    CHECK(Ids_MpscRing_Space(&ring) == 4);
+    CHECK(Ids_MpscRing_Empty(&ring));
+    CHECK(!Ids_MpscRing_Full(&ring));
 
     range = Ids_MpscRing_Reserve(&ring, 2);
     Ids_MpscRing_Commit(&ring, &range);
-    assert(Ids_MpscRing_Count(&ring) == 2);
+    CHECK(Ids_MpscRing_Count(&ring) == 2);
 
     Ids_MpscRing_Reset(&ring);
-    assert(Ids_MpscRing_Count(&ring) == 0);
-    assert(Ids_MpscRing_Space(&ring) == 4);
+    CHECK(Ids_MpscRing_Count(&ring) == 0);
+    CHECK(Ids_MpscRing_Space(&ring) == 4);
 }
 
 static void
@@ -66,22 +68,22 @@ Test_ReserveCommit (void)
     Ids_MpscRing_Init(&ring, 4);
 
     range = Ids_MpscRing_Reserve(&ring, 3);
-    assert(range.start == 0);
-    assert(range.count == 3);
-    assert(Ids_MpscRing_Count(&ring) == 0);
-    assert(Ids_MpscRing_Space(&ring) == 1);
+    CHECK(range.start == 0);
+    CHECK(range.count == 3);
+    CHECK(Ids_MpscRing_Count(&ring) == 0);
+    CHECK(Ids_MpscRing_Space(&ring) == 1);
 
     Ids_MpscRing_Commit(&ring, &range);
-    assert(Ids_MpscRing_Count(&ring) == 3);
+    CHECK(Ids_MpscRing_Count(&ring) == 3);
 
     range = Ids_MpscRing_Reserve(&ring, 3);
-    assert(range.start == 3);
-    assert(range.count == 1);
+    CHECK(range.start == 3);
+    CHECK(range.count == 1);
     Ids_MpscRing_Commit(&ring, &range);
-    assert(Ids_MpscRing_Full(&ring));
+    CHECK(Ids_MpscRing_Full(&ring));
 
     range = Ids_MpscRing_Reserve(&ring, 1);
-    assert(range.count == 0);
+    CHECK(range.count == 0);
     Ids_MpscRing_Commit(&ring, &range);
 }
 
@@ -97,19 +99,19 @@ Test_PeekRelease (void)
     Ids_MpscRing_Commit(&ring, &range);
 
     range = Ids_MpscRing_Peek(&ring, 2);
-    assert(range.start == 0);
-    assert(range.count == 2);
-    assert(Ids_MpscRing_Count(&ring) == 4);
+    CHECK(range.start == 0);
+    CHECK(range.count == 2);
+    CHECK(Ids_MpscRing_Count(&ring) == 4);
 
     Ids_MpscRing_Release(&ring, &range);
-    assert(Ids_MpscRing_Count(&ring) == 2);
-    assert(Ids_MpscRing_Space(&ring) == 2);
+    CHECK(Ids_MpscRing_Count(&ring) == 2);
+    CHECK(Ids_MpscRing_Space(&ring) == 2);
 
     range = Ids_MpscRing_Peek(&ring, 3);
-    assert(range.start == 2);
-    assert(range.count == 2);
+    CHECK(range.start == 2);
+    CHECK(range.count == 2);
     Ids_MpscRing_Release(&ring, &range);
-    assert(Ids_MpscRing_Empty(&ring));
+    CHECK(Ids_MpscRing_Empty(&ring));
 }
 
 static void
@@ -126,23 +128,23 @@ Test_Wrap (void)
     Ids_MpscRing_Release(&ring, &range);
 
     range = Ids_MpscRing_Reserve(&ring, 3);
-    assert(range.start == 3);
-    assert(range.count == 1);
+    CHECK(range.start == 3);
+    CHECK(range.count == 1);
     Ids_MpscRing_Commit(&ring, &range);
 
     range = Ids_MpscRing_Reserve(&ring, 2);
-    assert(range.start == 0);
-    assert(range.count == 2);
+    CHECK(range.start == 0);
+    CHECK(range.count == 2);
     Ids_MpscRing_Commit(&ring, &range);
 
     range = Ids_MpscRing_Peek(&ring, 4);
-    assert(range.start == 2);
-    assert(range.count == 2);
+    CHECK(range.start == 2);
+    CHECK(range.count == 2);
     Ids_MpscRing_Release(&ring, &range);
 
     range = Ids_MpscRing_Peek(&ring, 4);
-    assert(range.start == 0);
-    assert(range.count == 2);
+    CHECK(range.start == 0);
+    CHECK(range.count == 2);
     Ids_MpscRing_Release(&ring, &range);
 }
 
@@ -185,21 +187,21 @@ Test_OrderedCommit (void)
                                      .range    = &second,
                                      .started  = &started,
                                      .finished = &finished};
-    assert(thrd_create(&thread, CommitThread, &context) == thrd_success);
+    CHECK(thrd_create(&thread, CommitThread, &context) == thrd_success);
     while(!atomic_load_explicit(&started, memory_order_acquire))
         thrd_yield();
 
-    assert(!atomic_load_explicit(&finished, memory_order_acquire));
-    assert(Ids_MpscRing_Count(&ring) == 0);
-    assert(Ids_MpscRing_Full(&ring));
+    CHECK(!atomic_load_explicit(&finished, memory_order_acquire));
+    CHECK(Ids_MpscRing_Count(&ring) == 0);
+    CHECK(Ids_MpscRing_Full(&ring));
 
     Ids_MpscRing_Commit(&ring, &first);
-    assert(thrd_join(thread, NULL) == thrd_success);
-    assert(atomic_load_explicit(&finished, memory_order_acquire));
-    assert(Ids_MpscRing_Count(&ring) == 4);
+    CHECK(thrd_join(thread, NULL) == thrd_success);
+    CHECK(atomic_load_explicit(&finished, memory_order_acquire));
+    CHECK(Ids_MpscRing_Count(&ring) == 4);
 
     peek = Ids_MpscRing_Peek(&ring, 4);
-    assert(peek.count == 4);
+    CHECK(peek.count == 4);
     Ids_MpscRing_Release(&ring, &peek);
 }
 
@@ -267,8 +269,8 @@ ConsumerThread (void* argument)
         for(size_t index = 0; index < range.count; ++index)
         {
             size_t value = context->values[range.start + index];
-            assert(value < ITEM_COUNT);
-            assert(atomic_fetch_add_explicit(&context->seen[value], 1, memory_order_relaxed) == 0);
+            CHECK(value < ITEM_COUNT);
+            CHECK(atomic_fetch_add_explicit(&context->seen[value], 1, memory_order_relaxed) == 0);
         }
 
         Ids_MpscRing_Release(&context->ring, &range);
@@ -291,30 +293,30 @@ Test_Concurrent (void)
     for(size_t index = 0; index < ITEM_COUNT; ++index)
         atomic_init(&context.seen[index], 0);
 
-    assert(thrd_create(&consumer, ConsumerThread, &context) == thrd_success);
+    CHECK(thrd_create(&consumer, ConsumerThread, &context) == thrd_success);
     for(size_t index = 0; index < PRODUCER_COUNT; ++index)
     {
         producer_contexts[index].stress = &context;
         producer_contexts[index].first  = index * ITEMS_PER_PRODUCER;
-        assert(thrd_create(&producers[index], ProducerThread, &producer_contexts[index]) ==
+        CHECK(thrd_create(&producers[index], ProducerThread, &producer_contexts[index]) ==
                thrd_success);
     }
 
     atomic_store_explicit(&context.start, 1, memory_order_release);
     for(size_t index = 0; index < PRODUCER_COUNT; ++index)
-        assert(thrd_join(producers[index], NULL) == thrd_success);
-    assert(thrd_join(consumer, NULL) == thrd_success);
+        CHECK(thrd_join(producers[index], NULL) == thrd_success);
+    CHECK(thrd_join(consumer, NULL) == thrd_success);
 
     for(size_t index = 0; index < ITEM_COUNT; ++index)
-        assert(atomic_load_explicit(&context.seen[index], memory_order_relaxed) == 1);
-    assert(Ids_MpscRing_Empty(&context.ring));
-    assert(Ids_MpscRing_Space(&context.ring) == STRESS_CAPACITY);
+        CHECK(atomic_load_explicit(&context.seen[index], memory_order_relaxed) == 1);
+    CHECK(Ids_MpscRing_Empty(&context.ring));
+    CHECK(Ids_MpscRing_Space(&context.ring) == STRESS_CAPACITY);
 }
 
 static void
 Test_Alignment (void)
 {
-    assert(alignof(struct ids_mpsc_ring) == IDS_CACHE_LINE_SIZE);
+    CHECK(alignof(struct ids_mpsc_ring) == IDS_CACHE_LINE_SIZE);
 }
 
 int

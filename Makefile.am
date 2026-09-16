@@ -1,4 +1,23 @@
-AM_CFLAGS = -std=c23 -I$(top_srcdir)/include
+AM_CFLAGS = -std=c23                    \
+            -I$(top_srcdir)/include     \
+    	    -DNDEBUG                    \
+	    -O2                         \
+	    -g                          \
+            -Wall                       \
+	    -Wextra                     \
+	    -pedantic                   \
+	    -Wconversion                \
+	    -Wsign-conversion           \
+	    -Wshadow                    \
+	    -Wundef                     \
+	    -Wformat=2                  \
+	    -Wstrict-prototypes         \
+	    -Wmissing-prototypes        \
+	    -Wimplicit-fallthrough      \
+	    -Wnull-dereference          \
+	    -Wconditional-uninitialized \
+	    -Wunreachable-code          \
+	    -Wno-unused-parameter
 
 lib_LTLIBRARIES = libids.la
 

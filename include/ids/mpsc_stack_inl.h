@@ -27,7 +27,7 @@ Ids_MpscStack_Init (struct ids_mpsc_stack* stack)
 }
 
 inline int
-Ids_MpscStack_Empty (struct ids_mpsc_stack* stack)
+Ids_MpscStack_Empty (const struct ids_mpsc_stack* stack)
 {
     return atomic_load_explicit(&stack->head, memory_order_acquire) == NULL;
 }

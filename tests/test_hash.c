@@ -26,6 +26,8 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#include "test_utils.h"
+
 
 struct item
 {
@@ -35,13 +37,11 @@ struct item
 
 
 static inline int
-ItemCmp (void* id, struct ids_hash_node* node, void* user_data)
+ItemCmp (const void* id, const struct ids_hash_node* node, void* user_data)
 {
-    struct item* item;
+    const struct item* item = IDS_CONT_OF(node, struct item, node);
 
-    item = IDS_CONT_OF(node, struct item, node);
-
-    return item->id != *(int*)id;
+    return item->id != *(const int*)id;
 }
 
 
@@ -54,19 +54,19 @@ Test_InitReset (void)
     struct item         item = {.id = 1};
 
     Ids_Hash_Init(&hash, 3, bkts);
-    assert(hash.bkt_count == 3);
-    assert(hash.bkts == bkts);
-    assert(Ids_Hash_BktEmpty(&bkts[0]));
-    assert(Ids_Hash_BktEmpty(&bkts[1]));
-    assert(Ids_Hash_BktEmpty(&bkts[2]));
+    CHECK(hash.bkt_count == 3);
+    CHECK(hash.bkts == bkts);
+    CHECK(Ids_Hash_BktEmpty(&bkts[0]));
+    CHECK(Ids_Hash_BktEmpty(&bkts[1]));
+    CHECK(Ids_Hash_BktEmpty(&bkts[2]));
 
     Ids_Hash_Add(&hash, 1, &item.node);
-    assert(!Ids_Hash_BktEmpty(Ids_Hash_Bkt(&hash, 1)));
+    CHECK(!Ids_Hash_BktEmpty(Ids_Hash_Bkt(&hash, 1)));
 
     Ids_Hash_Reset(&hash);
-    assert(Ids_Hash_BktEmpty(&bkts[0]));
-    assert(Ids_Hash_BktEmpty(&bkts[1]));
-    assert(Ids_Hash_BktEmpty(&bkts[2]));
+    CHECK(Ids_Hash_BktEmpty(&bkts[0]));
+    CHECK(Ids_Hash_BktEmpty(&bkts[1]));
+    CHECK(Ids_Hash_BktEmpty(&bkts[2]));
 }
 
 static void
@@ -74,9 +74,9 @@ Test_CreateDestroy (void)
 {
     struct ids_hash hash;
 
-    assert(Ids_Hash_Create(&hash, 4) == ids_err_none);
-    assert(hash.bkt_count == 4);
-    assert(hash.bkts != 0);
+    CHECK(Ids_Hash_Create(&hash, 4) == ids_err_none);
+    CHECK(hash.bkt_count == 4);
+    CHECK(hash.bkts != 0);
     Ids_Hash_Destroy(&hash);
 }
 
@@ -96,15 +96,15 @@ Test_FindDel (void)
     Ids_Hash_Add(&hash, 3, &b.node);
 
     id = 3;
-    assert(Ids_Hash_Find(&hash, 3, &id, ItemCmp, 0, &searched_bkt) == &b.node);
-    assert(searched_bkt == Ids_Hash_Bkt(&hash, 3));
+    CHECK(Ids_Hash_Find(&hash, 3, &id, ItemCmp, 0, &searched_bkt) == &b.node);
+    CHECK(searched_bkt == Ids_Hash_Bkt(&hash, 3));
 
     id = 2;
-    assert(Ids_Hash_Find(&hash, 2, &id, ItemCmp, 0, &searched_bkt) == NULL);
+    CHECK(Ids_Hash_Find(&hash, 2, &id, ItemCmp, 0, &searched_bkt) == NULL);
 
     Ids_Hash_Del(&b.node);
     id = 3;
-    assert(Ids_Hash_Find(&hash, 3, &id, ItemCmp, 0, &searched_bkt) == NULL);
+    CHECK(Ids_Hash_Find(&hash, 3, &id, ItemCmp, 0, &searched_bkt) == NULL);
 }
 
 static void
@@ -120,19 +120,19 @@ Test_BktIt (void)
     Ids_Hash_Init(&hash, 1, bkts);
 
     Ids_Hash_BeginBktIt(&bkts[0], &it);
-    assert(Ids_Hash_BktItDone(&it));
+    CHECK(Ids_Hash_BktItDone(&it));
 
     Ids_Hash_Add(&hash, 0, &a.node);
     Ids_Hash_Add(&hash, 0, &b.node);
 
     Ids_Hash_BeginBktIt(&bkts[0], &it);
-    assert(!Ids_Hash_BktItDone(&it));
-    assert(it.node == &b.node);
+    CHECK(!Ids_Hash_BktItDone(&it));
+    CHECK(it.node == &b.node);
     Ids_Hash_BktItFwd(&bkts[0], &it);
-    assert(!Ids_Hash_BktItDone(&it));
-    assert(it.node == &a.node);
+    CHECK(!Ids_Hash_BktItDone(&it));
+    CHECK(it.node == &a.node);
     Ids_Hash_BktItFwd(&bkts[0], &it);
-    assert(Ids_Hash_BktItDone(&it));
+    CHECK(Ids_Hash_BktItDone(&it));
 }
 
 static void
@@ -152,7 +152,7 @@ Test_It (void)
     Ids_Hash_Init(&hash, 4, bkts);
 
     Ids_Hash_BeginIt(&hash, &it);
-    assert(Ids_Hash_ItDone(&it));
+    CHECK(Ids_Hash_ItDone(&it));
 
     Ids_Hash_Add(&hash, 0, &a.node);
     Ids_Hash_Add(&hash, 2, &b.node);
@@ -162,18 +162,18 @@ Test_It (void)
     for(Ids_Hash_BeginIt(&hash, &it); !Ids_Hash_ItDone(&it); Ids_Hash_ItFwd(&hash, &it))
     {
         struct item* item = IDS_CONT_OF(it.node, struct item, node);
-        assert(item->id >= 1 && item->id <= 4);
-        assert(!visited[item->id]);
+        CHECK(item->id >= 1 && item->id <= 4);
+        CHECK(!visited[item->id]);
 
         visited[item->id] = 1;
         count++;
     }
 
-    assert(count == 4);
-    assert(visited[1]);
-    assert(visited[2]);
-    assert(visited[3]);
-    assert(visited[4]);
+    CHECK(count == 4);
+    CHECK(visited[1]);
+    CHECK(visited[2]);
+    CHECK(visited[3]);
+    CHECK(visited[4]);
 }
 
 int

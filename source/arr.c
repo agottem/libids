@@ -29,9 +29,9 @@ Ids_Arr_Init (struct ids_arr* arr, size_t elem_size);
 
 extern void
 Ids_Arr_InitStatic (struct ids_arr* arr,
-                    size_t elem_size,
-                    size_t capacity,
-                    void*  data);
+                    size_t          elem_size,
+                    size_t          capacity,
+                    const void*     data);
 
 extern enum ids_err
 Ids_Arr_Create (struct ids_arr* arr, size_t elem_size, size_t capacity);
@@ -44,16 +44,16 @@ Ids_Arr_Reset (struct ids_arr* arr);
 
 
 extern size_t
-Ids_Arr_Count (struct ids_arr* arr);
+Ids_Arr_Count (const struct ids_arr* arr);
 
 extern size_t
-Ids_Arr_Capacity (struct ids_arr* arr);
+Ids_Arr_Capacity (const struct ids_arr* arr);
 
 extern void*
-Ids_Arr_Data (struct ids_arr* arr);
+Ids_Arr_Data (const struct ids_arr* arr);
 
 extern void*
-Ids_Arr_At (struct ids_arr* arr, size_t elem_index);
+Ids_Arr_At (const struct ids_arr* arr, size_t elem_index);
 
 
 extern enum ids_err
@@ -63,13 +63,13 @@ extern void*
 Ids_Arr_InsUninit (struct ids_arr* arr, size_t count, size_t elem_index);
 
 extern enum ids_err
-Ids_Arr_Ins (struct ids_arr* arr, void* data, size_t count, size_t elem_index);
+Ids_Arr_Ins (struct ids_arr* arr, const void* data, size_t count, size_t elem_index);
 
 extern void*
 Ids_Arr_AddUninit (struct ids_arr* arr, size_t count);
 
 extern enum ids_err
-Ids_Arr_Add (struct ids_arr* arr, void* data, size_t count);
+Ids_Arr_Add (struct ids_arr* arr, const void* restrict data, size_t count);
 
 extern enum ids_err
-Ids_Arr_Place (struct ids_arr* arr, void* data, size_t count);
+Ids_Arr_Place (struct ids_arr* arr, const void* restrict data, size_t count);

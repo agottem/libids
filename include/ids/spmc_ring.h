@@ -85,25 +85,25 @@ Ids_SpmcRing_Reset (struct ids_spmc_ring* ring);
     Return a snapshot of the number of committed indexes available to claim
  */
 inline size_t
-Ids_SpmcRing_Count (struct ids_spmc_ring* ring);
+Ids_SpmcRing_Count (const struct ids_spmc_ring* ring);
 
 /*
     Return a snapshot of the number of indexes available to the producer
  */
 inline size_t
-Ids_SpmcRing_Space (struct ids_spmc_ring* ring);
+Ids_SpmcRing_Space (const struct ids_spmc_ring* ring);
 
 /*
     Return non-zero if no committed indexes are available to claim
  */
 inline int
-Ids_SpmcRing_Empty (struct ids_spmc_ring* ring);
+Ids_SpmcRing_Empty (const struct ids_spmc_ring* ring);
 
 /*
     Return non-zero if no indexes are available to the producer
  */
 inline int
-Ids_SpmcRing_Full (struct ids_spmc_ring* ring);
+Ids_SpmcRing_Full (const struct ids_spmc_ring* ring);
 
 
 /*
@@ -112,14 +112,14 @@ Ids_SpmcRing_Full (struct ids_spmc_ring* ring);
     free space available.  If no space is available, the returned count is zero
  */
 inline struct ids_spmc_ring_range
-Ids_SpmcRing_Reserve (struct ids_spmc_ring* ring, size_t count);
+Ids_SpmcRing_Reserve (const struct ids_spmc_ring* ring, size_t count);
 
 /*
     Commit previously reserved indexes to the consumers.  Only the producer may call this
     function
  */
 inline void
-Ids_SpmcRing_Commit (struct ids_spmc_ring* ring, struct ids_spmc_ring_range* range);
+Ids_SpmcRing_Commit (struct ids_spmc_ring* ring, const struct ids_spmc_ring_range* range);
 
 
 /*
@@ -137,7 +137,7 @@ Ids_SpmcRing_Claim (struct ids_spmc_ring* ring, size_t count);
     claims.  Claims should be short lived.  Consumers must not access a range after releasing it
  */
 inline void
-Ids_SpmcRing_Release (struct ids_spmc_ring* ring, struct ids_spmc_ring_range* range);
+Ids_SpmcRing_Release (struct ids_spmc_ring* ring, const struct ids_spmc_ring_range* range);
 
 
 #include <ids/spmc_ring_inl.h>

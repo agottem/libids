@@ -68,7 +68,7 @@ struct ids_spsc_ring
     Initialize an spsc ring.  The data struct will be empty upon initialization
  */
 inline void
-Ids_SpscRing_Init (size_t capacity, struct ids_spsc_ring* ring);
+Ids_SpscRing_Init (struct ids_spsc_ring* ring, size_t capacity);
 
 /*
     Reset an spsc ring to the initialized state
@@ -81,25 +81,25 @@ Ids_SpscRing_Reset (struct ids_spsc_ring* ring);
     Return the number of indexes available to the consumer
  */
 inline size_t
-Ids_SpscRing_Count (struct ids_spsc_ring* ring);
+Ids_SpscRing_Count (const struct ids_spsc_ring* ring);
 
 /*
     Return the number of indexes available to the producer
  */
 inline size_t
-Ids_SpscRing_Space (struct ids_spsc_ring* ring);
+Ids_SpscRing_Space (const struct ids_spsc_ring* ring);
 
 /*
     Return non-zero if the ring is empty
  */
 inline int
-Ids_SpscRing_Empty (struct ids_spsc_ring* ring);
+Ids_SpscRing_Empty (const struct ids_spsc_ring* ring);
 
 /*
     Return non-zero if the ring is full
  */
 inline int
-Ids_SpscRing_Full (struct ids_spsc_ring* ring);
+Ids_SpscRing_Full (const struct ids_spsc_ring* ring);
 
 
 /*
@@ -108,13 +108,13 @@ Ids_SpscRing_Full (struct ids_spsc_ring* ring);
     free space available.  If no space is available, the returned count is zero
  */
 inline struct ids_spsc_ring_range
-Ids_SpscRing_Reserve (size_t count, struct ids_spsc_ring* ring);
+Ids_SpscRing_Reserve (const struct ids_spsc_ring* ring, size_t count);
 
 /*
     Commit previously reserved indexes to the consumer
  */
 inline void
-Ids_SpscRing_Commit (struct ids_spsc_ring_range* range, struct ids_spsc_ring* ring);
+Ids_SpscRing_Commit (struct ids_spsc_ring* ring, const struct ids_spsc_ring_range* range);
 
 
 /*
@@ -123,13 +123,13 @@ Ids_SpscRing_Commit (struct ids_spsc_ring_range* range, struct ids_spsc_ring* ri
     are available.  If the ring is empty, the returned count is zero
  */
 inline struct ids_spsc_ring_range
-Ids_SpscRing_Peek (size_t count, struct ids_spsc_ring* ring);
+Ids_SpscRing_Peek (const struct ids_spsc_ring* ring, size_t count);
 
 /*
     Release previously peeked indexes back to the producer
  */
 inline void
-Ids_SpscRing_Release (struct ids_spsc_ring_range* range, struct ids_spsc_ring* ring);
+Ids_SpscRing_Release (struct ids_spsc_ring* ring, const struct ids_spsc_ring_range* range);
 
 
 #include <ids/spsc_ring_inl.h>

@@ -28,6 +28,8 @@
 #include <stdlib.h>
 #include <threads.h>
 
+#include "test_utils.h"
+
 
 #define STRESS_CAPACITY 64
 #define STRESS_COUNT    100000
@@ -39,20 +41,20 @@ Test_InitReset (void)
     struct ids_spsc_ring       ring;
     struct ids_spsc_ring_range range;
 
-    Ids_SpscRing_Init(4, &ring);
-    assert(ring.capacity == 4);
-    assert(Ids_SpscRing_Count(&ring) == 0);
-    assert(Ids_SpscRing_Space(&ring) == 4);
-    assert(Ids_SpscRing_Empty(&ring));
-    assert(!Ids_SpscRing_Full(&ring));
+    Ids_SpscRing_Init(&ring, 4);
+    CHECK(ring.capacity == 4);
+    CHECK(Ids_SpscRing_Count(&ring) == 0);
+    CHECK(Ids_SpscRing_Space(&ring) == 4);
+    CHECK(Ids_SpscRing_Empty(&ring));
+    CHECK(!Ids_SpscRing_Full(&ring));
 
-    range = Ids_SpscRing_Reserve(2, &ring);
-    Ids_SpscRing_Commit(&range, &ring);
-    assert(Ids_SpscRing_Count(&ring) == 2);
+    range = Ids_SpscRing_Reserve(&ring, 2);
+    Ids_SpscRing_Commit(&ring, &range);
+    CHECK(Ids_SpscRing_Count(&ring) == 2);
 
     Ids_SpscRing_Reset(&ring);
-    assert(Ids_SpscRing_Count(&ring) == 0);
-    assert(Ids_SpscRing_Space(&ring) == 4);
+    CHECK(Ids_SpscRing_Count(&ring) == 0);
+    CHECK(Ids_SpscRing_Space(&ring) == 4);
 }
 
 static void
@@ -61,23 +63,23 @@ Test_ReserveCommit (void)
     struct ids_spsc_ring       ring;
     struct ids_spsc_ring_range range;
 
-    Ids_SpscRing_Init(4, &ring);
+    Ids_SpscRing_Init(&ring, 4);
 
-    range = Ids_SpscRing_Reserve(3, &ring);
-    assert(range.start == 0);
-    assert(range.count == 3);
-    assert(Ids_SpscRing_Count(&ring) == 0);
+    range = Ids_SpscRing_Reserve(&ring, 3);
+    CHECK(range.start == 0);
+    CHECK(range.count == 3);
+    CHECK(Ids_SpscRing_Count(&ring) == 0);
 
-    Ids_SpscRing_Commit(&range, &ring);
-    assert(Ids_SpscRing_Count(&ring) == 3);
-    assert(Ids_SpscRing_Space(&ring) == 1);
+    Ids_SpscRing_Commit(&ring, &range);
+    CHECK(Ids_SpscRing_Count(&ring) == 3);
+    CHECK(Ids_SpscRing_Space(&ring) == 1);
 
-    range = Ids_SpscRing_Reserve(3, &ring);
-    assert(range.start == 3);
-    assert(range.count == 1);
+    range = Ids_SpscRing_Reserve(&ring, 3);
+    CHECK(range.start == 3);
+    CHECK(range.count == 1);
 
-    Ids_SpscRing_Commit(&range, &ring);
-    assert(Ids_SpscRing_Full(&ring));
+    Ids_SpscRing_Commit(&ring, &range);
+    CHECK(Ids_SpscRing_Full(&ring));
 }
 
 static void
@@ -86,26 +88,26 @@ Test_PeekRelease (void)
     struct ids_spsc_ring       ring;
     struct ids_spsc_ring_range range;
 
-    Ids_SpscRing_Init(4, &ring);
+    Ids_SpscRing_Init(&ring, 4);
 
-    range = Ids_SpscRing_Reserve(4, &ring);
-    Ids_SpscRing_Commit(&range, &ring);
+    range = Ids_SpscRing_Reserve(&ring, 4);
+    Ids_SpscRing_Commit(&ring, &range);
 
-    range = Ids_SpscRing_Peek(2, &ring);
-    assert(range.start == 0);
-    assert(range.count == 2);
-    assert(Ids_SpscRing_Count(&ring) == 4);
+    range = Ids_SpscRing_Peek(&ring, 2);
+    CHECK(range.start == 0);
+    CHECK(range.count == 2);
+    CHECK(Ids_SpscRing_Count(&ring) == 4);
 
-    Ids_SpscRing_Release(&range, &ring);
-    assert(Ids_SpscRing_Count(&ring) == 2);
-    assert(Ids_SpscRing_Space(&ring) == 2);
+    Ids_SpscRing_Release(&ring, &range);
+    CHECK(Ids_SpscRing_Count(&ring) == 2);
+    CHECK(Ids_SpscRing_Space(&ring) == 2);
 
-    range = Ids_SpscRing_Peek(3, &ring);
-    assert(range.start == 2);
-    assert(range.count == 2);
+    range = Ids_SpscRing_Peek(&ring, 3);
+    CHECK(range.start == 2);
+    CHECK(range.count == 2);
 
-    Ids_SpscRing_Release(&range, &ring);
-    assert(Ids_SpscRing_Empty(&ring));
+    Ids_SpscRing_Release(&ring, &range);
+    CHECK(Ids_SpscRing_Empty(&ring));
 }
 
 static void
@@ -114,45 +116,45 @@ Test_Wrap (void)
     struct ids_spsc_ring       ring;
     struct ids_spsc_ring_range range;
 
-    Ids_SpscRing_Init(4, &ring);
+    Ids_SpscRing_Init(&ring, 4);
 
-    range = Ids_SpscRing_Reserve(3, &ring);
-    Ids_SpscRing_Commit(&range, &ring);
-    range = Ids_SpscRing_Peek(2, &ring);
-    Ids_SpscRing_Release(&range, &ring);
+    range = Ids_SpscRing_Reserve(&ring, 3);
+    Ids_SpscRing_Commit(&ring, &range);
+    range = Ids_SpscRing_Peek(&ring, 2);
+    Ids_SpscRing_Release(&ring, &range);
 
-    range = Ids_SpscRing_Reserve(3, &ring);
-    assert(range.start == 3);
-    assert(range.count == 1);
-    Ids_SpscRing_Commit(&range, &ring);
+    range = Ids_SpscRing_Reserve(&ring, 3);
+    CHECK(range.start == 3);
+    CHECK(range.count == 1);
+    Ids_SpscRing_Commit(&ring, &range);
 
-    range = Ids_SpscRing_Reserve(2, &ring);
-    assert(range.start == 0);
-    assert(range.count == 2);
-    Ids_SpscRing_Commit(&range, &ring);
-    assert(Ids_SpscRing_Full(&ring));
+    range = Ids_SpscRing_Reserve(&ring, 2);
+    CHECK(range.start == 0);
+    CHECK(range.count == 2);
+    Ids_SpscRing_Commit(&ring, &range);
+    CHECK(Ids_SpscRing_Full(&ring));
 
-    range = Ids_SpscRing_Peek(4, &ring);
-    assert(range.start == 2);
-    assert(range.count == 2);
-    Ids_SpscRing_Release(&range, &ring);
+    range = Ids_SpscRing_Peek(&ring, 4);
+    CHECK(range.start == 2);
+    CHECK(range.count == 2);
+    Ids_SpscRing_Release(&ring, &range);
 
-    range = Ids_SpscRing_Peek(4, &ring);
-    assert(range.start == 0);
-    assert(range.count == 2);
+    range = Ids_SpscRing_Peek(&ring, 4);
+    CHECK(range.start == 0);
+    CHECK(range.count == 2);
 }
 
 static void
 Test_Alignment (void)
 {
-    assert(alignof(struct ids_spsc_ring) == IDS_CACHE_LINE_SIZE);
+    CHECK(alignof(struct ids_spsc_ring) == IDS_CACHE_LINE_SIZE);
 }
 
 struct stress_context
 {
     struct ids_spsc_ring ring;
-    size_t                values[STRESS_CAPACITY];
-    atomic_int            start;
+    size_t               values[STRESS_CAPACITY];
+    atomic_int           start;
 };
 
 static int
@@ -167,7 +169,7 @@ ProducerThread (void* argument)
     while(produced < STRESS_COUNT)
     {
         size_t count = IDS_MIN(7, STRESS_COUNT - produced);
-        struct ids_spsc_ring_range range = Ids_SpscRing_Reserve(count, &context->ring);
+        struct ids_spsc_ring_range range = Ids_SpscRing_Reserve(&context->ring, count);
         if(range.count == 0)
         {
             thrd_yield();
@@ -177,7 +179,7 @@ ProducerThread (void* argument)
         for(size_t index = 0; index < range.count; ++index)
             context->values[range.start + index] = produced + index;
 
-        Ids_SpscRing_Commit(&range, &context->ring);
+        Ids_SpscRing_Commit(&context->ring, &range);
         produced += range.count;
     }
 
@@ -195,7 +197,7 @@ ConsumerThread (void* argument)
 
     while(consumed < STRESS_COUNT)
     {
-        struct ids_spsc_ring_range range = Ids_SpscRing_Peek(5, &context->ring);
+        struct ids_spsc_ring_range range = Ids_SpscRing_Peek(&context->ring, 5);
         if(range.count == 0)
         {
             thrd_yield();
@@ -203,9 +205,9 @@ ConsumerThread (void* argument)
         }
 
         for(size_t index = 0; index < range.count; ++index)
-            assert(context->values[range.start + index] == consumed + index);
+            CHECK(context->values[range.start + index] == consumed + index);
 
-        Ids_SpscRing_Release(&range, &context->ring);
+        Ids_SpscRing_Release(&context->ring, &range);
         consumed += range.count;
     }
 
@@ -219,16 +221,16 @@ Test_Concurrent (void)
     thrd_t                producer;
     thrd_t                consumer;
 
-    Ids_SpscRing_Init(STRESS_CAPACITY, &context.ring);
+    Ids_SpscRing_Init(&context.ring, STRESS_CAPACITY);
     atomic_init(&context.start, 0);
 
-    assert(thrd_create(&producer, ProducerThread, &context) == thrd_success);
-    assert(thrd_create(&consumer, ConsumerThread, &context) == thrd_success);
+    CHECK(thrd_create(&producer, ProducerThread, &context) == thrd_success);
+    CHECK(thrd_create(&consumer, ConsumerThread, &context) == thrd_success);
     atomic_store_explicit(&context.start, 1, memory_order_release);
 
-    assert(thrd_join(producer, NULL) == thrd_success);
-    assert(thrd_join(consumer, NULL) == thrd_success);
-    assert(Ids_SpscRing_Empty(&context.ring));
+    CHECK(thrd_join(producer, NULL) == thrd_success);
+    CHECK(thrd_join(consumer, NULL) == thrd_success);
+    CHECK(Ids_SpscRing_Empty(&context.ring));
 }
 
 int

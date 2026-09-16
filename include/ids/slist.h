@@ -81,19 +81,19 @@ Ids_Slist_Reset (struct ids_slist* slist);
     Return the list head, or NULL when empty
  */
 inline struct ids_slist_node*
-Ids_Slist_Head (struct ids_slist* slist);
+Ids_Slist_Head (const struct ids_slist* slist);
 
 /*
     Return the list tail, or NULL when empty
  */
 inline struct ids_slist_node*
-Ids_Slist_Tail (struct ids_slist* slist);
+Ids_Slist_Tail (const struct ids_slist* slist);
 
 /*
     Return non-zero if the slist is empty
  */
 inline int
-Ids_Slist_Empty (struct ids_slist* slist);
+Ids_Slist_Empty (const struct ids_slist* slist);
 
 
 /*
@@ -140,13 +140,13 @@ Ids_Slist_PushT (struct ids_slist* slist, struct ids_slist_node* node);
     Start an slist iteration from the specified node
  */
 inline void
-Ids_Slist_NBeginIt (struct ids_slist_node* node, struct ids_slist_it* it);
+Ids_Slist_NBeginIt (const struct ids_slist_node* node, struct ids_slist_it* it);
 
 /*
     Start an slist iteration from the head node
  */
 inline void
-Ids_Slist_BeginIt (struct ids_slist* slist, struct ids_slist_it* it);
+Ids_Slist_BeginIt (const struct ids_slist* slist, struct ids_slist_it* it);
 
 /*
     Iterate forwards
@@ -158,7 +158,7 @@ Ids_Slist_ItFwd (struct ids_slist_it* it);
     Return non-zero if the iterator is past the last node
  */
 inline int
-Ids_Slist_ItDone (struct ids_slist_it* it);
+Ids_Slist_ItDone (const struct ids_slist_it* it);
 
 
 #include <ids/slist_inl.h>

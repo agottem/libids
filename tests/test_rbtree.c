@@ -27,6 +27,8 @@
 #include <stddef.h>
 #include <stdlib.h>
 
+#include "test_utils.h"
+
 
 struct item
 {
@@ -36,20 +38,20 @@ struct item
 
 
 static inline struct item*
-NodeToItem (struct ids_rbtree_node* node)
+NodeToItem (const struct ids_rbtree_node* node)
 {
     return IDS_CONT_OF(node, struct item, node);
 }
 
 static int
-ItemCmp (void* id, struct ids_rbtree_node* node, void* user_data)
+ItemCmp (const void* id, const struct ids_rbtree_node* node, void* user_data)
 {
-    int direction = user_data == NULL ? 1 : *(int*)user_data;
+    int direction = user_data == NULL ? 1 : *(const int*)user_data;
     int node_id   = NodeToItem(node)->id;
 
-    if(*(int*)id < node_id)
+    if(*(const int*)id < node_id)
         return -direction;
-    if(*(int*)id > node_id)
+    if(*(const int*)id > node_id)
         return direction;
 
     return 0;
@@ -58,52 +60,52 @@ ItemCmp (void* id, struct ids_rbtree_node* node, void* user_data)
 static void
 AddItem (struct ids_rbtree* rbtree, struct item* item)
 {
-    assert(Ids_RbTree_Add(rbtree, &item->id, &item->node, ItemCmp, NULL) == NULL);
+    CHECK(Ids_RbTree_Add(rbtree, &item->id, &item->node, ItemCmp, NULL) == NULL);
 }
 
 static int
-ValidateNode (struct ids_rbtree_node* node,
-              struct ids_rbtree_node* parent,
-              int*                    previous,
-              int*                    count)
+ValidateNode (const struct ids_rbtree_node* node,
+              const struct ids_rbtree_node* parent,
+              int*                          previous,
+              int*                          count)
 {
     if(node == NULL)
         return 1;
 
-    assert(node->parent == parent);
+    CHECK(node->parent == parent);
     if(node->color == ids_rbtree_color_red)
     {
-        assert(node->left == NULL || node->left->color == ids_rbtree_color_black);
-        assert(node->right == NULL || node->right->color == ids_rbtree_color_black);
+        CHECK(node->left == NULL || node->left->color == ids_rbtree_color_black);
+        CHECK(node->right == NULL || node->right->color == ids_rbtree_color_black);
     }
 
     int left_height = ValidateNode(node->left, node, previous, count);
     int id          = NodeToItem(node)->id;
     if(*count > 0)
-        assert(*previous < id);
+        CHECK(*previous < id);
     *previous = id;
     (*count)++;
 
     int right_height = ValidateNode(node->right, node, previous, count);
-    assert(left_height == right_height);
+    CHECK(left_height == right_height);
 
     return left_height + (node->color == ids_rbtree_color_black);
 }
 
 static void
-ValidateTree (struct ids_rbtree* rbtree, int expected_count)
+ValidateTree (const struct ids_rbtree* rbtree, int expected_count)
 {
     int count    = 0;
     int previous = 0;
 
     if(rbtree->root != NULL)
     {
-        assert(rbtree->root->parent == NULL);
-        assert(rbtree->root->color == ids_rbtree_color_black);
+        CHECK(rbtree->root->parent == NULL);
+        CHECK(rbtree->root->color == ids_rbtree_color_black);
     }
 
     ValidateNode(rbtree->root, NULL, &previous, &count);
-    assert(count == expected_count);
+    CHECK(count == expected_count);
 }
 
 static void
@@ -113,17 +115,17 @@ Test_InitReset (void)
     struct item       item = {.id = 1};
 
     Ids_RbTree_Init(&rbtree);
-    assert(Ids_RbTree_Empty(&rbtree));
-    assert(Ids_RbTree_Root(&rbtree) == NULL);
-    assert(Ids_RbTree_Min(&rbtree) == NULL);
-    assert(Ids_RbTree_Max(&rbtree) == NULL);
+    CHECK(Ids_RbTree_Empty(&rbtree));
+    CHECK(Ids_RbTree_Root(&rbtree) == NULL);
+    CHECK(Ids_RbTree_Min(&rbtree) == NULL);
+    CHECK(Ids_RbTree_Max(&rbtree) == NULL);
 
     AddItem(&rbtree, &item);
-    assert(!Ids_RbTree_Empty(&rbtree));
-    assert(Ids_RbTree_Root(&rbtree) == &item.node);
+    CHECK(!Ids_RbTree_Empty(&rbtree));
+    CHECK(Ids_RbTree_Root(&rbtree) == &item.node);
 
     Ids_RbTree_Reset(&rbtree);
-    assert(Ids_RbTree_Empty(&rbtree));
+    CHECK(Ids_RbTree_Empty(&rbtree));
 }
 
 static void
@@ -149,7 +151,7 @@ Test_Rotations (void)
             ValidateTree(&rbtree, i + 1);
         }
 
-        assert(NodeToItem(rbtree.root)->id == 2);
+        CHECK(NodeToItem(rbtree.root)->id == 2);
     }
 }
 
@@ -169,30 +171,30 @@ Test_FindBoundsDuplicate (void)
     }
 
     int id = 20;
-    assert(Ids_RbTree_Find(&rbtree, &id, ItemCmp, NULL) == &items[1].node);
-    assert(Ids_RbTree_Add(&rbtree, &id, &duplicate.node, ItemCmp, NULL) == &items[1].node);
+    CHECK(Ids_RbTree_Find(&rbtree, &id, ItemCmp, NULL) == &items[1].node);
+    CHECK(Ids_RbTree_Add(&rbtree, &id, &duplicate.node, ItemCmp, NULL) == &items[1].node);
     ValidateTree(&rbtree, 4);
 
     id = 25;
-    assert(Ids_RbTree_Find(&rbtree, &id, ItemCmp, NULL) == NULL);
-    assert(NodeToItem(Ids_RbTree_LowerBound(&rbtree, &id, ItemCmp, NULL))->id == 30);
-    assert(NodeToItem(Ids_RbTree_UpperBound(&rbtree, &id, ItemCmp, NULL))->id == 30);
+    CHECK(Ids_RbTree_Find(&rbtree, &id, ItemCmp, NULL) == NULL);
+    CHECK(NodeToItem(Ids_RbTree_LowerBound(&rbtree, &id, ItemCmp, NULL))->id == 30);
+    CHECK(NodeToItem(Ids_RbTree_UpperBound(&rbtree, &id, ItemCmp, NULL))->id == 30);
 
     id = 20;
-    assert(NodeToItem(Ids_RbTree_LowerBound(&rbtree, &id, ItemCmp, NULL))->id == 20);
-    assert(NodeToItem(Ids_RbTree_UpperBound(&rbtree, &id, ItemCmp, NULL))->id == 30);
+    CHECK(NodeToItem(Ids_RbTree_LowerBound(&rbtree, &id, ItemCmp, NULL))->id == 20);
+    CHECK(NodeToItem(Ids_RbTree_UpperBound(&rbtree, &id, ItemCmp, NULL))->id == 30);
 
     id = 5;
-    assert(NodeToItem(Ids_RbTree_LowerBound(&rbtree, &id, ItemCmp, NULL))->id == 10);
-    assert(NodeToItem(Ids_RbTree_UpperBound(&rbtree, &id, ItemCmp, NULL))->id == 10);
+    CHECK(NodeToItem(Ids_RbTree_LowerBound(&rbtree, &id, ItemCmp, NULL))->id == 10);
+    CHECK(NodeToItem(Ids_RbTree_UpperBound(&rbtree, &id, ItemCmp, NULL))->id == 10);
 
     id = 40;
-    assert(NodeToItem(Ids_RbTree_LowerBound(&rbtree, &id, ItemCmp, NULL))->id == 40);
-    assert(Ids_RbTree_UpperBound(&rbtree, &id, ItemCmp, NULL) == NULL);
+    CHECK(NodeToItem(Ids_RbTree_LowerBound(&rbtree, &id, ItemCmp, NULL))->id == 40);
+    CHECK(Ids_RbTree_UpperBound(&rbtree, &id, ItemCmp, NULL) == NULL);
 
     id = 50;
-    assert(Ids_RbTree_LowerBound(&rbtree, &id, ItemCmp, NULL) == NULL);
-    assert(Ids_RbTree_UpperBound(&rbtree, &id, ItemCmp, NULL) == NULL);
+    CHECK(Ids_RbTree_LowerBound(&rbtree, &id, ItemCmp, NULL) == NULL);
+    CHECK(Ids_RbTree_UpperBound(&rbtree, &id, ItemCmp, NULL) == NULL);
 }
 
 static void
@@ -205,12 +207,12 @@ Test_UserData (void)
     struct ids_rbtree rbtree;
 
     Ids_RbTree_Init(&rbtree);
-    assert(Ids_RbTree_Add(&rbtree, &a.id, &a.node, ItemCmp, &direction) == NULL);
-    assert(Ids_RbTree_Add(&rbtree, &b.id, &b.node, ItemCmp, &direction) == NULL);
-    assert(Ids_RbTree_Add(&rbtree, &c.id, &c.node, ItemCmp, &direction) == NULL);
-    assert(Ids_RbTree_Find(&rbtree, &b.id, ItemCmp, &direction) == &b.node);
-    assert(NodeToItem(Ids_RbTree_Min(&rbtree))->id == 3);
-    assert(NodeToItem(Ids_RbTree_Max(&rbtree))->id == 1);
+    CHECK(Ids_RbTree_Add(&rbtree, &a.id, &a.node, ItemCmp, &direction) == NULL);
+    CHECK(Ids_RbTree_Add(&rbtree, &b.id, &b.node, ItemCmp, &direction) == NULL);
+    CHECK(Ids_RbTree_Add(&rbtree, &c.id, &c.node, ItemCmp, &direction) == NULL);
+    CHECK(Ids_RbTree_Find(&rbtree, &b.id, ItemCmp, &direction) == &b.node);
+    CHECK(NodeToItem(Ids_RbTree_Min(&rbtree))->id == 3);
+    CHECK(NodeToItem(Ids_RbTree_Max(&rbtree))->id == 1);
 }
 
 static void
@@ -223,7 +225,7 @@ Test_It (void)
 
     Ids_RbTree_Init(&rbtree);
     Ids_RbTree_BeginIt(&rbtree, &it);
-    assert(Ids_RbTree_ItDone(&it));
+    CHECK(Ids_RbTree_ItDone(&it));
 
     for(int i = 0; i < 7; i++)
     {
@@ -234,25 +236,25 @@ Test_It (void)
     int expected = 1;
     for(Ids_RbTree_BeginIt(&rbtree, &it); !Ids_RbTree_ItDone(&it); Ids_RbTree_ItFwd(&it))
     {
-        assert(NodeToItem(it.node)->id == expected);
+        CHECK(NodeToItem(it.node)->id == expected);
         expected++;
     }
-    assert(expected == 8);
+    CHECK(expected == 8);
 
     expected = 7;
     for(Ids_RbTree_RBeginIt(&rbtree, &it); !Ids_RbTree_ItDone(&it); Ids_RbTree_ItBack(&it))
     {
-        assert(NodeToItem(it.node)->id == expected);
+        CHECK(NodeToItem(it.node)->id == expected);
         expected--;
     }
-    assert(expected == 0);
+    CHECK(expected == 0);
 
     Ids_RbTree_NBeginIt(&items[4].node, &it);
-    assert(NodeToItem(it.node)->id == 3);
+    CHECK(NodeToItem(it.node)->id == 3);
     Ids_RbTree_ItFwd(&it);
-    assert(NodeToItem(it.node)->id == 4);
+    CHECK(NodeToItem(it.node)->id == 4);
     Ids_RbTree_ItBack(&it);
-    assert(NodeToItem(it.node)->id == 3);
+    CHECK(NodeToItem(it.node)->id == 3);
 }
 
 static void
@@ -274,19 +276,19 @@ Test_DeleteCases (void)
     for(int i = 0; i < 11; i++)
     {
         struct ids_rbtree_node* node = Ids_RbTree_Find( &rbtree, &deletes[i], ItemCmp, NULL);
-        assert(node != NULL);
+        CHECK(node != NULL);
         Ids_RbTree_Del(&rbtree, node);
-        assert(Ids_RbTree_Find(&rbtree, &deletes[i], ItemCmp, NULL) == NULL);
+        CHECK(Ids_RbTree_Find(&rbtree, &deletes[i], ItemCmp, NULL) == NULL);
         ValidateTree(&rbtree, 10 - i);
     }
 
-    assert(Ids_RbTree_Empty(&rbtree));
+    CHECK(Ids_RbTree_Empty(&rbtree));
 
     items[0].id = 100;
     AddItem(&rbtree, &items[0]);
-    assert(Ids_RbTree_Root(&rbtree) == &items[0].node);
+    CHECK(Ids_RbTree_Root(&rbtree) == &items[0].node);
     Ids_RbTree_Del(&rbtree, &items[0].node);
-    assert(Ids_RbTree_Empty(&rbtree));
+    CHECK(Ids_RbTree_Empty(&rbtree));
 }
 
 static void
@@ -300,8 +302,8 @@ Test_Stress (void)
     int*              order = malloc(sizeof(*order) * item_count);
     struct ids_rbtree rbtree;
 
-    assert(items != NULL);
-    assert(order != NULL);
+    CHECK(items != NULL);
+    CHECK(order != NULL);
     Ids_RbTree_Init(&rbtree);
 
     for(int i = 0; i < item_count; i++)
@@ -344,12 +346,12 @@ Test_PostIt (void)
 
     Ids_RbTree_Init(&rbtree);
     Ids_RbTree_BeginPostIt(&rbtree, &it);
-    assert(Ids_RbTree_PostItDone(&it));
+    CHECK(Ids_RbTree_PostItDone(&it));
 
     for(int i = 0; i < item_count; i++)
     {
         struct item* item = malloc(sizeof(*item));
-        assert(item != NULL);
+        CHECK(item != NULL);
         item->id = (i * 53) % item_count;
         AddItem(&rbtree, item);
     }
@@ -362,7 +364,7 @@ Test_PostIt (void)
         struct ids_rbtree_node* node = it.node;
         struct item*            item = NodeToItem(node);
 
-        assert(!visited[item->id]);
+        CHECK(!visited[item->id]);
         visited[item->id] = 1;
         count++;
 
@@ -370,9 +372,9 @@ Test_PostIt (void)
         free(item);
     }
 
-    assert(count == item_count);
+    CHECK(count == item_count);
     Ids_RbTree_Reset(&rbtree);
-    assert(Ids_RbTree_Empty(&rbtree));
+    CHECK(Ids_RbTree_Empty(&rbtree));
 }
 
 int

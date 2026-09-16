@@ -26,7 +26,7 @@
 
 
 inline void
-Ids_SpscRing_Init (size_t capacity, struct ids_spsc_ring* ring)
+Ids_SpscRing_Init (struct ids_spsc_ring* ring, size_t capacity)
 {
     assert(capacity > 0 && "SPSC ring capacity must be greater than zero");
 
@@ -43,7 +43,7 @@ Ids_SpscRing_Reset (struct ids_spsc_ring* ring)
 }
 
 inline size_t
-Ids_SpscRing_Count (struct ids_spsc_ring* ring)
+Ids_SpscRing_Count (const struct ids_spsc_ring* ring)
 {
     size_t write_cursor = atomic_load_explicit(&ring->write_cursor, memory_order_relaxed);
     size_t read_cursor  = atomic_load_explicit(&ring->read_cursor,  memory_order_relaxed);
@@ -52,25 +52,25 @@ Ids_SpscRing_Count (struct ids_spsc_ring* ring)
 }
 
 inline size_t
-Ids_SpscRing_Space (struct ids_spsc_ring* ring)
+Ids_SpscRing_Space (const struct ids_spsc_ring* ring)
 {
     return ring->capacity - Ids_SpscRing_Count(ring);
 }
 
 inline int
-Ids_SpscRing_Empty (struct ids_spsc_ring* ring)
+Ids_SpscRing_Empty (const struct ids_spsc_ring* ring)
 {
     return Ids_SpscRing_Count(ring) == 0;
 }
 
 inline int
-Ids_SpscRing_Full (struct ids_spsc_ring* ring)
+Ids_SpscRing_Full (const struct ids_spsc_ring* ring)
 {
     return Ids_SpscRing_Count(ring) == ring->capacity;
 }
 
 inline struct ids_spsc_ring_range
-Ids_SpscRing_Reserve (size_t count, struct ids_spsc_ring* ring)
+Ids_SpscRing_Reserve (const struct ids_spsc_ring* ring, size_t count)
 {
     size_t write_cursor = atomic_load_explicit(&ring->write_cursor, memory_order_relaxed);
     size_t read_cursor  = atomic_load_explicit(&ring->read_cursor,  memory_order_acquire);
@@ -85,7 +85,7 @@ Ids_SpscRing_Reserve (size_t count, struct ids_spsc_ring* ring)
 }
 
 inline void
-Ids_SpscRing_Commit (struct ids_spsc_ring_range* range, struct ids_spsc_ring* ring)
+Ids_SpscRing_Commit (struct ids_spsc_ring* ring, const struct ids_spsc_ring_range* range)
 {
     size_t write_cursor = atomic_load_explicit(&ring->write_cursor, memory_order_relaxed);
 
@@ -93,7 +93,7 @@ Ids_SpscRing_Commit (struct ids_spsc_ring_range* range, struct ids_spsc_ring* ri
 }
 
 inline struct ids_spsc_ring_range
-Ids_SpscRing_Peek (size_t count, struct ids_spsc_ring* ring)
+Ids_SpscRing_Peek (const struct ids_spsc_ring* ring, size_t count)
 {
     size_t write_cursor = atomic_load_explicit(&ring->write_cursor, memory_order_acquire);
     size_t read_cursor  = atomic_load_explicit(&ring->read_cursor,  memory_order_relaxed);
@@ -107,7 +107,7 @@ Ids_SpscRing_Peek (size_t count, struct ids_spsc_ring* ring)
 }
 
 inline void
-Ids_SpscRing_Release (struct ids_spsc_ring_range* range, struct ids_spsc_ring* ring)
+Ids_SpscRing_Release (struct ids_spsc_ring* ring, const struct ids_spsc_ring_range* range)
 {
     size_t read_cursor = atomic_load_explicit(&ring->read_cursor, memory_order_relaxed);
 

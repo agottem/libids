@@ -24,10 +24,10 @@
 
 
 extern void
-Ids_Hash_UpdateBktIt (struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
+Ids_Hash_UpdateBktIt (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
 
 extern void
-Ids_Hash_UpdateIt (struct ids_hash* hash, struct ids_hash_it* it);
+Ids_Hash_UpdateIt (const struct ids_hash* hash, struct ids_hash_it* it);
 
 
 extern void
@@ -44,16 +44,16 @@ Ids_Hash_Reset (struct ids_hash* hash);
 
 
 extern struct ids_hash_bkt*
-Ids_Hash_Bkt (struct ids_hash* hash, unsigned int value_hash);
+Ids_Hash_Bkt (const struct ids_hash* hash, unsigned int value_hash);
 
 
 extern struct ids_hash_node*
-Ids_Hash_Find (struct ids_hash*      hash,
-               unsigned int          value_hash,
-               void*                 value,
-               ids_hash_cmp_t        cmp_func,
-               void*                 user_data,
-               struct ids_hash_bkt** searched_bkt);
+Ids_Hash_Find (const struct ids_hash* hash,
+               unsigned int           value_hash,
+               const void*            value,
+               ids_hash_cmp_t         cmp_func,
+               void*                  user_data,
+               struct ids_hash_bkt**  searched_bkt);
 
 
 extern void
@@ -66,24 +66,24 @@ extern void
 Ids_Hash_Del (struct ids_hash_node* node);
 
 extern int
-Ids_Hash_BktEmpty (struct ids_hash_bkt* bkt);
+Ids_Hash_BktEmpty (const struct ids_hash_bkt* bkt);
 
 
 extern void
-Ids_Hash_BeginBktIt (struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
+Ids_Hash_BeginBktIt (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
 
 extern void
-Ids_Hash_BktItFwd (struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
+Ids_Hash_BktItFwd (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
 
 extern int
-Ids_Hash_BktItDone (struct ids_hash_bkt_it* it);
+Ids_Hash_BktItDone (const struct ids_hash_bkt_it* it);
 
 
 extern void
-Ids_Hash_BeginIt (struct ids_hash* hash, struct ids_hash_it* it);
+Ids_Hash_BeginIt (const struct ids_hash* hash, struct ids_hash_it* it);
 
 extern void
-Ids_Hash_ItFwd (struct ids_hash* hash, struct ids_hash_it* it);
+Ids_Hash_ItFwd (const struct ids_hash* hash, struct ids_hash_it* it);
 
 extern int
-Ids_Hash_ItDone (struct ids_hash_it* it);
+Ids_Hash_ItDone (const struct ids_hash_it* it);

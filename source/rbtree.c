@@ -24,25 +24,25 @@
 
 
 extern enum ids_rbtree_color
-Ids_RbTree_Color (struct ids_rbtree_node* node);
+Ids_RbTree_Color (const struct ids_rbtree_node* node);
 
 extern struct ids_rbtree_node*
-Ids_RbTree_NodeMin (struct ids_rbtree_node* node);
+Ids_RbTree_NodeMin (const struct ids_rbtree_node* node);
 
 extern struct ids_rbtree_node*
-Ids_RbTree_NodeMax (struct ids_rbtree_node* node);
+Ids_RbTree_NodeMax (const struct ids_rbtree_node* node);
 
 extern struct ids_rbtree_node*
-Ids_RbTree_NodeNext (struct ids_rbtree_node* node);
+Ids_RbTree_NodeNext (const struct ids_rbtree_node* node);
 
 extern struct ids_rbtree_node*
-Ids_RbTree_NodePrev (struct ids_rbtree_node* node);
+Ids_RbTree_NodePrev (const struct ids_rbtree_node* node);
 
 extern struct ids_rbtree_node*
-Ids_RbTree_PostFirst (struct ids_rbtree_node* node);
+Ids_RbTree_PostFirst (const struct ids_rbtree_node* node);
 
 extern struct ids_rbtree_node*
-Ids_RbTree_PostNext (struct ids_rbtree_node* node);
+Ids_RbTree_PostNext (const struct ids_rbtree_node* node);
 
 extern void
 Ids_RbTree_RotateLeft (struct ids_rbtree* rbtree, struct ids_rbtree_node* node);
@@ -71,37 +71,40 @@ extern void
 Ids_RbTree_Reset (struct ids_rbtree* rbtree);
 
 extern int
-Ids_RbTree_Empty (struct ids_rbtree* rbtree);
+Ids_RbTree_Empty (const struct ids_rbtree* rbtree);
 
 extern struct ids_rbtree_node*
-Ids_RbTree_Root (struct ids_rbtree* rbtree);
+Ids_RbTree_Root (const struct ids_rbtree* rbtree);
 
 extern struct ids_rbtree_node*
-Ids_RbTree_Min (struct ids_rbtree* rbtree);
+Ids_RbTree_Min (const struct ids_rbtree* rbtree);
 
 extern struct ids_rbtree_node*
-Ids_RbTree_Max (struct ids_rbtree* rbtree);
+Ids_RbTree_Max (const struct ids_rbtree* rbtree);
 
 
 extern struct ids_rbtree_node*
-Ids_RbTree_Find (struct ids_rbtree* rbtree, void* id, ids_rbtree_cmp_t* cmp_func, void* user_data);
+Ids_RbTree_Find (const struct ids_rbtree* rbtree,
+                 const void*              id,
+                 ids_rbtree_cmp_t*        cmp_func,
+                 void*                    user_data);
 
 extern struct ids_rbtree_node*
-Ids_RbTree_LowerBound (struct ids_rbtree* rbtree,
-                       void*              id,
-                       ids_rbtree_cmp_t*  cmp_func,
-                       void*              user_data);
+Ids_RbTree_LowerBound (const struct ids_rbtree* rbtree,
+                       const void*              id,
+                       ids_rbtree_cmp_t*        cmp_func,
+                       void*                    user_data);
 
 extern struct ids_rbtree_node*
-Ids_RbTree_UpperBound (struct ids_rbtree* rbtree,
-                       void*              id,
-                       ids_rbtree_cmp_t*  cmp_func,
-                       void*              user_data);
+Ids_RbTree_UpperBound (const struct ids_rbtree* rbtree,
+                       const void*              id,
+                       ids_rbtree_cmp_t*        cmp_func,
+                       void*                    user_data);
 
 
 extern struct ids_rbtree_node*
 Ids_RbTree_Add (struct ids_rbtree*      rbtree,
-                void*                   id,
+                const void*             id,
                 struct ids_rbtree_node* node,
                 ids_rbtree_cmp_t*       cmp_func,
                 void*                   user_data);
@@ -111,13 +114,13 @@ Ids_RbTree_Del (struct ids_rbtree* rbtree, struct ids_rbtree_node* node);
 
 
 extern void
-Ids_RbTree_NBeginIt (struct ids_rbtree_node* node, struct ids_rbtree_it* it);
+Ids_RbTree_NBeginIt (const struct ids_rbtree_node* node, struct ids_rbtree_it* it);
 
 extern void
-Ids_RbTree_BeginIt (struct ids_rbtree* rbtree, struct ids_rbtree_it* it);
+Ids_RbTree_BeginIt (const struct ids_rbtree* rbtree, struct ids_rbtree_it* it);
 
 extern void
-Ids_RbTree_RBeginIt (struct ids_rbtree* rbtree, struct ids_rbtree_it* it);
+Ids_RbTree_RBeginIt (const struct ids_rbtree* rbtree, struct ids_rbtree_it* it);
 
 extern void
 Ids_RbTree_ItFwd (struct ids_rbtree_it* it);
@@ -126,11 +129,11 @@ extern void
 Ids_RbTree_ItBack (struct ids_rbtree_it* it);
 
 extern int
-Ids_RbTree_ItDone (struct ids_rbtree_it* it);
+Ids_RbTree_ItDone (const struct ids_rbtree_it* it);
 
 
 extern void
-Ids_RbTree_BeginPostIt (struct ids_rbtree* rbtree, struct ids_rbtree_post_it* it);
+Ids_RbTree_BeginPostIt (const struct ids_rbtree* rbtree, struct ids_rbtree_post_it* it);
 
 extern void
 Ids_RbTree_PostItFwd (struct ids_rbtree_post_it* it);

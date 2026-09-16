@@ -37,25 +37,25 @@ Ids_Clist_Reset (struct ids_clist* clist)
 }
 
 inline struct ids_clist_node*
-Ids_Clist_Head (struct ids_clist* clist)
+Ids_Clist_Head (const struct ids_clist* clist)
 {
     return clist->sentinel.next;
 }
 
 inline struct ids_clist_node*
-Ids_Clist_Tail (struct ids_clist* clist)
+Ids_Clist_Tail (const struct ids_clist* clist)
 {
     return clist->sentinel.prev;
 }
 
 inline struct ids_clist_node*
-Ids_Clist_End (struct ids_clist* clist)
+Ids_Clist_End (const struct ids_clist* clist)
 {
-    return &clist->sentinel;
+    return (struct ids_clist_node*)&clist->sentinel;
 }
 
 inline int
-Ids_Clist_Empty (struct ids_clist* clist)
+Ids_Clist_Empty (const struct ids_clist* clist)
 {
     return clist->sentinel.next == Ids_Clist_End(clist);
 }
@@ -133,19 +133,19 @@ Ids_Clist_PopT (struct ids_clist* clist)
 }
 
 inline void
-Ids_Clist_NBeginIt (struct ids_clist_node* node, struct ids_clist_it* it)
+Ids_Clist_NBeginIt (const struct ids_clist_node* node, struct ids_clist_it* it)
 {
-    it->node = node;
+    it->node = (struct ids_clist_node*)node;
 }
 
 inline void
-Ids_Clist_BeginIt (struct ids_clist* clist, struct ids_clist_it* it)
+Ids_Clist_BeginIt (const struct ids_clist* clist, struct ids_clist_it* it)
 {
     Ids_Clist_NBeginIt(Ids_Clist_Head(clist), it);
 }
 
 inline void
-Ids_Clist_RBeginIt (struct ids_clist* clist, struct ids_clist_it* it)
+Ids_Clist_RBeginIt (const struct ids_clist* clist, struct ids_clist_it* it)
 {
     Ids_Clist_NBeginIt(Ids_Clist_Tail(clist), it);
 }
@@ -163,7 +163,7 @@ Ids_Clist_ItBack (struct ids_clist_it* it)
 }
 
 inline int
-Ids_Clist_ItDone (struct ids_clist* clist, struct ids_clist_it* it)
+Ids_Clist_ItDone (const struct ids_clist* clist, const struct ids_clist_it* it)
 {
     return it->node == Ids_Clist_End(clist);
 }
