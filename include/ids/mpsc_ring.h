@@ -28,11 +28,11 @@
 #define IDS_MPSC_RING_H
 
 
+#include <ids/sys.h>
+
 #include <stdalign.h>
 #include <stdatomic.h>
 #include <stddef.h>
-
-#include <ids/sys.h>
 
 
 /*

@@ -22,6 +22,8 @@
 
 #include <ids/hash.h>
 
+#include <ids/err.h>
+
 
 extern void
 Ids_Hash_UpdateBktIt (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);

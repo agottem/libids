@@ -7,17 +7,17 @@ UseTab: Never
 ColumnLimit: 100
 
 BreakBeforeBraces: Allman
-AlwaysBreakAfterReturnType: All
+BreakAfterReturnType: All
 PenaltyBreakAssignment: 1000000
 
 SpaceBeforeParens: Custom
 SpaceBeforeParensOptions:
-  AfterControlStatements: false
-  AfterFunctionDefinitionName: true
-  AfterFunctionDeclarationName: true
-  AfterIfMacros: false
-  AfterForeachMacros: false
-  BeforeNonEmptyParentheses: false
+    AfterControlStatements: false
+    AfterFunctionDefinitionName: true
+    AfterFunctionDeclarationName: true
+    AfterIfMacros: false
+    AfterForeachMacros: false
+    BeforeNonEmptyParentheses: false
 
 PointerAlignment: Left
 DerivePointerAlignment: false
@@ -29,19 +29,25 @@ AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 
 AlignConsecutiveDeclarations:
-  Enabled: true
-  AcrossEmptyLines: true
-  AcrossComments: true
+    Enabled: true
+    AcrossEmptyLines: true
+    AcrossComments: true
 
 AlignConsecutiveMacros:
-  Enabled: true
-  AcrossEmptyLines: false
-  AcrossComments: false
+    Enabled: true
+    AcrossEmptyLines: false
+    AcrossComments: false
 
 AlignConsecutiveAssignments:
-  Enabled: true
-  AcrossEmptyLines: true
-  AcrossComments: false
+    Enabled: true
+    AcrossEmptyLines: true
+    AcrossComments: false
+
+AlignConsecutiveShortCaseStatements:
+    Enabled: true
+    AcrossEmptyLines: false
+    AcrossComments: false
+    AlignCaseColons: false
 
 AlignArrayOfStructures: Left
 AlignOperands: Align
@@ -49,14 +55,36 @@ AlignOperands: Align
 Cpp11BracedListStyle: true
 SpaceBeforeCpp11BracedList: false
 
+AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: None
 AllowShortBlocksOnASingleLine: Never
-AllowShortIfStatementsOnASingleLine: Never
+AllowShortIfStatementsOnASingleLine: true
 AllowShortLoopsOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: true
 
 IndentCaseLabels: false
 KeepEmptyLinesAtTheStartOfBlocks: false
 MaxEmptyLinesToKeep: 2
 
-SortIncludes: false
+SortIncludes: true
+IncludeBlocks: Regroup
+IncludeIsMainRegex: '$'
+MainIncludeChar: Any
+IncludeCategories:
+    - Regex: '^<ids/'
+      Priority: 1
+      SortPriority: 1
+
+    - Regex: '^<'
+      Priority: 2
+      SortPriority: 2
+
+    - Regex: '^"'
+      Priority: 3
+      SortPriority: 3
+
+    - Regex: '.*'
+      Priority: 4
+      SortPriority: 4
+
 ReflowComments: false

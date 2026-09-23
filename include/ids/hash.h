@@ -28,8 +28,8 @@
 #define IDS_HASH_H
 
 
-#include <ids/err.h>
 #include <ids/clist.h>
+#include <ids/err.h>
 
 
 /*

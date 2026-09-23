@@ -28,9 +28,9 @@
 #define IDS_ARR_H
 
 
-#include <stddef.h>
-
 #include <ids/err.h>
+
+#include <stddef.h>
 
 
 enum ids_arr_flags : unsigned int

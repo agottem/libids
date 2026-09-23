@@ -28,12 +28,11 @@
 #define IDS_SPSC_RING_H
 
 
-#include <stdatomic.h>
-#include <stdalign.h>
-#include <stddef.h>
-
 #include <ids/sys.h>
 
+#include <stdalign.h>
+#include <stdatomic.h>
+#include <stddef.h>
 
 
 /*
