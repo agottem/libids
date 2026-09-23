@@ -57,7 +57,7 @@ Ids_Hash_UpdateIt (const struct ids_hash* hash, struct ids_hash_it* it)
 
 
 inline void
-Ids_Hash_Init (struct ids_hash* hash, unsigned int count, struct ids_hash_bkt* bkts)
+Ids_Hash_Init (struct ids_hash* hash, size_t count, struct ids_hash_bkt* bkts)
 {
     assert(count > 0 && "Hash bucket count must be greater than zero");
 
@@ -69,7 +69,7 @@ Ids_Hash_Init (struct ids_hash* hash, unsigned int count, struct ids_hash_bkt* b
 }
 
 inline enum ids_err
-Ids_Hash_Create (struct ids_hash* hash, unsigned int count)
+Ids_Hash_Create (struct ids_hash* hash, size_t count)
 {
     size_t               alloc_size = count * sizeof(struct ids_hash_bkt);
     struct ids_hash_bkt* bkts       = malloc(alloc_size);
@@ -91,20 +91,20 @@ inline void
 Ids_Hash_Reset (struct ids_hash* hash)
 {
     struct ids_hash_bkt* bkts  = hash->bkts;
-    unsigned int         count = hash->bkt_count;
+    size_t               count = hash->bkt_count;
     while(count-- > 0)
         Ids_Clist_Reset(&bkts[count].node_list);
 }
 
 inline struct ids_hash_bkt*
-Ids_Hash_Bkt (const struct ids_hash* hash, unsigned int value_hash)
+Ids_Hash_Bkt (const struct ids_hash* hash, size_t value_hash)
 {
     return &hash->bkts[value_hash % hash->bkt_count];
 }
 
 inline struct ids_hash_node*
 Ids_Hash_Find (const struct ids_hash* hash,
-               unsigned int           value_hash,
+               size_t                 value_hash,
                const void*            value,
                ids_hash_cmp_t*        cmp_func,
                void*                  user_data,
@@ -134,7 +134,7 @@ Ids_Hash_Ins (struct ids_hash_bkt* bkt, struct ids_hash_node* node)
 }
 
 inline void
-Ids_Hash_Add (struct ids_hash* hash, unsigned int value_hash, struct ids_hash_node* node)
+Ids_Hash_Add (struct ids_hash* hash, size_t value_hash, struct ids_hash_node* node)
 {
     Ids_Hash_Ins(Ids_Hash_Bkt(hash, value_hash), node);
 }

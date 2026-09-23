@@ -31,6 +31,8 @@
 #include <ids/clist.h>
 #include <ids/err.h>
 
+#include <stddef.h>
+
 
 /*
     The node data to be placed in each hash element
@@ -53,7 +55,7 @@ struct ids_hash_bkt
  */
 struct ids_hash
 {
-    unsigned int         bkt_count;
+    size_t               bkt_count;
     struct ids_hash_bkt* bkts;
 };
 
@@ -80,7 +82,7 @@ struct ids_hash_it
 {
     struct ids_hash_node*  node;
 
-    unsigned int           current_bkt;
+    size_t                 current_bkt;
     struct ids_hash_bkt_it bkt_it;
 };
 
@@ -110,14 +112,14 @@ ids_hash_cmp_t (const void* id, const struct ids_hash_node* node, void* user_dat
      Initialize a hash.  The data struct will be empty upon initialization
  */
 inline void
-Ids_Hash_Init (struct ids_hash* hash, unsigned int count, struct ids_hash_bkt* bkts);
+Ids_Hash_Init (struct ids_hash* hash, size_t count, struct ids_hash_bkt* bkts);
 
 /*
      Allocate hash buckets and initialize a hash.  The data struct will be empty upon
      initialization
  */
 inline enum ids_err
-Ids_Hash_Create (struct ids_hash* hash, unsigned int count);
+Ids_Hash_Create (struct ids_hash* hash, size_t count);
 
 /*
      Cleanup a previously created hash
@@ -136,7 +138,7 @@ Ids_Hash_Reset (struct ids_hash* hash);
    Return the bucket which maps to the specified hash value
  */
 inline struct ids_hash_bkt*
-Ids_Hash_Bkt (const struct ids_hash* hash, unsigned int value_hash);
+Ids_Hash_Bkt (const struct ids_hash* hash, size_t value_hash);
 
 
 /*
@@ -145,7 +147,7 @@ Ids_Hash_Bkt (const struct ids_hash* hash, unsigned int value_hash);
  */
 inline struct ids_hash_node*
 Ids_Hash_Find (const struct ids_hash* hash,
-               unsigned int           value_hash,
+               size_t                 value_hash,
                const void*            value,
                ids_hash_cmp_t*        cmp_func,
                void*                  user_data,
@@ -162,7 +164,7 @@ Ids_Hash_Ins (struct ids_hash_bkt* bkt, struct ids_hash_node* node);
     Add a node to the hash, specifying the hash value for the node
  */
 inline void
-Ids_Hash_Add (struct ids_hash* hash, unsigned int value_hash, struct ids_hash_node* node);
+Ids_Hash_Add (struct ids_hash* hash, size_t value_hash, struct ids_hash_node* node);
 
 /*
     Delete the specified node from the hash

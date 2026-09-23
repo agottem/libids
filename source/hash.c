@@ -33,10 +33,10 @@ Ids_Hash_UpdateIt (const struct ids_hash* hash, struct ids_hash_it* it);
 
 
 extern void
-Ids_Hash_Init (struct ids_hash* hash, unsigned int count, struct ids_hash_bkt* bkts);
+Ids_Hash_Init (struct ids_hash* hash, size_t count, struct ids_hash_bkt* bkts);
 
 extern enum ids_err
-Ids_Hash_Create (struct ids_hash* hash, unsigned int count);
+Ids_Hash_Create (struct ids_hash* hash, size_t count);
 
 extern void
 Ids_Hash_Destroy (struct ids_hash* hash);
@@ -46,12 +46,12 @@ Ids_Hash_Reset (struct ids_hash* hash);
 
 
 extern struct ids_hash_bkt*
-Ids_Hash_Bkt (const struct ids_hash* hash, unsigned int value_hash);
+Ids_Hash_Bkt (const struct ids_hash* hash, size_t value_hash);
 
 
 extern struct ids_hash_node*
 Ids_Hash_Find (const struct ids_hash* hash,
-               unsigned int           value_hash,
+               size_t                 value_hash,
                const void*            value,
                ids_hash_cmp_t         cmp_func,
                void*                  user_data,
@@ -62,7 +62,7 @@ extern void
 Ids_Hash_Ins (struct ids_hash_bkt* bkt, struct ids_hash_node* node);
 
 extern void
-Ids_Hash_Add (struct ids_hash* hash, unsigned int value_hash, struct ids_hash_node* node);
+Ids_Hash_Add (struct ids_hash* hash, size_t value_hash, struct ids_hash_node* node);
 
 extern void
 Ids_Hash_Del (struct ids_hash_node* node);
