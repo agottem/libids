@@ -71,8 +71,7 @@ Ids_Hash_Init (struct ids_hash* hash, size_t count, struct ids_hash_bkt* bkts)
 inline enum ids_err
 Ids_Hash_Create (struct ids_hash* hash, size_t count)
 {
-    size_t               alloc_size = count * sizeof(struct ids_hash_bkt);
-    struct ids_hash_bkt* bkts       = malloc(alloc_size);
+    struct ids_hash_bkt* bkts = calloc(count, sizeof(struct ids_hash_bkt));
     if(bkts == NULL)
         return ids_err_mem;
 

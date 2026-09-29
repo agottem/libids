@@ -60,7 +60,7 @@ Ids_Arr_Create (struct ids_arr* arr, size_t elem_size, size_t capacity)
     void* data = NULL;
     if(capacity > 0)
     {
-        data = malloc(elem_size * capacity);
+        data = calloc(capacity, elem_size);
         if(data == NULL)
             return ids_err_mem;
     }
@@ -119,17 +119,17 @@ Ids_Arr_Reserve (struct ids_arr* arr, size_t count)
     if(count <= arr->capacity)
         return ids_err_none;
 
-    void*  data;
-    size_t alloc_size = count * arr->elem_size;
+    void* data;
     if(!(arr->flags & ids_arr_flag_static_data))
     {
-        data = realloc(arr->data, alloc_size);
+        size_t alloc_size = count * arr->elem_size;
+        data              = realloc(arr->data, alloc_size);
         if(data == NULL)
             return ids_err_mem;
     }
     else
     {
-        data = malloc(alloc_size);
+        data = calloc(count, arr->elem_size);
         if(data == NULL)
             return ids_err_mem;
 
