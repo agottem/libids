@@ -25,6 +25,8 @@
 
 #include <ids/err.h>
 
+#include <stddef.h>
+
 
 extern void
 Ids_Arr_Init (struct ids_arr* arr, size_t elem_size);

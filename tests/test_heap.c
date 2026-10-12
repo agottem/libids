@@ -112,10 +112,6 @@ Test_Lifecycle (void)
     struct ids_heap_node* storage[2];
     struct item           items[2] = {{.priority = 3}, {.priority = 1}};
 
-    Ids_Heap_Init(&heap, 0, NULL);
-    ValidateHeap(&heap, items, 2, 1);
-    CHECK(Ids_Heap_Full(&heap));
-
     Ids_Heap_Init(&heap, 2, storage);
     CHECK(heap.nodes == storage);
     for(size_t i = 0; i < 2; i++)

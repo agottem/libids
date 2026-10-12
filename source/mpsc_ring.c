@@ -22,6 +22,8 @@
 
 #include <ids/mpsc_ring.h>
 
+#include <stddef.h>
+
 
 extern void
 Ids_MpscRing_Init (struct ids_mpsc_ring* ring, size_t capacity);

@@ -22,6 +22,8 @@
 
 #include <ids/heap.h>
 
+#include <stddef.h>
+
 
 extern size_t
 Ids_Heap_ParentIndex (size_t index);

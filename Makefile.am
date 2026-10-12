@@ -1,23 +1,23 @@
 AM_CFLAGS = -std=c23                    \
             -I$(top_srcdir)/include     \
-    	    -DNDEBUG                    \
-	    -O2                         \
-	    -g                          \
+            -DNDEBUG                    \
+            -O2                         \
+            -g                          \
             -Wall                       \
-	    -Wextra                     \
-	    -pedantic                   \
-	    -Wconversion                \
-	    -Wsign-conversion           \
-	    -Wshadow                    \
-	    -Wundef                     \
-	    -Wformat=2                  \
-	    -Wstrict-prototypes         \
-	    -Wmissing-prototypes        \
-	    -Wimplicit-fallthrough      \
-	    -Wnull-dereference          \
-	    -Wconditional-uninitialized \
-	    -Wunreachable-code          \
-	    -Wno-unused-parameter
+            -Wextra                     \
+            -pedantic                   \
+            -Wconversion                \
+            -Wsign-conversion           \
+            -Wshadow                    \
+            -Wundef                     \
+            -Wformat=2                  \
+            -Wstrict-prototypes         \
+            -Wmissing-prototypes        \
+            -Wimplicit-fallthrough      \
+            -Wnull-dereference          \
+            -Wconditional-uninitialized \
+            -Wunreachable-code          \
+            -Wno-unused-parameter
 
 lib_LTLIBRARIES = libids.la
 
@@ -30,6 +30,7 @@ libids_la_SOURCES = source/arr.c        \
                     source/rbtree.c     \
                     source/slist.c      \
                     source/spmc_ring.c  \
+                    source/spmr_ring.c  \
                     source/spsc_ring.c
 
 libids_la_LDFLAGS = -static
@@ -58,6 +59,8 @@ libids_HEADERS = include/ids/err.h            \
                  include/ids/slist_inl.h      \
                  include/ids/spmc_ring.h      \
                  include/ids/spmc_ring_inl.h  \
+                 include/ids/spmr_ring.h      \
+                 include/ids/spmr_ring_inl.h  \
                  include/ids/spsc_ring.h      \
                  include/ids/spsc_ring_inl.h
 
@@ -70,6 +73,7 @@ TESTS = tests/test_arr        \
         tests/test_rbtree     \
         tests/test_slist      \
         tests/test_spmc_ring  \
+        tests/test_spmr_ring  \
         tests/test_spsc_ring
 
 check_PROGRAMS = $(TESTS)
@@ -83,6 +87,7 @@ tests_test_mpsc_stack_SOURCES = tests/test_mpsc_stack.c
 tests_test_rbtree_SOURCES     = tests/test_rbtree.c
 tests_test_slist_SOURCES      = tests/test_slist.c
 tests_test_spmc_ring_SOURCES  = tests/test_spmc_ring.c
+tests_test_spmr_ring_SOURCES  = tests/test_spmr_ring.c
 tests_test_spsc_ring_SOURCES  = tests/test_spsc_ring.c
 
 LDADD = libids.la

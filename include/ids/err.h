@@ -30,7 +30,7 @@
 enum ids_err
 {
     ids_err_none,
-    ids_err_mem
+    ids_err_mem,
 };
 
 

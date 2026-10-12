@@ -29,6 +29,8 @@ inline void
 Ids_SpscRing_Init (struct ids_spsc_ring* ring, size_t capacity)
 {
     assert(capacity > 0 && "SPSC ring capacity must be greater than zero");
+    assert((capacity & (capacity - 1)) == 0 &&
+           "SPSC ring capacity must be a power of two");
 
     ring->capacity = capacity;
     atomic_init(&ring->write_cursor, 0);

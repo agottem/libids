@@ -22,6 +22,8 @@
 
 #include <ids/spmc_ring.h>
 
+#include <stddef.h>
+
 
 extern void
 Ids_SpmcRing_Init (struct ids_spmc_ring* ring, size_t capacity);
