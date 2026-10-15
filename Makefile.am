@@ -21,7 +21,8 @@ AM_CFLAGS = -std=c23                    \
 
 lib_LTLIBRARIES = libids.la
 
-libids_la_SOURCES = source/arr.c        \
+libids_la_SOURCES = source/alg.c        \
+                    source/arr.c        \
                     source/clist.c      \
                     source/hash.c       \
                     source/heap.c       \
@@ -40,6 +41,7 @@ libidsdir = $(includedir)/ids
 libids_HEADERS = include/ids/err.h            \
                  include/ids/sys.h            \
                  include/ids/alg.h            \
+                 include/ids/alg_inl.h        \
                  include/ids/cont_of.h        \
                  include/ids/arr.h            \
                  include/ids/arr_inl.h        \
@@ -64,7 +66,8 @@ libids_HEADERS = include/ids/err.h            \
                  include/ids/spsc_ring.h      \
                  include/ids/spsc_ring_inl.h
 
-TESTS = tests/test_arr        \
+TESTS = tests/test_alg        \
+        tests/test_arr        \
         tests/test_clist      \
         tests/test_hash       \
         tests/test_heap       \
@@ -78,6 +81,7 @@ TESTS = tests/test_arr        \
 
 check_PROGRAMS = $(TESTS)
 
+tests_test_alg_SOURCES        = tests/test_alg.c
 tests_test_arr_SOURCES        = tests/test_arr.c
 tests_test_clist_SOURCES      = tests/test_clist.c
 tests_test_hash_SOURCES       = tests/test_hash.c
