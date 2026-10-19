@@ -140,15 +140,15 @@ Ids_Slist_PushT (struct ids_slist* slist, struct ids_slist_node* node)
 }
 
 inline void
-Ids_Slist_NBeginIt (const struct ids_slist_node* node, struct ids_slist_it* it)
+Ids_Slist_ItNBegin (const struct ids_slist_node* node, struct ids_slist_it* it)
 {
     it->node = (struct ids_slist_node*)node;
 }
 
 inline void
-Ids_Slist_BeginIt (const struct ids_slist* slist, struct ids_slist_it* it)
+Ids_Slist_ItBegin (const struct ids_slist* slist, struct ids_slist_it* it)
 {
-    Ids_Slist_NBeginIt(Ids_Slist_Head(slist), it);
+    Ids_Slist_ItNBegin(Ids_Slist_Head(slist), it);
 }
 
 inline void

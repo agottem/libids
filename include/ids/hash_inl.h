@@ -28,7 +28,7 @@
 
 
 inline void
-Ids_Hash_UpdateBktIt (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it)
+Ids_Hash_BktItUpdate (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it)
 {
     int done = Ids_Clist_ItDone(&bkt->node_list, &it->clist_it);
     if(!done)
@@ -38,7 +38,7 @@ Ids_Hash_UpdateBktIt (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it
 }
 
 inline void
-Ids_Hash_UpdateIt (const struct ids_hash* hash, struct ids_hash_it* it)
+Ids_Hash_ItUpdate (const struct ids_hash* hash, struct ids_hash_it* it)
 {
     while(Ids_Hash_BktItDone(&it->bkt_it) && it->current_bkt < hash->bkt_count)
     {
@@ -49,7 +49,7 @@ Ids_Hash_UpdateIt (const struct ids_hash* hash, struct ids_hash_it* it)
             return;
         }
 
-        Ids_Hash_BeginBktIt(&hash->bkts[it->current_bkt], &it->bkt_it);
+        Ids_Hash_BktItBegin(&hash->bkts[it->current_bkt], &it->bkt_it);
     }
 
     it->node = it->bkt_it.node;
@@ -114,7 +114,7 @@ Ids_Hash_Find (const struct ids_hash* hash,
         *searched_bkt = (struct ids_hash_bkt*)bkt;
 
     struct ids_hash_bkt_it it;
-    for(Ids_Hash_BeginBktIt(bkt, &it); !Ids_Hash_BktItDone(&it); Ids_Hash_BktItFwd(bkt, &it))
+    for(Ids_Hash_BktItBegin(bkt, &it); !Ids_Hash_BktItDone(&it); Ids_Hash_BktItFwd(bkt, &it))
     {
         int delta;
 
@@ -151,17 +151,17 @@ Ids_Hash_BktEmpty (const struct ids_hash_bkt* bkt)
 }
 
 inline void
-Ids_Hash_BeginBktIt (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it)
+Ids_Hash_BktItBegin (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it)
 {
-    Ids_Clist_BeginIt(&bkt->node_list, &it->clist_it);
-    Ids_Hash_UpdateBktIt(bkt, it);
+    Ids_Clist_ItBegin(&bkt->node_list, &it->clist_it);
+    Ids_Hash_BktItUpdate(bkt, it);
 }
 
 inline void
 Ids_Hash_BktItFwd (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it)
 {
     Ids_Clist_ItFwd(&it->clist_it);
-    Ids_Hash_UpdateBktIt(bkt, it);
+    Ids_Hash_BktItUpdate(bkt, it);
 }
 
 inline int
@@ -171,18 +171,18 @@ Ids_Hash_BktItDone (const struct ids_hash_bkt_it* it)
 }
 
 inline void
-Ids_Hash_BeginIt (const struct ids_hash* hash, struct ids_hash_it* it)
+Ids_Hash_ItBegin (const struct ids_hash* hash, struct ids_hash_it* it)
 {
     it->current_bkt = 0;
-    Ids_Hash_BeginBktIt(&hash->bkts[0], &it->bkt_it);
-    Ids_Hash_UpdateIt(hash, it);
+    Ids_Hash_BktItBegin(&hash->bkts[0], &it->bkt_it);
+    Ids_Hash_ItUpdate(hash, it);
 }
 
 inline void
 Ids_Hash_ItFwd (const struct ids_hash* hash, struct ids_hash_it* it)
 {
     Ids_Hash_BktItFwd(&hash->bkts[it->current_bkt], &it->bkt_it);
-    Ids_Hash_UpdateIt(hash, it);
+    Ids_Hash_ItUpdate(hash, it);
 }
 
 inline int

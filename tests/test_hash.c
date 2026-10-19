@@ -119,13 +119,13 @@ Test_BktIt (void)
 
     Ids_Hash_Init(&hash, 1, bkts);
 
-    Ids_Hash_BeginBktIt(&bkts[0], &it);
+    Ids_Hash_BktItBegin(&bkts[0], &it);
     CHECK(Ids_Hash_BktItDone(&it));
 
     Ids_Hash_Add(&hash, 0, &a.node);
     Ids_Hash_Add(&hash, 0, &b.node);
 
-    Ids_Hash_BeginBktIt(&bkts[0], &it);
+    Ids_Hash_BktItBegin(&bkts[0], &it);
     CHECK(!Ids_Hash_BktItDone(&it));
     CHECK(it.node == &b.node);
     Ids_Hash_BktItFwd(&bkts[0], &it);
@@ -151,7 +151,7 @@ Test_It (void)
 
     Ids_Hash_Init(&hash, 4, bkts);
 
-    Ids_Hash_BeginIt(&hash, &it);
+    Ids_Hash_ItBegin(&hash, &it);
     CHECK(Ids_Hash_ItDone(&it));
 
     Ids_Hash_Add(&hash, 0, &a.node);
@@ -159,7 +159,7 @@ Test_It (void)
     Ids_Hash_Add(&hash, 6, &c.node);
     Ids_Hash_Add(&hash, 3, &d.node);
 
-    for(Ids_Hash_BeginIt(&hash, &it); !Ids_Hash_ItDone(&it); Ids_Hash_ItFwd(&hash, &it))
+    for(Ids_Hash_ItBegin(&hash, &it); !Ids_Hash_ItDone(&it); Ids_Hash_ItFwd(&hash, &it))
     {
         struct item* item = IDS_CONT_OF(it.node, struct item, node);
         CHECK(item->id >= 1 && item->id <= 4);

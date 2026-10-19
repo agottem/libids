@@ -224,7 +224,7 @@ Test_It (void)
     struct ids_rbtree_it it;
 
     Ids_RbTree_Init(&rbtree);
-    Ids_RbTree_BeginIt(&rbtree, &it);
+    Ids_RbTree_ItBegin(&rbtree, &it);
     CHECK(Ids_RbTree_ItDone(&it));
 
     for(int i = 0; i < 7; i++)
@@ -234,7 +234,7 @@ Test_It (void)
     }
 
     int expected = 1;
-    for(Ids_RbTree_BeginIt(&rbtree, &it); !Ids_RbTree_ItDone(&it); Ids_RbTree_ItFwd(&it))
+    for(Ids_RbTree_ItBegin(&rbtree, &it); !Ids_RbTree_ItDone(&it); Ids_RbTree_ItFwd(&it))
     {
         CHECK(NodeToItem(it.node)->id == expected);
         expected++;
@@ -242,14 +242,14 @@ Test_It (void)
     CHECK(expected == 8);
 
     expected = 7;
-    for(Ids_RbTree_RBeginIt(&rbtree, &it); !Ids_RbTree_ItDone(&it); Ids_RbTree_ItBack(&it))
+    for(Ids_RbTree_ItRBegin(&rbtree, &it); !Ids_RbTree_ItDone(&it); Ids_RbTree_ItBack(&it))
     {
         CHECK(NodeToItem(it.node)->id == expected);
         expected--;
     }
     CHECK(expected == 0);
 
-    Ids_RbTree_NBeginIt(&items[4].node, &it);
+    Ids_RbTree_ItNBegin(&items[4].node, &it);
     CHECK(NodeToItem(it.node)->id == 3);
     Ids_RbTree_ItFwd(&it);
     CHECK(NodeToItem(it.node)->id == 4);
@@ -345,7 +345,7 @@ Test_PostIt (void)
     struct ids_rbtree_post_it it;
 
     Ids_RbTree_Init(&rbtree);
-    Ids_RbTree_BeginPostIt(&rbtree, &it);
+    Ids_RbTree_PostItBegin(&rbtree, &it);
     CHECK(Ids_RbTree_PostItDone(&it));
 
     for(int i = 0; i < item_count; i++)
@@ -358,7 +358,7 @@ Test_PostIt (void)
 
     int visited[item_count] = {0};
     int count               = 0;
-    Ids_RbTree_BeginPostIt(&rbtree, &it);
+    Ids_RbTree_PostItBegin(&rbtree, &it);
     while(!Ids_RbTree_PostItDone(&it))
     {
         struct ids_rbtree_node* node = it.node;

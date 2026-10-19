@@ -215,14 +215,14 @@ Test_It (void)
     struct item         c = {.id = 3};
 
     Ids_Slist_Init(&list);
-    Ids_Slist_BeginIt(&list, &it);
+    Ids_Slist_ItBegin(&list, &it);
     CHECK(Ids_Slist_ItDone(&it));
 
     Ids_Slist_PushT(&list, &a.node);
     Ids_Slist_PushT(&list, &b.node);
     Ids_Slist_PushT(&list, &c.node);
 
-    Ids_Slist_BeginIt(&list, &it);
+    Ids_Slist_ItBegin(&list, &it);
     CHECK(NodeToItem(it.node)->id == 1);
     Ids_Slist_ItFwd(&it);
     CHECK(NodeToItem(it.node)->id == 2);
@@ -231,7 +231,7 @@ Test_It (void)
     Ids_Slist_ItFwd(&it);
     CHECK(Ids_Slist_ItDone(&it));
 
-    Ids_Slist_NBeginIt(&b.node, &it);
+    Ids_Slist_ItNBegin(&b.node, &it);
     CHECK(NodeToItem(it.node)->id == 2);
     Ids_Slist_ItFwd(&it);
     CHECK(NodeToItem(it.node)->id == 3);

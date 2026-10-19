@@ -62,10 +62,10 @@ Ids_Slist_PushT (struct ids_slist* slist, struct ids_slist_node* node);
 
 
 extern void
-Ids_Slist_NBeginIt (const struct ids_slist_node* node, struct ids_slist_it* it);
+Ids_Slist_ItNBegin (const struct ids_slist_node* node, struct ids_slist_it* it);
 
 extern void
-Ids_Slist_BeginIt (const struct ids_slist* slist, struct ids_slist_it* it);
+Ids_Slist_ItBegin (const struct ids_slist* slist, struct ids_slist_it* it);
 
 extern void
 Ids_Slist_ItFwd (struct ids_slist_it* it);

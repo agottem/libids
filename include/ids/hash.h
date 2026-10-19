@@ -183,7 +183,7 @@ Ids_Hash_BktEmpty (const struct ids_hash_bkt* bkt);
     Start an iteration of the specified hash bucket
  */
 inline void
-Ids_Hash_BeginBktIt (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
+Ids_Hash_BktItBegin (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
 
 /*
     Iterate to the next node in the bucket
@@ -202,7 +202,7 @@ Ids_Hash_BktItDone (const struct ids_hash_bkt_it* it);
     Start an unordered iteration of the hash
  */
 inline void
-Ids_Hash_BeginIt (const struct ids_hash* hash, struct ids_hash_it* it);
+Ids_Hash_ItBegin (const struct ids_hash* hash, struct ids_hash_it* it);
 
 /*
     Iterate to the next node in the hash

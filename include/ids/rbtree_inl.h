@@ -512,21 +512,21 @@ Ids_RbTree_Del (struct ids_rbtree* rbtree, struct ids_rbtree_node* node)
 }
 
 inline void
-Ids_RbTree_NBeginIt (const struct ids_rbtree_node* node, struct ids_rbtree_it* it)
+Ids_RbTree_ItNBegin (const struct ids_rbtree_node* node, struct ids_rbtree_it* it)
 {
     it->node = (struct ids_rbtree_node*)node;
 }
 
 inline void
-Ids_RbTree_BeginIt (const struct ids_rbtree* rbtree, struct ids_rbtree_it* it)
+Ids_RbTree_ItBegin (const struct ids_rbtree* rbtree, struct ids_rbtree_it* it)
 {
-    Ids_RbTree_NBeginIt(Ids_RbTree_Min(rbtree), it);
+    Ids_RbTree_ItNBegin(Ids_RbTree_Min(rbtree), it);
 }
 
 inline void
-Ids_RbTree_RBeginIt (const struct ids_rbtree* rbtree, struct ids_rbtree_it* it)
+Ids_RbTree_ItRBegin (const struct ids_rbtree* rbtree, struct ids_rbtree_it* it)
 {
-    Ids_RbTree_NBeginIt(Ids_RbTree_Max(rbtree), it);
+    Ids_RbTree_ItNBegin(Ids_RbTree_Max(rbtree), it);
 }
 
 inline void
@@ -548,7 +548,7 @@ Ids_RbTree_ItDone (const struct ids_rbtree_it* it)
 }
 
 inline void
-Ids_RbTree_BeginPostIt (const struct ids_rbtree* rbtree, struct ids_rbtree_post_it* it)
+Ids_RbTree_PostItBegin (const struct ids_rbtree* rbtree, struct ids_rbtree_post_it* it)
 {
     it->node = Ids_RbTree_PostFirst(rbtree->root);
     it->next = it->node == NULL ? NULL : Ids_RbTree_PostNext(it->node);

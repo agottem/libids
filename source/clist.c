@@ -69,13 +69,13 @@ Ids_Clist_PopT (struct ids_clist* clist);
 
 
 extern void
-Ids_Clist_NBeginIt (const struct ids_clist_node* node, struct ids_clist_it* it);
+Ids_Clist_ItNBegin (const struct ids_clist_node* node, struct ids_clist_it* it);
 
 extern void
-Ids_Clist_BeginIt (const struct ids_clist* clist, struct ids_clist_it* it);
+Ids_Clist_ItBegin (const struct ids_clist* clist, struct ids_clist_it* it);
 
 extern void
-Ids_Clist_RBeginIt (const struct ids_clist* clist, struct ids_clist_it* it);
+Ids_Clist_ItRBegin (const struct ids_clist* clist, struct ids_clist_it* it);
 
 extern void
 Ids_Clist_ItFwd (struct ids_clist_it* it);

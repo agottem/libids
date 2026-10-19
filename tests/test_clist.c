@@ -98,14 +98,14 @@ Test_ItAndDel (void)
 
     Ids_Clist_Del(&b.node);
 
-    Ids_Clist_BeginIt(&list, &it);
+    Ids_Clist_ItBegin(&list, &it);
     CHECK(NodeToItem(it.node)->id == 1);
     Ids_Clist_ItFwd(&it);
     CHECK(NodeToItem(it.node)->id == 3);
     Ids_Clist_ItFwd(&it);
     CHECK(Ids_Clist_ItDone(&list, &it));
 
-    Ids_Clist_RBeginIt(&list, &it);
+    Ids_Clist_ItRBegin(&list, &it);
     CHECK(NodeToItem(it.node)->id == 3);
     Ids_Clist_ItBack(&it);
     CHECK(NodeToItem(it.node)->id == 1);

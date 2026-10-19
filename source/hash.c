@@ -28,10 +28,10 @@
 
 
 extern void
-Ids_Hash_UpdateBktIt (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
+Ids_Hash_BktItUpdate (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
 
 extern void
-Ids_Hash_UpdateIt (const struct ids_hash* hash, struct ids_hash_it* it);
+Ids_Hash_ItUpdate (const struct ids_hash* hash, struct ids_hash_it* it);
 
 
 extern void
@@ -74,7 +74,7 @@ Ids_Hash_BktEmpty (const struct ids_hash_bkt* bkt);
 
 
 extern void
-Ids_Hash_BeginBktIt (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
+Ids_Hash_BktItBegin (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
 
 extern void
 Ids_Hash_BktItFwd (const struct ids_hash_bkt* bkt, struct ids_hash_bkt_it* it);
@@ -84,7 +84,7 @@ Ids_Hash_BktItDone (const struct ids_hash_bkt_it* it);
 
 
 extern void
-Ids_Hash_BeginIt (const struct ids_hash* hash, struct ids_hash_it* it);
+Ids_Hash_ItBegin (const struct ids_hash* hash, struct ids_hash_it* it);
 
 extern void
 Ids_Hash_ItFwd (const struct ids_hash* hash, struct ids_hash_it* it);
