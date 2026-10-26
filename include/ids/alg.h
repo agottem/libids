@@ -27,10 +27,6 @@
 #include <stddef.h>
 
 
-#define IDS_MIN(a, b) ((a) < (b) ? (a) : (b))
-#define IDS_MAX(a, b) ((a) > (b) ? (a) : (b))
-
-
 /*
     Return less than zero if left sorts before right, zero if equivalent, or greater than
     zero if left sorts after right

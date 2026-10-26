@@ -38,15 +38,15 @@ libids_la_LDFLAGS = -static
 
 libidsdir = $(includedir)/ids
 
-libids_HEADERS = include/ids/err.h            \
-                 include/ids/sys.h            \
-                 include/ids/alg.h            \
+libids_HEADERS = include/ids/alg.h            \
                  include/ids/alg_inl.h        \
-                 include/ids/cont_of.h        \
+                 include/ids/arith.h          \
                  include/ids/arr.h            \
                  include/ids/arr_inl.h        \
                  include/ids/clist.h          \
                  include/ids/clist_inl.h      \
+                 include/ids/cont_of.h        \
+		 include/ids/err.h            \
                  include/ids/hash.h           \
                  include/ids/hash_inl.h       \
                  include/ids/heap.h           \
@@ -64,7 +64,8 @@ libids_HEADERS = include/ids/err.h            \
                  include/ids/spmr_ring.h      \
                  include/ids/spmr_ring_inl.h  \
                  include/ids/spsc_ring.h      \
-                 include/ids/spsc_ring_inl.h
+                 include/ids/spsc_ring_inl.h  \
+                 include/ids/sys.h
 
 TESTS = tests/test_alg        \
         tests/test_arr        \

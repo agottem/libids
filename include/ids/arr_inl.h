@@ -20,7 +20,7 @@
  */
 
 
-#include <ids/alg.h>
+#include <ids/arith.h>
 
 #include <assert.h>
 #include <stddef.h>
