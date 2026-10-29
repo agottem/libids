@@ -29,6 +29,7 @@ libids_la_SOURCES = source/alg.c        \
                     source/mpsc_ring.c  \
                     source/mpsc_stack.c \
                     source/rbtree.c     \
+                    source/ring.c       \
                     source/slist.c      \
                     source/spmc_ring.c  \
                     source/spmr_ring.c  \
@@ -57,6 +58,8 @@ libids_HEADERS = include/ids/alg.h            \
                  include/ids/mpsc_stack_inl.h \
                  include/ids/rbtree.h         \
                  include/ids/rbtree_inl.h     \
+                 include/ids/ring.h           \
+                 include/ids/ring_inl.h       \
                  include/ids/slist.h          \
                  include/ids/slist_inl.h      \
                  include/ids/spmc_ring.h      \
@@ -75,6 +78,7 @@ TESTS = tests/test_alg        \
         tests/test_mpsc_ring  \
         tests/test_mpsc_stack \
         tests/test_rbtree     \
+        tests/test_ring       \
         tests/test_slist      \
         tests/test_spmc_ring  \
         tests/test_spmr_ring  \
@@ -90,6 +94,7 @@ tests_test_heap_SOURCES       = tests/test_heap.c
 tests_test_mpsc_ring_SOURCES  = tests/test_mpsc_ring.c
 tests_test_mpsc_stack_SOURCES = tests/test_mpsc_stack.c
 tests_test_rbtree_SOURCES     = tests/test_rbtree.c
+tests_test_ring_SOURCES       = tests/test_ring.c
 tests_test_slist_SOURCES      = tests/test_slist.c
 tests_test_spmc_ring_SOURCES  = tests/test_spmc_ring.c
 tests_test_spmr_ring_SOURCES  = tests/test_spmr_ring.c
