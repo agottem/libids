@@ -53,6 +53,9 @@ Ids_Arr_Count (const struct ids_arr* arr);
 extern size_t
 Ids_Arr_Capacity (const struct ids_arr* arr);
 
+extern size_t
+Ids_Arr_Space (const struct ids_arr* arr);
+
 extern void*
 Ids_Arr_Data (const struct ids_arr* arr);
 
@@ -74,6 +77,9 @@ Ids_Arr_AddUninit (struct ids_arr* arr, size_t count);
 
 extern enum ids_err
 Ids_Arr_Add (struct ids_arr* arr, const void* restrict data, size_t count);
+
+extern enum ids_err
+Ids_Arr_TryAdd (struct ids_arr* arr, const void* restrict data, size_t count);
 
 extern enum ids_err
 Ids_Arr_Place (struct ids_arr* arr, const void* restrict data, size_t count);

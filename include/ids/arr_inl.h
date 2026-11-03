@@ -99,6 +99,12 @@ Ids_Arr_Capacity (const struct ids_arr* arr)
     return arr->capacity;
 }
 
+inline size_t
+Ids_Arr_Space (const struct ids_arr* arr)
+{
+    return arr->capacity - arr->elem_count;
+}
+
 inline void*
 Ids_Arr_Data (const struct ids_arr* arr)
 {
@@ -189,6 +195,16 @@ Ids_Arr_Add (struct ids_arr* arr, const void* restrict data, size_t count)
     assert(count > 0 && "Element count must be greater than zero");
 
     return Ids_Arr_Ins(arr, data, count, arr->elem_count);
+}
+
+inline enum ids_err
+Ids_Arr_TryAdd (struct ids_arr* arr, const void* restrict data, size_t count)
+{
+    assert(count > 0 && "Element count must be greater than zero");
+
+    if(Ids_Arr_Space(arr) < count)
+        return ids_err_mem;
+    return Ids_Arr_Add(arr, data, count);
 }
 
 inline enum ids_err

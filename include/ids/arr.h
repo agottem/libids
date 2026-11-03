@@ -104,6 +104,12 @@ inline size_t
 Ids_Arr_Capacity (const struct ids_arr* arr);
 
 /*
+    Return the number of remaining elements the current storage can hold
+*/
+inline size_t
+Ids_Arr_Space (const struct ids_arr* arr);
+
+/*
     Return the arr storage
  */
 inline void*
@@ -147,6 +153,12 @@ Ids_Arr_AddUninit (struct ids_arr* arr, size_t count);
  */
 inline enum ids_err
 Ids_Arr_Add (struct ids_arr* arr, const void* restrict data, size_t count);
+
+/*
+    Append count elements from data to the arr only if arr doesn't need to be resized
+ */
+inline enum ids_err
+Ids_Arr_TryAdd (struct ids_arr* arr, const void* restrict data, size_t count);
 
 /*
     Place count elements from data to the start of the arr, growing arr only if needed
