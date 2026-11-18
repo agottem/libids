@@ -54,3 +54,31 @@ Ids_Alg_InsOrdered (void*          data,
 
     return first;
 }
+
+inline size_t
+Ids_Alg_FindOrdered (const void*    data,
+                     size_t         elem_count,
+                     size_t         elem_size,
+                     const void*    key,
+                     ids_alg_cmp_t* cmp_func,
+                     void*          user_data)
+{
+    assert(elem_size != 0 && "Element size must not be zero");
+
+    const unsigned char* bytes = data;
+    size_t               first = 0;
+    size_t               last  = elem_count;
+    while(first < last)
+    {
+        size_t middle = first + (last - first) / 2;
+        int    cmp    = (*cmp_func)(key, bytes + middle * elem_size, user_data);
+        if(cmp < 0)
+            last = middle;
+        else if(cmp > 0)
+            first = middle + 1;
+        else
+            return middle;
+    }
+
+    return elem_count;
+}

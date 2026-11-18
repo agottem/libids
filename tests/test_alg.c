@@ -106,6 +106,40 @@ Test_Insertions (int direction)
     CHECK(storage[count].sequence == 456);
 }
 
+static void
+Test_FindOrdered (int direction)
+{
+    const struct item ascending[] = {{1, 0}, {3, 1}, {3, 2}, {5, 3}, {7, 4}};
+    const struct item descending[] = {{7, 0}, {5, 1}, {3, 2}, {3, 3}, {1, 4}};
+    const struct item* storage = direction > 0 ? ascending : descending;
+    size_t count = sizeof(ascending) / sizeof(ascending[0]);
+    struct cmp_context context = {.direction = direction};
+    struct item key = {.pri = storage[0].pri};
+
+    CHECK(Ids_Alg_FindOrdered(NULL, 0, sizeof(*storage), &key, ItemCmp, &context) == 0);
+    CHECK(context.calls == 0);
+    CHECK(Ids_Alg_FindOrdered(storage, 1, sizeof(*storage), &key, ItemCmp, &context) == 0);
+    key.pri = 2;
+    CHECK(Ids_Alg_FindOrdered(storage, 1, sizeof(*storage), &key, ItemCmp, &context) == 1);
+
+    for(int pri = 0; pri <= 8; pri++)
+    {
+        key.pri = pri;
+        context.calls = 0;
+        size_t index = Ids_Alg_FindOrdered(storage, count, sizeof(*storage),
+                                         &key, ItemCmp, &context);
+        if(pri % 2 != 0)
+        {
+            CHECK(index < count);
+            CHECK(storage[index].pri == pri);
+        }
+        else
+            CHECK(index == count);
+
+        CHECK(context.calls <= 3);
+    }
+}
+
 static int
 ByteCmp (const void* left, const void* right, void* user_data)
 {
@@ -134,6 +168,8 @@ main (void)
 {
     Test_Insertions(1);
     Test_Insertions(-1);
+    Test_FindOrdered(1);
+    Test_FindOrdered(-1);
     Test_Bytes();
 
     return EXIT_SUCCESS;

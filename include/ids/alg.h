@@ -50,6 +50,20 @@ Ids_Alg_InsOrdered (void*          data,
                     void*          user_data);
 
 
+/*
+    Search an ordered array of elem_count elements of elem_size bytes, with elem_size
+    nonzero.  The comparator is called with key first and must use the array's ordering.
+    Return the index of any equivalent element, or elem_count if no match exists
+ */
+inline size_t
+Ids_Alg_FindOrdered (const void*    data,
+                     size_t         elem_count,
+                     size_t         elem_size,
+                     const void*    key,
+                     ids_alg_cmp_t* cmp_func,
+                     void*          user_data);
+
+
 #include <ids/alg_inl.h>
 
 

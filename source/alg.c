@@ -32,3 +32,11 @@ Ids_Alg_InsOrdered (void*          data,
                     const void*    elem,
                     ids_alg_cmp_t* cmp_func,
                     void*          user_data);
+
+extern size_t
+Ids_Alg_FindOrdered (const void*    data,
+                     size_t         elem_count,
+                     size_t         elem_size,
+                     const void*    key,
+                     ids_alg_cmp_t* cmp_func,
+                     void*          user_data);
