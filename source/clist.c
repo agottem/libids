@@ -49,8 +49,12 @@ Ids_Clist_Splice (struct ids_clist_node* start,
                   struct ids_clist_node* dest);
 
 extern void
-Ids_Clist_Ins (struct ids_clist_node* restrict new_node,
-               struct ids_clist_node* restrict existing_node);
+Ids_Clist_InsBefore (struct ids_clist_node* restrict new_node,
+                     struct ids_clist_node* restrict existing_node);
+
+extern void
+Ids_Clist_InsAfter (struct ids_clist_node* restrict new_node,
+                    struct ids_clist_node* restrict existing_node);
 
 extern void
 Ids_Clist_Del (struct ids_clist_node* node);

@@ -114,8 +114,15 @@ Ids_Clist_Splice (struct ids_clist_node* start,
     Insert a node before the specified node in the clist
  */
 inline void
-Ids_Clist_Ins (struct ids_clist_node* restrict new_node,
-               struct ids_clist_node* restrict existing_node);
+Ids_Clist_InsBefore (struct ids_clist_node* restrict new_node,
+                     struct ids_clist_node* restrict existing_node);
+
+/*
+    Insert a node after the specified node in the clist
+ */
+inline void
+Ids_Clist_InsAfter (struct ids_clist_node* restrict new_node,
+                    struct ids_clist_node* restrict existing_node);
 
 /*
     Delete the specified node from its clist

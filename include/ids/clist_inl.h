@@ -75,8 +75,8 @@ Ids_Clist_Splice (struct ids_clist_node* start,
 }
 
 inline void
-Ids_Clist_Ins (struct ids_clist_node* restrict new_node,
-               struct ids_clist_node* restrict existing_node)
+Ids_Clist_InsBefore (struct ids_clist_node* restrict new_node,
+                     struct ids_clist_node* restrict existing_node)
 {
     struct ids_clist_node* prev = existing_node->prev;
 
@@ -84,6 +84,18 @@ Ids_Clist_Ins (struct ids_clist_node* restrict new_node,
     new_node->prev      = prev;
     new_node->next      = existing_node;
     existing_node->prev = new_node;
+}
+
+inline void
+Ids_Clist_InsAfter (struct ids_clist_node* restrict new_node,
+                    struct ids_clist_node* restrict existing_node)
+{
+    struct ids_clist_node* next = existing_node->next;
+
+    next->prev          = new_node;
+    new_node->prev      = existing_node;
+    new_node->next      = next;
+    existing_node->next = new_node;
 }
 
 inline void
@@ -99,36 +111,32 @@ Ids_Clist_Del (struct ids_clist_node* node)
 inline void
 Ids_Clist_PushH (struct ids_clist* clist, struct ids_clist_node* node)
 {
-    Ids_Clist_Ins(node, Ids_Clist_Head(clist));
+    Ids_Clist_InsBefore(node, Ids_Clist_Head(clist));
 }
 
 inline struct ids_clist_node*
 Ids_Clist_PopH (struct ids_clist* clist)
 {
-    struct ids_clist_node* head = Ids_Clist_Head(clist);
-
     assert(!Ids_Clist_Empty(clist) && "Attempting to pop an empty clist");
 
+    struct ids_clist_node* head = Ids_Clist_Head(clist);
     Ids_Clist_Del(head);
-
     return head;
 }
 
 inline void
 Ids_Clist_PushT (struct ids_clist* clist, struct ids_clist_node* node)
 {
-    Ids_Clist_Ins(node, Ids_Clist_End(clist));
+    Ids_Clist_InsBefore(node, Ids_Clist_End(clist));
 }
 
 inline struct ids_clist_node*
 Ids_Clist_PopT (struct ids_clist* clist)
 {
-    struct ids_clist_node* tail = Ids_Clist_Tail(clist);
-
     assert(!Ids_Clist_Empty(clist) && "Attempting to pop an empty clist");
 
+    struct ids_clist_node* tail = Ids_Clist_Tail(clist);
     Ids_Clist_Del(tail);
-
     return tail;
 }
 
